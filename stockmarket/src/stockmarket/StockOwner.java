@@ -14,6 +14,10 @@ public class StockOwner {
 		this.money = money;
 	}
 	
+	public void getInfo(){
+		System.out.println(name + "\t:\t" + money);
+	}
+	
 	public void credit (double moreMoney){
 		money += moreMoney;
 	}
