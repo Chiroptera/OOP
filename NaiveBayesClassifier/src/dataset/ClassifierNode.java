@@ -5,9 +5,8 @@ public class ClassifierNode extends BayesNode {
 	private int s; //number of classifications
 	private int[] Nc;
 
-	ClassifierNode(String nameNew, int sNew) {
+	ClassifierNode(String nameNew) {
 		super(nameNew);
-		this.s = sNew;
 	}
 	
 	public int GetS(){
@@ -22,20 +21,23 @@ public class ClassifierNode extends BayesNode {
 	
 	public void UpdateNcVector(int sClass){
 		
+		
 		this.Nc[sClass]++;
 	}
 	
-	public void IncrementsNew(){
+	public void UpdateSR(int sUp){
 		
-		this.s++;
+		if(sUp > this.s){
+			this.s = sUp;
+		}		
 	}
 	
 	public static void main(String[] args) {	
 		
-		ClassifierNode test1 = new ClassifierNode("name", 1);
-		test1.UpdateNcVector(0);
-		test1.UpdateNcVector(3);
-		test1.IncrementsNew();
+		ClassifierNode test1 = new ClassifierNode("name");
+		test1.UpdateSR(4);
+		test1.UpdateSR(2);
+
 
 		
 		System.out.println(test1.GetS());

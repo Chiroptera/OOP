@@ -20,4 +20,6 @@ public abstract class BayesNode {
 		return this.value;
 	}
 	
+	public abstract void UpdateSR(int rs);
+	
 }
