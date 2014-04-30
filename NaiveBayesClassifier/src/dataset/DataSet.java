@@ -4,15 +4,21 @@ import java.io.BufferedReader; //reads text from a character-input stream
 import java.io.FileNotFoundException; //signal that an attempt to open the file has failed
 import java.io.FileReader; //convenience class for read char files
 import java.io.IOException; //signals that an I/O exception of some sort has occurred
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 
 
 
 public class DataSet {
 	
 	LinkedList<int[]> parsedData = new LinkedList<int[]>();
-	Hashtable<int[],Integer> NijkcTable,Nikc_JTable,Nijc_KTable = new Hashtable<int[],Integer>();
+	Hashtable<List<Integer>,Integer> NijkcTable = new Hashtable<List<Integer>,Integer>();
+	Hashtable<List<Integer>,Integer> Nikc_JTable = new Hashtable<List<Integer>,Integer>();
+	Hashtable<List<Integer>,Integer> Nijc_KTable = new Hashtable<List<Integer>,Integer>();
+
 	BayesNode[] NodeList;
 	
 	DataSet(){
@@ -51,7 +57,6 @@ public class DataSet {
 				
 				/* go through all strings in line (seperated by commas)*/
 				for(int j=0;j<sSize-1;j++){
-					System.err.println("iteration j=" + String.valueOf(j));
 					NodeList[j] = new VariableNode(lineparse[j], j);
 					System.out.print(" | " + NodeList[j].getName());
 				}
@@ -64,42 +69,20 @@ public class DataSet {
 					
 				    // use comma as separator
 					lineparse = line.split(cvsSplitBy); /* split string by commas */
-					sSize = lineparse.length; /* number of variables + 1 (class variable)*/
 					
-	//				else {
-						System.out.println("Values: ");
-						System.out.println("line[0]: " + line.toString());
-						temp = new int[sSize];
-	
-	
-						for(int j=0;j<sSize;j++){
-	
-							temp[j] = Integer.parseInt(lineparse[j]);
-	//						System.err.println("iteration j=" + String.valueOf(j) 
-	//								+ "\tlineparse.size = " + String.valueOf(lineparse.length)
-	//								+ "\tlineparse[j]=" + lineparse[j]
-	//								+ "\tlineparse[j] int =" + Integer.parseInt(lineparse[j])
-	//								+ "\ttemp.size = " + String.valueOf(temp.length)
-	//								+ "\ttemp[j] = " + String.valueOf(temp[j]));
-							
-							System.err.println("iteration j=" + String.valueOf(j) 
-							+ "\tlineparse.length = " + String.valueOf(lineparse.length)
-							+ "\tlineparse[j]=" + lineparse[j]
-							+ "\tlineparse[j] int =" + Integer.parseInt(lineparse[j])
-							+ "\tnodelist.length = " + String.valueOf(NodeList.length)
-							+ "\tnodelist[j].id = " + NodeList[j].getName());
-							
-							NodeList[j].UpdateSR(Integer.parseInt(lineparse[j]));
-	
-							System.out.print("|" + lineparse[j] + " ");
-						}
-						parsedData.add(temp);
+					temp = new int[sSize];
+					System.out.println("");
+					for(int j=0;j<sSize;j++){
+						temp[j] = Integer.parseInt(lineparse[j]);
+						NodeList[j].UpdateSR(temp[j]);
+						System.out.print("|" + lineparse[j] + " ");
 					}
+					parsedData.add(temp);
+				} /* end of while cycle*/
 		
-					System.out.println();
-					i++;
-			}	
-//			}
+				System.out.println();
+
+			} /* end of if*/
 		 
 		} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -120,13 +103,15 @@ public class DataSet {
 
 	public void buildTable(){
 	    /*for(Iterator iter = parsedData.iterator();iter.hasNext();){*/
-		int[] key,keyInv;
+		List<Integer> key,keyInv;
 		Integer value;
 		int classe;
 		
 		/* for each line of parsed data*/
 		for(int[] dataLine : parsedData){
 			classe=dataLine[dataLine.length-1];
+
+			/* for each variable excluding the class */
 			for(int i=0;i<dataLine.length-1;i++){
 				
 				/* 
@@ -135,7 +120,7 @@ public class DataSet {
 				 * 
 				 * */
 				/* key = [var id, var value, class value] */
-				key=new int[]{i,dataLine[i],classe};
+				key=Arrays.asList(i,dataLine[i],classe);
 				
 				/* if key already exists, increment*/
 				if(Nikc_JTable.containsKey(key)){
@@ -159,8 +144,8 @@ public class DataSet {
 					 * 
 					 * */
 					/* key = [var id, parent id, var value, parent value, class value] */
-					key=new int[]{i,il,dataLine[i],dataLine[il],classe};
-					keyInv=new int[]{il,i,dataLine[il],dataLine[i],classe};
+					key=Arrays.asList(i,il,dataLine[i],dataLine[il],classe);
+					keyInv=Arrays.asList(il,i,dataLine[il],dataLine[i],classe);
 					
 					
 					/* if key already exists, increment*/
@@ -168,9 +153,11 @@ public class DataSet {
 						value=NijkcTable.get(key).intValue()+1; /* increment Nijkc */
 						NijkcTable.put(key,value); /* add entry in table*/
 						NijkcTable.put(keyInv,value);
+						
 					}
 					/* otherwise add entries to table with value 1*/
 					else{
+
 						NijkcTable.put(key, 1);
 						NijkcTable.put(keyInv, 1);
 					}
@@ -180,8 +167,8 @@ public class DataSet {
 					 *  CHECKING FOR Nijc_K
 					 * 
 					 * */
-					key=new int[]{i,il,dataLine[il],classe};
-					keyInv=new int[]{il,i,dataLine[i],classe};
+					key=Arrays.asList(i,il,dataLine[il],classe);
+					keyInv=Arrays.asList(il,i,dataLine[i],classe);
 					
 					
 					/* if key already exists, increment*/
@@ -196,12 +183,14 @@ public class DataSet {
 						Nijc_KTable.put(keyInv, 1);
 					}					
 
-				}
-				/* end cycle il*/
-			}
-			/* end cycle i*/
-	    }
-		/* end cycle dataLine*/
+				} /* end cycle il*/
+			} /* end cycle i*/
+
+			
+
+
+			
+	    } /* end cycle dataLine*/
 	}
 	
 	/**
@@ -213,11 +202,24 @@ public class DataSet {
 		DataSet obj = new DataSet();
 		obj.parse(args[0]);
 		obj.buildTable();
-		System.err.println("\nNijkc:\n\n"+obj.NijkcTable.toString());
-		System.err.println("\nNikc_J:\n\n"+obj.Nikc_JTable.toString());
-		System.err.println("\nNijc_K:\n\n"+obj.Nijc_KTable.toString());
-
-	
-	}
-  
+		
+		/* print Nijkc*/
+		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.NijkcTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.NijkcTable.get(key));
+		}
+		/* print Nikc_J*/
+		System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.Nikc_JTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.Nikc_JTable.get(key));
+		}
+		/* print Nijc_K*/
+		System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.Nijc_KTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.Nijc_KTable.get(key));
+		}	
+	}  
 }
