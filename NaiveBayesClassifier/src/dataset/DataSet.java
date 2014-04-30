@@ -254,25 +254,36 @@ public class DataSet {
 						for(int c = 0; c < ClassNode.GetSR(); c++){
 							counter++;
 
-							keyIJC = Arrays.asList(i,k,c);
+							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIKC = Arrays.asList(i,k,j,c);
+							keyIJC = Arrays.asList(i,k,j,c);
 							
 							/*
 							invkeyIJC = Arrays.asList(c,k,i);
 							invkeyIJKC = Arrays.asList(c,j,k,ii,i);
 							invkeyIKC = Arrays.asList(c,j,k,i);
-							/*
+							*/
 							
 							/*
 							System.out.println(keyIJC.toString());
 							System.out.println(keyIJKC.toString());
 							System.out.println(keyIKC.toString());
-							*/
-														
+							
+							
+							System.out.println(Nijc_KTable.containsKey(keyIJC));	
+							System.out.println(NijkcTable.containsKey(keyIJKC) );			
+							System.out.println(Nikc_JTable.containsKey(keyIKC));	
+							System.out.println();	
+							*/		
+
+
+		
 							if(Nijc_KTable.containsKey(keyIJC)){
-								scoreIJC = Nijc_KTable.get(keyIJC).intValue();			
+								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
+								System.out.println(Nijc_KTable.get(keyIJC).intValue());			
+
 							}
+							
 							/*
 							else if(Nijc_KTable.containsKey(invkeyIJC)){
 								scoreIJC = Nijc_KTable.get(invkeyIJC).intValue();			
@@ -285,6 +296,8 @@ public class DataSet {
 							
 							if( NijkcTable.containsKey(keyIJKC) ){
 								scoreIJKC = NijkcTable.get(keyIJKC).intValue();
+								System.out.println(NijkcTable.get(keyIJKC).intValue());			
+
 							}
 							/*
 							else if(NijkcTable.containsKey(invkeyIJKC)){
@@ -297,6 +310,8 @@ public class DataSet {
 							
 							if( Nikc_JTable.containsKey(keyIKC) ){
 								scoreIKC = Nikc_JTable.get(keyIKC).intValue();
+								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
+
 							}
 							/*
 							else if(Nikc_JTable.containsKey(invkeyIKC)){
@@ -306,20 +321,20 @@ public class DataSet {
 							else{
 								continue;
 							}
-							
+
+
 							System.out.println("Midscore calculus:");
 							System.out.println("ScoreIJKC: " + scoreIJKC);
 							System.out.println("ScoreIJC: " + scoreIJC);
 							System.out.println("ScoreIKC: " + scoreIKC);
-							
-							System.out.println("Number instances: " + this.NT);
-							System.out.println("Number classifications: " + ClassNode.GetSR());
+
 
 							
-							score += (float) ( (scoreIJKC/this.NT) * 
-									Math.log( ( scoreIJKC*ClassNode.GetSR() ) / 
-									(scoreIKC*scoreIJC ) ) );
+							score += (scoreIJKC / (float) (this.NT) )  * Math.log(( (float)scoreIJKC*(float)ClassNode.GetSR() ) / 
+									((float)scoreIKC*(float)scoreIJC )) / (float)Math.log(2);
 							System.out.println("Score: " + score);
+							System.out.println();
+							System.out.println();
 							
 						}
 					}	
