@@ -21,5 +21,6 @@ public abstract class BayesNode {
 	}
 	
 	public abstract void UpdateSR(int rs);
-	
+	public abstract int GetSR();
+
 }

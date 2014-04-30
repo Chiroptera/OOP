@@ -21,9 +21,14 @@ public class VariableNode extends BayesNode {
 	//this method can be abstract and implemented by each node variable
 	public void UpdateSR(int rUp){
 		
-		if(rUp > this.r){
-			this.r = rUp;
+		if(rUp + 1 > this.r){
+			this.r = rUp + 1;
 		}		
+	}
+	
+	public int GetSR(){
+		
+		return r;
 	}
 	
 	public static void main(String[] args) {		
