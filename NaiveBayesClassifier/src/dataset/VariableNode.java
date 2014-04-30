@@ -1,5 +1,7 @@
 package dataset;
 
+import java.util.LinkedList;
+
 
 public class VariableNode extends BayesNode {
 	
@@ -7,6 +9,7 @@ public class VariableNode extends BayesNode {
 	private int id; //index
 	private int r; //number of values in variable
 	BayesNode parent; //graph built by saying who is the father
+	LinkedList<VariableNode> children;
 	
 	VariableNode(String nameNew, int idNew) {
 		super(nameNew);
@@ -24,6 +27,14 @@ public class VariableNode extends BayesNode {
 		if(rUp > this.r){
 			this.r = rUp;
 		}		
+	}
+	
+	public void setParent(BayesNode parent){
+		this.parent = parent;
+	}
+	
+	public void addChild(VariableNode child){
+		this.children.add(child);
 	}
 	
 	public static void main(String[] args) {		
