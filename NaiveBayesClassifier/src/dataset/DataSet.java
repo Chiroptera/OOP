@@ -5,21 +5,25 @@ import java.io.FileNotFoundException; //signal that an attempt to open the file 
 import java.io.FileReader; //convenience class for read char files
 import java.io.IOException; //signals that an I/O exception of some sort has occurred
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 
 
 public class DataSet {
 
-	LinkedList<Edge> edgeWeight = new LinkedList<Edge>();
 	LinkedList<int[]> parsedData = new LinkedList<int[]>();
 	Hashtable<List<Integer>,Integer> NijkcTable = new Hashtable<List<Integer>,Integer>();
 	Hashtable<List<Integer>,Integer> Nikc_JTable = new Hashtable<List<Integer>,Integer>();
 	Hashtable<List<Integer>,Integer> Nijc_KTable = new Hashtable<List<Integer>,Integer>();
+	
+	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
+
 	
 	BayesNode[] NodeList;
 	ClassifierNode ClassNode;
@@ -146,6 +150,7 @@ public class DataSet {
 		List<Integer> key,keyInv;
 		Integer value;
 		int classe;
+				
 
 		/* for each line of parsed data*/
 		for(int[] dataLine : parsedData){
@@ -238,16 +243,18 @@ public class DataSet {
 		int scoreIJKC;
 		int scoreIKC;
 		int counter = 0;
-		List<Integer> keyIJKC, keyIJC, keyIKC, invkeyIJKC, invkeyIJC, invkeyIKC;
+		
+		List<Integer> keyIJKC, keyIJC, keyIKC, invkeyIJKC, invkeyIJC, invkeyIKC, edgeKey;
+		
+		Float value;
 		
 
 		for(int i = 0; i < this.NX; i++){
-			for(int ii = i +1; ii < this.NX; ii++){
+			for(int ii = i+1; ii < this.NX; ii++){
 				
 				score = 0;
 
-				
-				for(int j=0; j < NodeList[ii].GetSR(); j++){
+				for(int j = 0; j < NodeList[ii].GetSR(); j++){
 
 					for(int k = 0; k < NodeList[i].GetSR(); k++){
 
@@ -280,7 +287,7 @@ public class DataSet {
 		
 							if(Nijc_KTable.containsKey(keyIJC)){
 								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
-								System.out.println(Nijc_KTable.get(keyIJC).intValue());			
+								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
 							
@@ -296,7 +303,7 @@ public class DataSet {
 							
 							if( NijkcTable.containsKey(keyIJKC) ){
 								scoreIJKC = NijkcTable.get(keyIJKC).intValue();
-								System.out.println(NijkcTable.get(keyIJKC).intValue());			
+								//System.out.println(NijkcTable.get(keyIJKC).intValue());			
 
 							}
 							/*
@@ -305,12 +312,13 @@ public class DataSet {
 							}
 							*/
 							else{
-								scoreIJKC = 0;
+								score += 0;
+								continue;
 							}
 							
 							if( Nikc_JTable.containsKey(keyIKC) ){
 								scoreIKC = Nikc_JTable.get(keyIKC).intValue();
-								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
+								//System.out.println(Nikc_JTable.get(keyIKC).intValue());			
 
 							}
 							/*
@@ -323,26 +331,31 @@ public class DataSet {
 							}
 
 
-							System.out.println("Midscore calculus:");
+							/*System.out.println("Midscore calculus:");
 							System.out.println("ScoreIJKC: " + scoreIJKC);
 							System.out.println("ScoreIJC: " + scoreIJC);
 							System.out.println("ScoreIKC: " + scoreIKC);
+							System.out.println("Number class occurrencies: " + ClassNode.GetNC(c));*/
 
 
 							
-							score += (scoreIJKC / (float) (this.NT) )  * Math.log(( (float)scoreIJKC*(float)ClassNode.GetSR() ) / 
-									((float)scoreIKC*(float)scoreIJC )) / (float)Math.log(2);
-							System.out.println("Score: " + score);
-							System.out.println();
-							System.out.println();
+							score += (     ( (float)scoreIJKC / (float) (this.NT) )
+									*  (Math.log(( (float)scoreIJKC * (float)ClassNode.GetNC(c) ) / 
+									( (float)scoreIKC*(float)scoreIJC ) ) / (float)Math.log(2)  )  );
+							//System.out.println("Score: " + score);
+//							System.out.println();
+//							System.out.println();
 							
 						}
 					}	
 				}
 				
 				System.out.println("Score: " + score + " for i= " + i + " and i'= " + ii);
-				Edge aux = new Edge(i, ii, score);
-				edgeWeight.add(aux);
+				
+				//aqui em vez de criar um nova edge, adicionar ao mapa com coordenadas i ii
+				edgeKey = Arrays.asList(i,ii);
+				value = score;
+				edgeWeight.put(edgeKey,value);
 				
 			}
 		}
@@ -352,7 +365,66 @@ public class DataSet {
 	}
 	
 	
-
+	//just for fun, nao est acabado
+//	public void minimumTreewithPrim(){
+//
+//		int[] connected = new int[this.NX];
+//		int notfinished = 1;
+//		Edge aux = edgeWeight.get(0);
+//		
+//		//first iteration, search for the highest connection
+//						
+//		for (Iterator<Edge> iter = edgeWeight.iterator(); iter.hasNext(); ) {
+//			
+//		    Edge element = iter.next();
+//		    
+//		    if(element.score > aux.score){
+//		    	
+//		    	aux = element;
+//		    }
+//		    
+//			System.out.println("peer1: " + element.peer[0] + ", peer2: " + element.peer[1] + ", score:" + element.score);
+//
+//		}
+//		
+//		//
+//		connected[aux.peer[0]] = 1;
+//		connected[aux.peer[1]] = 1;
+//		
+//		aux = edgeWeight.get(0);
+//		
+//		while(notfinished == 1){
+//			notfinished = 0;
+//			
+//			for (Iterator<Edge> iter = edgeWeight.iterator(); iter.hasNext(); ) {
+//				
+//				
+//			    Edge element = iter.next();
+//			    
+//				if( connected[element.peer[0]] == 1 && connected[element.peer[1]] == 1 ){
+//					//both are connected
+//					notfinished = 1;
+//					continue;
+//				}
+//				
+//				if( connected[element.peer[0]] == 1 || connected[element.peer[1]] == 1 ){
+//					//only one is connected the edge can be used
+//					notfinished = 1;
+//					
+//				    if(element.score > aux.score){
+//				    	
+//				    	aux = element;
+//				    	
+//				    }
+//				}
+//			    
+//				System.out.println("peer1: " + element.peer[0] + ", peer2: " + element.peer[1] + ", score:" + element.score);
+//	
+//			}
+//		}
+//}
+	
+	
 	/**
 	 * @param args
 	 */
@@ -362,6 +434,9 @@ public class DataSet {
 		DataSet obj = new DataSet();
 		obj.parse(args[0]);
 		obj.buildTable();
+		
+		List<Integer> keyedge;
+		
 		
 		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
 			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
@@ -395,6 +470,13 @@ public class DataSet {
 		}
 		
 		obj.buildmatrix();
+		
+		for (List<Integer> key : obj.edgeWeight.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.edgeWeight.get(key));
+		}
+		
+
 		
 		
 		/*for (Iterator<Edge> iter = obj.edgeWeight.iterator(); iter.hasNext(); ) {
