@@ -238,20 +238,20 @@ public class DataSet {
 	
 	public void buildmatrix(){
 		
-		float score = 0;
+		float score;
 		int scoreIJC;
 		int scoreIJKC;
 		int scoreIKC;
 		int counter = 0;
 		
-		List<Integer> keyIJKC, keyIJC, keyIKC, invkeyIJKC, invkeyIJC, invkeyIKC, edgeKey;
+		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
 		
 		Float value;
-		
 
 		for(int i = 0; i < this.NX; i++){
-			for(int ii = i+1; ii < this.NX; ii++){
-				
+			
+			for(int ii = i + 1; ii < this.NX; ii++){
+
 				score = 0;
 
 				for(int j = 0; j < NodeList[ii].GetSR(); j++){
@@ -263,20 +263,12 @@ public class DataSet {
 
 							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(i,k,j,c);
-							
-							/*
-							invkeyIJC = Arrays.asList(c,k,i);
-							invkeyIJKC = Arrays.asList(c,j,k,ii,i);
-							invkeyIKC = Arrays.asList(c,j,k,i);
-							*/
+							keyIJC = Arrays.asList(i,ii,j,c);
 							
 							/*
 							System.out.println(keyIJC.toString());
 							System.out.println(keyIJKC.toString());
 							System.out.println(keyIKC.toString());
-							
-							
 							System.out.println(Nijc_KTable.containsKey(keyIJC));	
 							System.out.println(NijkcTable.containsKey(keyIJKC) );			
 							System.out.println(Nikc_JTable.containsKey(keyIKC));	
@@ -290,13 +282,6 @@ public class DataSet {
 								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
-							
-							/*
-							else if(Nijc_KTable.containsKey(invkeyIJC)){
-								scoreIJC = Nijc_KTable.get(invkeyIJC).intValue();			
-								
-							}
-							*/
 							else{
 								continue;
 							}
@@ -306,11 +291,6 @@ public class DataSet {
 								//System.out.println(NijkcTable.get(keyIJKC).intValue());			
 
 							}
-							/*
-							else if(NijkcTable.containsKey(invkeyIJKC)){
-								scoreIJKC = NijkcTable.get(invkeyIJKC).intValue();			
-							}
-							*/
 							else{
 								score += 0;
 								continue;
@@ -318,14 +298,10 @@ public class DataSet {
 							
 							if( Nikc_JTable.containsKey(keyIKC) ){
 								scoreIKC = Nikc_JTable.get(keyIKC).intValue();
-								//System.out.println(Nikc_JTable.get(keyIKC).intValue());			
+								System.out.print(String.valueOf(keyIKC) + ",");
+								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
 
 							}
-							/*
-							else if(Nikc_JTable.containsKey(invkeyIKC)){
-								scoreIKC = Nikc_JTable.get(invkeyIKC).intValue();
-							}
-							*/
 							else{
 								continue;
 							}
@@ -339,9 +315,9 @@ public class DataSet {
 
 
 							
-							score += (     ( (float)scoreIJKC / (float) (this.NT) )
-									*  (Math.log(( (float)scoreIJKC * (float)ClassNode.GetNC(c) ) / 
-									( (float)scoreIKC*(float)scoreIJC ) ) / (float)Math.log(2)  )  );
+							score +=      ( scoreIJKC / (float)(this.NT) )
+									*  (Math.log(( scoreIJKC * (float)ClassNode.GetNC(c) ) / 
+									(scoreIKC*scoreIJC ) ) / (float)Math.log(2)  );
 							//System.out.println("Score: " + score);
 //							System.out.println();
 //							System.out.println();
@@ -352,7 +328,6 @@ public class DataSet {
 				
 				System.out.println("Score: " + score + " for i= " + i + " and i'= " + ii);
 				
-				//aqui em vez de criar um nova edge, adicionar ao mapa com coordenadas i ii
 				edgeKey = Arrays.asList(i,ii);
 				value = score;
 				edgeWeight.put(edgeKey,value);
@@ -364,67 +339,6 @@ public class DataSet {
 
 	}
 	
-	
-	//just for fun, nao est acabado
-//	public void minimumTreewithPrim(){
-//
-//		int[] connected = new int[this.NX];
-//		int notfinished = 1;
-//		Edge aux = edgeWeight.get(0);
-//		
-//		//first iteration, search for the highest connection
-//						
-//		for (Iterator<Edge> iter = edgeWeight.iterator(); iter.hasNext(); ) {
-//			
-//		    Edge element = iter.next();
-//		    
-//		    if(element.score > aux.score){
-//		    	
-//		    	aux = element;
-//		    }
-//		    
-//			System.out.println("peer1: " + element.peer[0] + ", peer2: " + element.peer[1] + ", score:" + element.score);
-//
-//		}
-//		
-//		//
-//		connected[aux.peer[0]] = 1;
-//		connected[aux.peer[1]] = 1;
-//		
-//		aux = edgeWeight.get(0);
-//		
-//		while(notfinished == 1){
-//			notfinished = 0;
-//			
-//			for (Iterator<Edge> iter = edgeWeight.iterator(); iter.hasNext(); ) {
-//				
-//				
-//			    Edge element = iter.next();
-//			    
-//				if( connected[element.peer[0]] == 1 && connected[element.peer[1]] == 1 ){
-//					//both are connected
-//					notfinished = 1;
-//					continue;
-//				}
-//				
-//				if( connected[element.peer[0]] == 1 || connected[element.peer[1]] == 1 ){
-//					//only one is connected the edge can be used
-//					notfinished = 1;
-//					
-//				    if(element.score > aux.score){
-//				    	
-//				    	aux = element;
-//				    	
-//				    }
-//				}
-//			    
-//				System.out.println("peer1: " + element.peer[0] + ", peer2: " + element.peer[1] + ", score:" + element.score);
-//	
-//			}
-//		}
-//}
-	
-	
 	/**
 	 * @param args
 	 */
@@ -434,8 +348,6 @@ public class DataSet {
 		DataSet obj = new DataSet();
 		obj.parse(args[0]);
 		obj.buildTable();
-		
-		List<Integer> keyedge;
 		
 		
 		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
