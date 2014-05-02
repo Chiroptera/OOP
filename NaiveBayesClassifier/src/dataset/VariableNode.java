@@ -29,18 +29,19 @@ public class VariableNode extends BayesNode {
 		}		
 	}
 	
-<<<<<<< HEAD
+
 	public int GetSR(){
 		
 		return r;
-=======
+	}
+
 	public void setParent(BayesNode parent){
 		this.parent = parent;
 	}
 	
 	public void addChild(VariableNode child){
 		this.children.add(child);
->>>>>>> origin/buildGraph
+
 	}
 	
 	public static void main(String[] args) {		
