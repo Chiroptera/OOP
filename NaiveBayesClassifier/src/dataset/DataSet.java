@@ -238,32 +238,23 @@ public class DataSet {
 	
 	public void buildmatrix(){
 		
-		float score;
-		int scoreIJC;
-		int scoreIJKC;
-		int scoreIKC;
-		int counter = 0;
+		float score, scoreMDL, scoreLL;
+		float scoreIJC, scoreIJKC, scoreIKC; //number of instances of each table
 		
 		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
 		
 		Float value;
 
 		for(int i = 0; i < this.NX; i++){
-			
-			for(int ii = i + 1; ii < this.NX; ii++){
-
+			for(int ii = 0 ; ii < this.NX; ii++){
 				score = 0;
-
 				for(int j = 0; j < NodeList[ii].GetSR(); j++){
-
 					for(int k = 0; k < NodeList[i].GetSR(); k++){
-
 						for(int c = 0; c < ClassNode.GetSR(); c++){
-							counter++;
 
 							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(i,ii,j,c);
+							keyIJC = Arrays.asList(ii,j,c);
 							
 							/*
 							System.out.println(keyIJC.toString());
@@ -274,11 +265,9 @@ public class DataSet {
 							System.out.println(Nikc_JTable.containsKey(keyIKC));	
 							System.out.println();	
 							*/		
-
-
 		
-							if(Nijc_KTable.containsKey(keyIJC)){
-								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
+							if(Nikc_JTable.containsKey(keyIJC)){
+								scoreIJC = Nikc_JTable.get(keyIJC).intValue();	
 								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
@@ -292,33 +281,35 @@ public class DataSet {
 
 							}
 							else{
-								score += 0;
 								continue;
 							}
 							
 							if( Nikc_JTable.containsKey(keyIKC) ){
 								scoreIKC = Nikc_JTable.get(keyIKC).intValue();
-								System.out.print(String.valueOf(keyIKC) + ",");
-								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
+//								System.out.print(String.valueOf(keyIKC) + ",");
+//								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
 
 							}
 							else{
 								continue;
 							}
-
-
-							/*System.out.println("Midscore calculus:");
-							System.out.println("ScoreIJKC: " + scoreIJKC);
-							System.out.println("ScoreIJC: " + scoreIJC);
-							System.out.println("ScoreIKC: " + scoreIKC);
-							System.out.println("Number class occurrencies: " + ClassNode.GetNC(c));*/
+//
+							if((i == 1 && ii == 0) || (i == 0 && ii == 1)){
+								System.out.print("Mid-score:");
+								System.out.print("   k: " + k + " j: " + j + " c: " + c);
+								System.out.print("   ScoreIJKC: " + scoreIJKC);
+								System.out.print("   ScoreIJC: " + scoreIJC);
+								System.out.print("   ScoreIKC: " + scoreIKC);
+								System.out.print("   Score: " + score);
+								System.out.println("   Class occurrences: " + ClassNode.GetNC(c));
+							}
 
 
 							
-							score +=      ( scoreIJKC / (float)(this.NT) )
-									*  (Math.log(( scoreIJKC * (float)ClassNode.GetNC(c) ) / 
-									(scoreIKC*scoreIJC ) ) / (float)Math.log(2)  );
-							//System.out.println("Score: " + score);
+							score += (scoreIJKC / (this.NT)) * 
+									( Math.log( (scoreIJKC * ClassNode.GetNC(c)) / (scoreIKC*scoreIJC )) 
+									/ Math.log(2));
+//							System.out.println("Score: " + score);
 //							System.out.println();
 //							System.out.println();
 							
@@ -326,17 +317,19 @@ public class DataSet {
 					}	
 				}
 				
-				System.out.println("Score: " + score + " for i= " + i + " and i'= " + ii);
+				if((i == 0 && ii == 1) || (i == 1 && ii == 0)){
+					System.out.println("Score: " + score + " for i= " + i + " and i'= " + ii);
+				}
 				
 				edgeKey = Arrays.asList(i,ii);
+				scoreLL = score;
+				scoreMDL = (float) (score - (((ClassNode.GetSR() * (NodeList[i].GetSR() - 1) * (NodeList[ii].GetSR() - 1))/2) * Math.log(this.NX)));
+				//take decision based on argument
 				value = score;
 				edgeWeight.put(edgeKey,value);
 				
 			}
 		}
-		
-		System.out.println("Number of 'cicles': " + counter);
-
 	}
 	
 	/**
@@ -354,7 +347,6 @@ public class DataSet {
 			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
 		}
 		System.out.println("Number of instances: " + obj.GetNT());
-
 
 
 		/* print Nijkc*/
