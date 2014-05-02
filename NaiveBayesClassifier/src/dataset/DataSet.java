@@ -42,7 +42,7 @@ public class DataSet {
 
 	public void parse(String Filename) {
 		//System.err.println("parse:");
-		String csvFile = (Filename + ".csv");
+		String csvFile = (Filename);
 
 		BufferedReader br = null;
 		String line;
@@ -186,7 +186,6 @@ public class DataSet {
 				 * and their corresponding values */
 				for(int il=0;il!=i && il<dataLine.length-1;il++){
 
-					
 					/* 
 					 * 
 					 *  CHECKING FOR Nijkc
@@ -224,14 +223,24 @@ public class DataSet {
 					if(Nijc_KTable.containsKey(key)){
 						value=Nijc_KTable.get(key).intValue()+1; /* increment Nijkc */
 						Nijc_KTable.put(key,value); /* add entry in table*/
+					}
+					/* otherwise add entries to table with value 1*/
+					else{
+						Nijc_KTable.put(key,1);
+					}
+					
+					/* if keyInv already exists, increment*/
+					if(Nijc_KTable.containsKey(keyInv)){
+						value=Nijc_KTable.get(key).intValue()+1; /* increment Nijkc */
 						Nijc_KTable.put(keyInv,value);
 					}
 					/* otherwise add entries to table with value 1*/
 					else{
-						Nijc_KTable.put(key, 1);
-						Nijc_KTable.put(keyInv, 1);
-					}	
+						Nijc_KTable.put(keyInv,1);
+					}
 					
+					
+
 				} /* end cycle il*/
 			} /* end cycle i*/
 	    } /* end cycle dataLine*/
@@ -255,7 +264,7 @@ public class DataSet {
 
 							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(ii,j,c);
+							keyIJC = Arrays.asList(i,ii,j,c);
 							
 							/*
 							System.out.println(keyIJC.toString());
@@ -267,8 +276,8 @@ public class DataSet {
 							System.out.println();	
 							*/		
 		
-							if(Nikc_JTable.containsKey(keyIJC)){
-								scoreIJC = Nikc_JTable.get(keyIJC).intValue();	
+							if(Nijc_KTable.containsKey(keyIJC)){
+								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
 								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
