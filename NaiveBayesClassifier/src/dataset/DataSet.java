@@ -5,6 +5,7 @@ import java.io.FileNotFoundException; //signal that an attempt to open the file 
 import java.io.FileReader; //convenience class for read char files
 import java.io.IOException; //signals that an I/O exception of some sort has occurred
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -15,11 +16,21 @@ import java.util.Map;
 
 =======
 import java.lang.reflect.Array;
+=======
+import java.util.ArrayList;
+>>>>>>> origin/buildGraph
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+<<<<<<< HEAD
 >>>>>>> 82192b7546d1bad4d72270764b337c12cb33f969
+=======
+import java.util.Map;
+import java.util.Map.Entry;
+>>>>>>> origin/buildGraph
 
 
 
@@ -71,7 +82,7 @@ public class DataSet {
 		BufferedReader br = null;
 		String line;
 		String cvsSplitBy = ",";
-		int i = 0, sSize;
+		int sSize;
 		
 <<<<<<< HEAD
 		//System.err.println("parse: before try");
@@ -493,6 +504,7 @@ public class DataSet {
 		System.out.println("Done");
   }
 
+    
 	public void buildTable(){
 	    /*for(Iterator iter = parsedData.iterator();iter.hasNext();){*/
 		List<Integer> key,keyInv;
@@ -585,6 +597,9 @@ public class DataSet {
 	    } /* end cycle dataLine*/
 	}
 	
+	
+
+	
 	/**
 	 * @param args
 	 */
@@ -612,7 +627,8 @@ public class DataSet {
 		for (List<Integer> key : obj.Nijc_KTable.keySet()){
 			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
 			System.out.println("\t\t" + obj.Nijc_KTable.get(key));
-		}	
+		}
+		
 	}  
 }
 >>>>>>> 82192b7546d1bad4d72270764b337c12cb33f969
