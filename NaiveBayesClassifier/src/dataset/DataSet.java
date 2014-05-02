@@ -264,7 +264,7 @@ public class DataSet {
 
 							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(i,ii,j,c);
+							keyIJC = Arrays.asList(ii,j,c);
 							
 							/*
 							System.out.println(keyIJC.toString());
@@ -276,8 +276,8 @@ public class DataSet {
 							System.out.println();	
 							*/		
 		
-							if(Nijc_KTable.containsKey(keyIJC)){
-								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
+							if(Nikc_JTable.containsKey(keyIJC)){
+								scoreIJC = Nikc_JTable.get(keyIJC).intValue();	
 								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
