@@ -40,6 +40,16 @@ public class DataSet {
 		return NT;
 	}
 
+	public VariableNode[] getVaribleList(){
+		/* if list hasn't been assigned yet, return null*/
+		if(NodeList == null) return null;
+		VariableNode[] outList = new VariableNode[NodeList.length-1];
+		for(int i=0;i<NodeList.length-1;i++){
+			outList[i]=(VariableNode)NodeList[i];
+		}
+		return outList;
+	}
+	
 	public void parse(String Filename) {
 		//System.err.println("parse:");
 		String csvFile = (Filename);

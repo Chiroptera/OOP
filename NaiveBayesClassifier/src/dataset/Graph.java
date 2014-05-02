@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,10 @@ import java.util.Map.Entry;
 
 public class Graph {
 
-	BayesNode[] varList;
+	VariableNode[] varList;
 	ClassifierNode classNode;
-	
+	VariableNode root;
+
 	Hashtable<List<Integer>,Integer> NijkcTable;
 	Hashtable<List<Integer>,Integer> Nijc_KTable;
 	
@@ -21,7 +23,7 @@ public class Graph {
 	
 	int numberOfVars;
 	
-	Graph(BayesNode[] varList_arg,ClassifierNode classNode_arg,
+	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
 			Hashtable<List<Integer>,Integer> NijkcTable_arg,Hashtable<List<Integer>,Integer> Nijc_KTable_arg){
 		varList = varList_arg;
 		classNode = classNode_arg;
@@ -133,7 +135,66 @@ public class Graph {
 		
 	}
 	
-	
+	void makeTreeDirected(){
+		
+		/* pick some node for root*/
+		root = varList[0];
+		
+		int id1,id2;
+		List<Integer> edge;
+		
+		/* make (shallow ?) copy of spanning tree*/
+		ArrayList<List<Integer>> treeCopy = new ArrayList<List<Integer>>(spanningTree);
+		
+		ArrayList<VariableNode> oldChilds = new ArrayList<VariableNode>(5),
+								newChilds = new ArrayList<VariableNode>(5), 
+								temp;
+		oldChilds.add(root);
+		System.err.println(newChilds.isEmpty());
+		
+		while(!treeCopy.isEmpty()){
+			/* cycle through all the edges */
+			for(Iterator<List<Integer>> i = treeCopy.iterator(); i.hasNext();){
+				edge = i.next();
+				for(VariableNode var : oldChilds){
+					/* if edge contains this variable*/
+					if (edge.contains(var.GetId())){
+						
+						id1=edge.get(0);
+						id2=edge.get(1);
+						
+						/* if variable is in position 1 of edge, make it the parent of variable in position 2*/
+						if(id1 == var.GetId()){
+							varList[id2].setParent(var);
+//							var.addChild(varList[id2]);
+							newChilds.add(varList[id2]);
+						}
+						else{
+							/* if variable is in position 2 of edge, make it the parent of variable in position 1
+							 * and add the variable in position 1 as one of the new childs to check*/
+							varList[id1].setParent(var);
+//							var.addChild(varList[id1]);
+							newChilds.add(varList[id1]);
+						}
+						
+						/* remove edge so it doesn't get checked again*/
+//						treeCopy.remove(edge);
+						i.remove();
+
+					}
+				} /* end for of variables */
+			} /* end for of edges */
+			
+			/* variables to be checked for in next iteration are the ones in newChilds */
+			temp=oldChilds;
+			oldChilds=newChilds;
+			
+			/* clear newChilds for next iteration  */
+			newChilds=temp;
+			newChilds.clear();
+			
+		}/* end while */
+	}
 	
 	/**
 	 * @param args
@@ -185,14 +246,34 @@ public class Graph {
 		}
 		
 	
-		Graph grafo = new Graph(obj.NodeList,obj.ClassNode,obj.NijkcTable,obj.Nijc_KTable);
+		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode,obj.NijkcTable,obj.Nijc_KTable);
 		grafo.buildMWST(obj.edgeWeight);
 		
 		System.err.println("Edges in tree");
 		for (List<Integer> edge : grafo.spanningTree){
 			System.err.println(edge);
 		}
-
+		
+		grafo.makeTreeDirected();
+		
+//		for(VariableNode var : grafo.varList){
+//			System.err.println("Variable " + var.getName() + " has childs ");
+//			for(VariableNode childVar : var.children){
+//				System.err.println(childVar.getName() + ", ");
+//			}
+//		}
+		
+		System.err.println("hello");
+		for(VariableNode var : grafo.varList){
+			System.err.println("Variable " + var.getName() + " has parent ");
+			if (var.parent!= null){
+				System.err.println(var.parent.getName());
+				continue;
+			}
+			System.err.println("null");
+		}
 	}
+
+//	}
 
 }

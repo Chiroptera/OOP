@@ -8,12 +8,16 @@ public class VariableNode extends BayesNode {
 
 	private int id; //index
 	private int r; //number of values in variable
-	BayesNode parent; //graph built by saying who is the father
+	VariableNode parent; //graph built by saying who is the father
 	LinkedList<VariableNode> children;
 	
 	VariableNode(String nameNew, int idNew) {
 		super(nameNew);
 		this.id = idNew;
+	}
+	
+	void setParent(VariableNode p){
+		this.parent=p;
 	}
 	
 	public int GetId(){
@@ -35,10 +39,7 @@ public class VariableNode extends BayesNode {
 		return r;
 	}
 
-	public void setParent(BayesNode parent){
-		this.parent = parent;
-	}
-	
+
 	public void addChild(VariableNode child){
 		this.children.add(child);
 
