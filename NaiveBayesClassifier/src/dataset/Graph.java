@@ -1,8 +1,10 @@
 package dataset;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,27 +13,100 @@ import java.util.Map.Entry;
 
 public class Graph {
 
-	LinkedList<VariableNode> varList;
+	BayesNode[] varList;
 	ClassifierNode classNode;
 	
-	Hashtable<List<Integer>,Integer> NijkcTable;
-	Hashtable<List<Integer>,Integer> Nijc_KTable;
+	Map<List<Integer>,Integer> NijkcTable;
+	Map<List<Integer>,Integer> Nijc_KTable;
+	Map<List<Integer>,Integer> Nikc_JTable;
+	Map<List<Integer>, Float> edgeWeight;
+	int numberOfInst;
+
 	int[][] edgeMatrix;
 	
 	ArrayList<List<Integer>> spanningTree;
 	
 	int numberOfVars;
 	
-	Graph(LinkedList<VariableNode> varList_arg,ClassifierNode classNode_arg,
-			int[][] edgeMatrix_arg,
-			Hashtable<List<Integer>,Integer> NijkcTable_arg,Hashtable<List<Integer>,Integer> Nijc_KTable_arg){
+	Graph(BayesNode[] varList_arg,ClassifierNode classNode_arg,
+			int NT_arg,
+			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
 		varList = varList_arg;
 		classNode = classNode_arg;
 		NijkcTable = NijkcTable_arg;
 		Nijc_KTable = Nijc_KTable_arg;
-		edgeMatrix = edgeMatrix_arg;
-		numberOfVars = varList_arg.size();
+		Nikc_JTable = Nikc_JTable_arg;
+		edgeWeight = edgeWeight_arg; 
+
+		numberOfVars = varList_arg.length;
+		numberOfInst = NT_arg;
 	}
+	
+	//buildmatrix()
+	//method to calculate the edges weight
+	public void buildmatrix(){
+		
+		float score, scoreMDL, scoreLL;
+		float occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
+		
+		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
+		
+		for(int i = 0; i < numberOfVars-1; i++){
+			for(int ii = 0 ; ii < numberOfVars-1; ii++){
+				score = 0;
+				for(int j = 0; j < varList[ii].GetSR(); j++){
+					for(int k = 0; k < varList[i].GetSR(); k++){
+						for(int c = 0; c < classNode.GetSR(); c++){
+
+							//keys to access the hash map
+							keyIKC = Arrays.asList(i,k,c);
+							keyIJKC = Arrays.asList(i,ii,k,j,c);
+							keyIJC = Arrays.asList(i,ii,j,c);
+		
+							//calculate the respective occurrences 
+							if(Nijc_KTable.containsKey(keyIJC)){
+								occurrIJC = Nijc_KTable.get(keyIJC).intValue();	
+							}
+							else{
+								continue;
+							}
+							
+							if( NijkcTable.containsKey(keyIJKC) ){
+								occurrIJKC = NijkcTable.get(keyIJKC).intValue();
+							}
+							else{
+								continue;
+							}
+							
+							if( Nikc_JTable.containsKey(keyIKC) ){
+								occurrIKC = Nikc_JTable.get(keyIKC).intValue();
+							}
+							else{
+								continue;
+							}
+
+							score += (occurrIJKC / (numberOfInst)) * 
+									( Math.log( (occurrIJKC * classNode.GetNC(c)) / (occurrIKC*occurrIJC )) 
+									/ Math.log(2));
+
+						}
+					}	
+				}
+
+				edgeKey = Arrays.asList(i,ii);
+				scoreLL = score;
+				
+				scoreMDL = (float) (score - (((classNode.GetSR() * (varList[i].GetSR() - 1) * (varList[ii].GetSR() - 1)) / 2) * Math.log(numberOfInst)));
+				
+				edgeWeight.put(edgeKey,scoreLL);
+				
+			}
+		}
+	}
+	
+	
+	
+	
 	
 	
 	/* function that converts from Hashtable to an ordered ArrayList*/
@@ -55,11 +130,11 @@ public class Graph {
 		 * 
 		Examine the edges (this should be done in a loop):
 		
-			(a) If “Island 1” and “Island 2” belong to the same component move on to the next
+			(a) If Island 1 and Island 2 belong to the same component move on to the next
 			edge.
 			
 			(b) Otherwise add the edge to the maximum weight spanning tree. Let ic1	be the
-			component of “Island 1” and	ic2	the component of “Island 2”. For every island
+			component of Island 1 and	ic2	the component of Island 2. For every island
 			with component	max(ic1, ic2), set the component to	min(ic1, ic2).
 			
 			(c) Stop after adding 12 edges to the maximum weight spanning tree.
