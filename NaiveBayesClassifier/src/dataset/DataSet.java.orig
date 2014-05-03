@@ -6,6 +6,7 @@ import java.io.FileReader; //convenience class for read char files
 import java.io.IOException; //signals that an I/O exception of some sort has occurred
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class DataSet {
 
 	public void parse(String Filename) {
 		//System.err.println("parse:");
-		String csvFile = (Filename + ".csv");
+		String csvFile = (Filename);
 
 		BufferedReader br = null;
 		String line;
@@ -174,6 +175,7 @@ public class DataSet {
 
 				/* go through all permutations of variables and their parents (a var i can't be its own parent)
 				 * and their corresponding values */
+<<<<<<< HEAD
 				for(int il=0; /*il!=i &&*/ il<dataLine.length-1;il++){
 					
 					if(il == i) continue;
@@ -181,6 +183,15 @@ public class DataSet {
 					System.out.println("i=" + i + " i'=" + il);
 					 // CHECKING FOR Nijkc
 
+=======
+				for(int il=0;il!=i && il<dataLine.length-1;il++){
+
+					/* 
+					 * 
+					 *  CHECKING FOR Nijkc
+					 * 
+					 * */
+>>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
 					/* key = [var id, parent id, var value, parent value, class value] */
 					key=Arrays.asList(i,il,dataLine[i],dataLine[il],classe);
 
@@ -210,17 +221,108 @@ public class DataSet {
 						
 						value = Nijc_KTable.get(key).intValue() + 1; /* increment Nijkc */
 						Nijc_KTable.put(key,value); /* add entry in table*/
+<<<<<<< HEAD
 						
 					}
 					/* otherwise add entries to table with value 1*/
 					else{
 						Nijc_KTable.put(key, 1);
 					}	
+=======
+					}
+					/* otherwise add entries to table with value 1*/
+					else{
+						Nijc_KTable.put(key,1);
+					}
 					
+					/* if keyInv already exists, increment*/
+					if(Nijc_KTable.containsKey(keyInv)){
+						value=Nijc_KTable.get(key).intValue()+1; /* increment Nijkc */
+						Nijc_KTable.put(keyInv,value);
+					}
+					/* otherwise add entries to table with value 1*/
+					else{
+						Nijc_KTable.put(keyInv,1);
+					}
+>>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
+					
+					
+
 				} /* end cycle il*/
 			} /* end cycle i*/
 	    } /* end cycle dataLine*/		
 	}
+<<<<<<< HEAD
+=======
+	
+	public void buildmatrix(){
+		
+		float score, scoreMDL, scoreLL;
+		float scoreIJC, scoreIJKC, scoreIKC; //number of instances of each table
+		
+		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
+		
+		Float value;
+
+		for(int i = 0; i < this.NX; i++){
+			for(int ii = 0 ; ii < this.NX; ii++){
+				score = 0;
+				for(int j = 0; j < NodeList[ii].GetSR(); j++){
+					for(int k = 0; k < NodeList[i].GetSR(); k++){
+						for(int c = 0; c < ClassNode.GetSR(); c++){
+
+							keyIKC = Arrays.asList(i,k,c);
+							keyIJKC = Arrays.asList(i,ii,k,j,c);
+							keyIJC = Arrays.asList(i,ii,j,c);
+							
+							/*
+							System.out.println(keyIJC.toString());
+							System.out.println(keyIJKC.toString());
+							System.out.println(keyIKC.toString());
+							System.out.println(Nijc_KTable.containsKey(keyIJC));	
+							System.out.println(NijkcTable.containsKey(keyIJKC) );			
+							System.out.println(Nikc_JTable.containsKey(keyIKC));	
+							System.out.println();	
+							*/		
+		
+							if(Nijc_KTable.containsKey(keyIJC)){
+								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
+								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
+
+							}
+							else{
+								continue;
+							}
+							
+							if( NijkcTable.containsKey(keyIJKC) ){
+								scoreIJKC = NijkcTable.get(keyIJKC).intValue();
+								//System.out.println(NijkcTable.get(keyIJKC).intValue());			
+
+							}
+							else{
+								continue;
+							}
+							
+							if( Nikc_JTable.containsKey(keyIKC) ){
+								scoreIKC = Nikc_JTable.get(keyIKC).intValue();
+//								System.out.print(String.valueOf(keyIKC) + ",");
+//								System.out.println(Nikc_JTable.get(keyIKC).intValue());			
+
+							}
+							else{
+								continue;
+							}
+//
+							if((i == 1 && ii == 0) || (i == 0 && ii == 1)){
+								System.out.print("Mid-score:");
+								System.out.print("   k: " + k + " j: " + j + " c: " + c);
+								System.out.print("   ScoreIJKC: " + scoreIJKC);
+								System.out.print("   ScoreIJC: " + scoreIJC);
+								System.out.print("   ScoreIKC: " + scoreIKC);
+								System.out.print("   Score: " + score);
+								System.out.println("   Class occurrences: " + ClassNode.GetNC(c));
+							}
+>>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
 
 	
 	/**
