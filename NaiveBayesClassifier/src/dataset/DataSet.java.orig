@@ -6,7 +6,6 @@ import java.io.FileReader; //convenience class for read char files
 import java.io.IOException; //signals that an I/O exception of some sort has occurred
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +37,19 @@ public class DataSet {
 		return NT;
 	}
 
+	public VariableNode[] getVaribleList(){
+		/* if list hasn't been assigned yet, return null*/
+		if(NodeList == null) return null;
+		VariableNode[] outList = new VariableNode[NodeList.length-1];
+		for(int i=0;i<NodeList.length-1;i++){
+			outList[i]=(VariableNode)NodeList[i];
+		}
+		return outList;
+	}
+	
 	public void parse(String Filename) {
 		//System.err.println("parse:");
-		String csvFile = (Filename);
+		String csvFile = (Filename + ".csv");
 
 		BufferedReader br = null;
 		String line;
@@ -175,7 +184,6 @@ public class DataSet {
 
 				/* go through all permutations of variables and their parents (a var i can't be its own parent)
 				 * and their corresponding values */
-<<<<<<< HEAD
 				for(int il=0; /*il!=i &&*/ il<dataLine.length-1;il++){
 					
 					if(il == i) continue;
@@ -183,15 +191,6 @@ public class DataSet {
 					System.out.println("i=" + i + " i'=" + il);
 					 // CHECKING FOR Nijkc
 
-=======
-				for(int il=0;il!=i && il<dataLine.length-1;il++){
-
-					/* 
-					 * 
-					 *  CHECKING FOR Nijkc
-					 * 
-					 * */
->>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
 					/* key = [var id, parent id, var value, parent value, class value] */
 					key=Arrays.asList(i,il,dataLine[i],dataLine[il],classe);
 
@@ -221,33 +220,13 @@ public class DataSet {
 						
 						value = Nijc_KTable.get(key).intValue() + 1; /* increment Nijkc */
 						Nijc_KTable.put(key,value); /* add entry in table*/
-<<<<<<< HEAD
 						
 					}
 					/* otherwise add entries to table with value 1*/
 					else{
 						Nijc_KTable.put(key, 1);
 					}	
-=======
-					}
-					/* otherwise add entries to table with value 1*/
-					else{
-						Nijc_KTable.put(key,1);
-					}
 					
-					/* if keyInv already exists, increment*/
-					if(Nijc_KTable.containsKey(keyInv)){
-						value=Nijc_KTable.get(key).intValue()+1; /* increment Nijkc */
-						Nijc_KTable.put(keyInv,value);
-					}
-					/* otherwise add entries to table with value 1*/
-					else{
-						Nijc_KTable.put(keyInv,1);
-					}
->>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
-					
-					
-
 				} /* end cycle il*/
 			} /* end cycle i*/
 	    } /* end cycle dataLine*/		
@@ -273,7 +252,7 @@ public class DataSet {
 
 							keyIKC = Arrays.asList(i,k,c);
 							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(i,ii,j,c);
+							keyIJC = Arrays.asList(ii,j,c);
 							
 							/*
 							System.out.println(keyIJC.toString());
@@ -285,8 +264,8 @@ public class DataSet {
 							System.out.println();	
 							*/		
 		
-							if(Nijc_KTable.containsKey(keyIJC)){
-								scoreIJC = Nijc_KTable.get(keyIJC).intValue();	
+							if(Nikc_JTable.containsKey(keyIJC)){
+								scoreIJC = Nikc_JTable.get(keyIJC).intValue();	
 								//System.out.println(Nijc_KTable.get(keyIJC).intValue());			
 
 							}
@@ -322,7 +301,7 @@ public class DataSet {
 								System.out.print("   Score: " + score);
 								System.out.println("   Class occurrences: " + ClassNode.GetNC(c));
 							}
->>>>>>> 6fafff3168d0ee03d056ad248f1f045da9728de0
+>>>>>>> origin/buildGraph
 
 	
 	/**

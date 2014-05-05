@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,22 +13,21 @@ import java.util.Map.Entry;
 
 public class Graph {
 
-	BayesNode[] varList;
+	VariableNode[] varList;
 	ClassifierNode classNode;
-	
+	VariableNode root;
+
 	Map<List<Integer>,Integer> NijkcTable;
 	Map<List<Integer>,Integer> Nijc_KTable;
 	Map<List<Integer>,Integer> Nikc_JTable;
-	Map<List<Integer>, Float> edgeWeight;
-	int numberOfInst;
-
-	int[][] edgeMatrix;
+	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 	
 	ArrayList<List<Integer>> spanningTree;
 	
 	int numberOfVars;
+	int numberOfInst;
 	
-	Graph(BayesNode[] varList_arg,ClassifierNode classNode_arg,
+	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
 			int NT_arg,
 			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
 		varList = varList_arg;
@@ -36,10 +35,9 @@ public class Graph {
 		NijkcTable = NijkcTable_arg;
 		Nijc_KTable = Nijc_KTable_arg;
 		Nikc_JTable = Nikc_JTable_arg;
-		edgeWeight = edgeWeight_arg; 
-
 		numberOfVars = varList_arg.length;
 		numberOfInst = NT_arg;
+
 	}
 	
 	//buildmatrix()
@@ -51,12 +49,21 @@ public class Graph {
 		
 		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
 		
-		for(int i = 0; i < numberOfVars-1; i++){
-			for(int ii = 0 ; ii < numberOfVars-1; ii++){
+		System.out.println("number of vars: " + numberOfVars + "Number of inst: " + this.numberOfInst);
+		
+		for(int i = 0;  i < varList.length; i++){
+			System.out.println("Variable " + i +  " has " + varList[i].GetSR() + " instances.");
+		}
+
+		
+		for(int i = 0; i < numberOfVars; i++){
+			for(int ii = i+1 ; ii < numberOfVars; ii++){
 				score = 0;
 				for(int j = 0; j < varList[ii].GetSR(); j++){
 					for(int k = 0; k < varList[i].GetSR(); k++){
 						for(int c = 0; c < classNode.GetSR(); c++){
+							
+
 
 							//keys to access the hash map
 							keyIKC = Arrays.asList(i,k,c);
@@ -85,7 +92,7 @@ public class Graph {
 								continue;
 							}
 
-							score += (occurrIJKC / (numberOfInst)) * 
+							score += (occurrIJKC / (this.numberOfInst)) * 
 									( Math.log( (occurrIJKC * classNode.GetNC(c)) / (occurrIKC*occurrIJC )) 
 									/ Math.log(2));
 
@@ -100,6 +107,8 @@ public class Graph {
 				
 				edgeWeight.put(edgeKey,scoreLL);
 				
+				System.out.println("edgekey: " + edgeKey + "score :" + score);
+				
 			}
 		}
 	}
@@ -110,13 +119,13 @@ public class Graph {
 	
 	
 	/* function that converts from Hashtable to an ordered ArrayList*/
-    public static ArrayList<Map.Entry<List<Integer>, Integer>> sortValue(Hashtable<?, Integer> t){
+    public static ArrayList<Map.Entry<List<Integer>, Float>> sortValue(Map<List<Integer>, Float> edgeWeight){
 
         //Transfer as List and sort it
-        ArrayList<Entry<List<Integer>, Integer>> l = new ArrayList(t.entrySet());
-        Collections.sort(l, new Comparator<Map.Entry<?, Integer>>(){
+        ArrayList<Entry<List<Integer>, Float>> l = new ArrayList(edgeWeight.entrySet());
+        Collections.sort(l, new Comparator<Map.Entry<?, Float>>(){
 
-          public int compare(Map.Entry<?, Integer> o1, Map.Entry<?, Integer> o2) {
+          public int compare(Map.Entry<?, Float> o1, Map.Entry<?, Float> o2) {
              return o2.getValue().compareTo(o1.getValue());
          }});
 
@@ -124,9 +133,9 @@ public class Graph {
      }
 	
 	/* build Maximum Weighted Spanning Tree*/
-	void buildMWST(ArrayList<Map.Entry<List<Integer>, Integer>> edges){
-		/*
-		 * From http://www.stats.ox.ac.uk/~konis/Rcourse/exercise1.pdf
+	void buildMWST(Map<List<Integer>, Float> edgeWeight){
+		/* 
+		 * Algorithm Steps from http://www.stats.ox.ac.uk/~konis/Rcourse/exercise1.pdf
 		 * 
 		Examine the edges (this should be done in a loop):
 		
@@ -139,6 +148,9 @@ public class Graph {
 			
 			(c) Stop after adding 12 edges to the maximum weight spanning tree.
 		*/
+		
+		/* order edges by descending weight */
+		ArrayList<Entry<List<Integer>, Float>> orderedEdges = sortValue(edgeWeight);
 		
 		/* array to hold var identifier of edge*/
 		int[] varsNumber = new int[numberOfVars];
@@ -153,15 +165,23 @@ public class Graph {
 		int edgeCounter=0;
 		
 		/* assumes edges is an ordered ArrayList with all the edges */
-		for(Map.Entry<List<Integer>, Integer> edge : edges){
+		for(Entry<List<Integer>, Float> edge : orderedEdges){
 			
-			/* step (a)*/
+			/* 
+			 * 
+			 * step (a)
+			 * 
+			 * */
 			/* if the varNumbers of the variables in this edge are equal we have a cyclic graph*/
 			if ( varsNumber[edge.getKey().get(0)] == varsNumber[edge.getKey().get(1)]){
 				continue;
 			}
 			
-			/* step (b)*/			
+			/* 
+			 * 
+			 * step (b)
+			 * 
+			 * */			
 			/* increment how many edges already in the list*/
 			edgeCounter = edgeCounter + 1;
 			
@@ -183,7 +203,11 @@ public class Graph {
 				if (varsNumber[i] == maxVarNumber) varsNumber[i] = minVarNumber;
 			}
 			
-			/* step (c) */
+			/* 
+			 * 
+			 * step (c) 
+			 * 
+			 * */
 			/* if all the variables are connected, finish*/
 			if (edgeCounter == numberOfVars-1){
 				spanningTree = listOfEdges;
@@ -196,12 +220,155 @@ public class Graph {
 		
 	}
 	
+	void makeTreeDirected(){
+		
+		/* pick some node for root*/
+		root = varList[0];
+		
+		int id1,id2;
+		List<Integer> edge;
+		
+		/* make (shallow ?) copy of spanning tree*/
+		ArrayList<List<Integer>> treeCopy = new ArrayList<List<Integer>>(spanningTree);
+		
+		ArrayList<VariableNode> oldChilds = new ArrayList<VariableNode>(5),
+								newChilds = new ArrayList<VariableNode>(5), 
+								temp;
+		oldChilds.add(root);
+		System.err.println(newChilds.isEmpty());
+		
+		while(!treeCopy.isEmpty()){
+			/* cycle through all the edges */
+			for(Iterator<List<Integer>> i = treeCopy.iterator(); i.hasNext();){
+				edge = i.next();
+				for(VariableNode var : oldChilds){
+					/* if edge contains this variable*/
+					if (edge.contains(var.GetId())){
+						
+						id1=edge.get(0);
+						id2=edge.get(1);
+						
+						/* if variable is in position 1 of edge, make it the parent of variable in position 2*/
+						if(id1 == var.GetId()){
+							varList[id2].setParent(var);
+//							var.addChild(varList[id2]);
+							newChilds.add(varList[id2]);
+						}
+						else{
+							/* if variable is in position 2 of edge, make it the parent of variable in position 1
+							 * and add the variable in position 1 as one of the new childs to check*/
+							varList[id1].setParent(var);
+//							var.addChild(varList[id1]);
+							newChilds.add(varList[id1]);
+						}
+						
+						/* remove edge so it doesn't get checked again*/
+//						treeCopy.remove(edge);
+						i.remove();
+
+					}
+				} /* end for of variables */
+			} /* end for of edges */
+			
+			/* variables to be checked for in next iteration are the ones in newChilds */
+			temp=oldChilds;
+			oldChilds=newChilds;
+			
+			/* clear newChilds for next iteration  */
+			newChilds=temp;
+			newChilds.clear();
+			
+		}/* end while */
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		System.err.println("Hello hashTable!");
+		DataSet obj = new DataSet();
+		obj.parse(args[0]);
+		obj.buildTable();
+		
+		
+		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
+			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
+		}
+		System.out.println("Number of instances: " + obj.GetNT());
+		
+		
+		for(int i = 0;  i < obj.NX; i++){
+			System.out.println("Variable OUTSIDE" + i +  " has " + obj.NodeList[i].GetSR() + " instances.");
+		}
 
+
+		/* print Nijkc*/
+		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.NijkcTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.NijkcTable.get(key));
+		}
+		/* print Nikc_J*/
+		System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.Nikc_JTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.Nikc_JTable.get(key));
+		}
+		/* print Nijc_K*/
+		System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : obj.Nijc_KTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.Nijc_KTable.get(key));
+		}
+
+				
+		for (List<Integer> key : obj.edgeWeight.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + obj.edgeWeight.get(key));
+		}
+
+	
+		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, obj.GetNT(), obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
+
+		grafo.buildmatrix();
+		
+		
+		for (List<Integer> key : grafo.edgeWeight.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + grafo.edgeWeight.get(key));
+		}
+
+		grafo.buildMWST(grafo.edgeWeight);
+
+		
+		
+		System.err.println("Edges in tree");
+		for (List<Integer> edge : grafo.spanningTree){
+			System.err.println(edge);
+		}
+		
+		grafo.makeTreeDirected();
+		
+//		for(VariableNode var : grafo.varList){
+//			System.err.println("Variable " + var.getName() + " has childs ");
+//			for(VariableNode childVar : var.children){
+//				System.err.println(childVar.getName() + ", ");
+//			}
+//		}
+		
+		System.err.println("hello");
+		for(VariableNode var : grafo.varList){
+			System.err.println("Variable " + var.getName() + " has parent ");
+			if (var.parent!= null){
+				System.err.println(var.parent.getName());
+				continue;
+			}
+			System.err.println("null");
+		}
 	}
+
+//	}
 
 }
