@@ -239,7 +239,10 @@ public class DataSet {
 		 * j	- value of j
 		 * c	- value of class variable 
 		 */
-		return NijkcTable.get(Arrays.asList(i,Pi,k,j,c)).intValue();
+		
+		Integer returnValue= NijkcTable.get(Arrays.asList(i,Pi,k,j,c));
+		
+		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
 	
 	public int getNikc(int i, int k, int c){
@@ -248,7 +251,9 @@ public class DataSet {
 		 * k	- value of i
 		 * c	- value of class variable 
 		 */
-		return Nikc_JTable.get(Arrays.asList(i,k,c)).intValue();
+		Integer returnValue= Nikc_JTable.get(Arrays.asList(i,k,c));
+		
+		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
 	
 	public int getNijc(int i, int Pi,int j, int c){
@@ -258,9 +263,23 @@ public class DataSet {
 		 * j	- value of j
 		 * c	- value of class variable 
 		 */
-		return Nijc_KTable.get(Arrays.asList(i,Pi,j,c)).intValue();
+		Integer returnValue= Nijc_KTable.get(Arrays.asList(i,Pi,j,c));
+	
+		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
-
+	
+	public boolean containIKJC(int i, int Pi, int k, int j, int c){
+		return NijkcTable.containsKey(Arrays.asList(i,Pi,k,j,c));
+	}
+	
+	public boolean containIKC(int i,int k, int c){
+		return Nikc_JTable.containsKey(Arrays.asList(i,k,c));
+	}
+	
+	public boolean containIJC(int i, int Pi, int j, int c){
+		return Nijc_KTable.containsKey(Arrays.asList(i,Pi,j,c));
+	}
+	
 	
 	/**
 	 * @param args

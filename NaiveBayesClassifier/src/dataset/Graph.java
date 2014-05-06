@@ -28,9 +28,22 @@ public class Graph {
 	int numberOfVars;
 	int numberOfInst;
 	
+	Graph(){
+		
+	}
+	
 	Graph(DataSet data){
-		varList = data.getVaribleList();
+		varList = data.getVaribleList().clone();
 		classNode = data.getClassVariable();
+		numberOfVars = varList.length;
+		numberOfInst = data.GetNT();
+	}
+	
+	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
+			int NT_arg,
+			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
+		varList = varList_arg;
+		classNode = classNode_arg;
 		NijkcTable = NijkcTable_arg;
 		Nijc_KTable = Nijc_KTable_arg;
 		Nikc_JTable = Nikc_JTable_arg;
@@ -39,31 +52,20 @@ public class Graph {
 
 	}
 	
-//	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
-//			int NT_arg,
-//			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
-//		varList = varList_arg;
-//		classNode = classNode_arg;
-//		NijkcTable = NijkcTable_arg;
-//		Nijc_KTable = Nijc_KTable_arg;
-//		Nikc_JTable = Nikc_JTable_arg;
-//		numberOfVars = varList_arg.length;
-//		numberOfInst = NT_arg;
-//
-//	}
-	
 	//buildmatrix()
 	//method to calculate the edges weight
 	public void buildmatrix(DataSet data){
 		
+		
+		
 		float score, scoreMDL, scoreLL;
 		float occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
 		
-		List<Integer> keyIJKC, keyIJC, keyIKC, edgeKey;
+		List<Integer> edgeKey;
 		
 		System.out.println("number of vars: " + numberOfVars + "Number of inst: " + this.numberOfInst);
 		
-		for(int i = 0;  i < varList.length; i++){
+		for(int i = 0;  i < numberOfVars; i++){
 			System.out.println("Variable " + i +  " has " + varList[i].GetSR() + " instances.");
 		}
 
@@ -74,34 +76,23 @@ public class Graph {
 				for(int j = 0; j < varList[ii].GetSR(); j++){
 					for(int k = 0; k < varList[i].GetSR(); k++){
 						for(int c = 0; c < classNode.GetSR(); c++){
-							
 
-
-							//keys to access the hash map
-							keyIKC = Arrays.asList(i,k,c);
-							keyIJKC = Arrays.asList(i,ii,k,j,c);
-							keyIJC = Arrays.asList(i,ii,j,c);
-		
 							//calculate the respective occurrences 
-							if(Nijc_KTable.containsKey(keyIJC)){
+							if(data.containIJC(i, ii, j, c)){
 								occurrIJC = data.getNijc(i, ii, j, c);
-//								occurrIJC = Nijc_KTable.get(keyIJC).intValue();	
 							}
 							else{
 								continue;
 							}
 							
-							if( NijkcTable.containsKey(keyIJKC) ){
-								occurrIJKC = data.getNijkc(i, ii, k, j, c);
-//								occurrIJKC = NijkcTable.get(keyIJKC).intValue();
-							}
+							if(data.containIKJC(i, ii, k, j, c)){
+								occurrIJKC = data.getNijkc(i, ii, k, j, c);							}
 							else{
 								continue;
 							}
 							
-							if( Nikc_JTable.containsKey(keyIKC) ){
+							if(data.containIKC(i, k, c)){
 								occurrIKC = data.getNikc(i, k, c);
-//								occurrIKC = Nikc_JTable.get(keyIKC).intValue();
 							}
 							else{
 								continue;
@@ -148,7 +139,7 @@ public class Graph {
      }
 	
 	/* build Maximum Weighted Spanning Tree*/
-	void buildMWST(Map<List<Integer>, Float> edgeWeight){
+	void Kruskal(Map<List<Integer>, Float> edgeWeight){
 		/* 
 		 * Algorithm Steps from http://www.stats.ox.ac.uk/~konis/Rcourse/exercise1.pdf
 		 * 
@@ -350,7 +341,10 @@ public class Graph {
 		}
 
 	
-		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, obj.GetNT(), obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
+//		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, 
+//				obj.GetNT(), obj.NijkcTable,obj.Nijc_KTable, 
+//				obj.Nikc_JTable, obj.edgeWeight);
+		Graph grafo = new Graph(obj);
 
 		grafo.buildmatrix(obj);
 		
@@ -360,7 +354,7 @@ public class Graph {
 			System.out.println("\t\t" + grafo.edgeWeight.get(key));
 		}
 
-		grafo.buildMWST(grafo.edgeWeight);
+		grafo.Kruskal(grafo.edgeWeight);
 
 		
 		

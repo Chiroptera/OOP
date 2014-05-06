@@ -10,8 +10,10 @@ public class Main {
 			return;
 		}
 		
-		/* get initial value of timer*/
-		long initTime = System.nanoTime();
+		ElapsedTime time = new ElapsedTime();
+		time.
+		
+		
 		
 		ParseLearnCSV trainset = new ParseLearnCSV(args[0]);
 		
@@ -33,8 +35,8 @@ public class Main {
 		
 		
 		
-		ElapsedTime time = new ElapsedTime();
-		long initTime = System.nanoTime();
+		
+		
 
 		
 		

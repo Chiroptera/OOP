@@ -3,10 +3,23 @@ package dataset;
 
 public class ElapsedTime {
 	
-	long startTime = System.nanoTime();  
+	protected long time;
+	
+	ElapsedTime(){
+		
+	}
+
+	
+	public void start(){
+		time = System.nanoTime();
+	}
+	
+	public void stop(){
+		time = System.nanoTime() - time;
+	}
 
 	public String toString() {
-		return ((long) ((System.nanoTime() - startTime) * Math.pow (10,-9))) + " seconds.";
+		return ((long) (time * Math.pow (10,-9))) + " seconds.";
 	}
 
 

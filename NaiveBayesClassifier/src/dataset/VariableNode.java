@@ -15,6 +15,7 @@ public class VariableNode extends BayesNode {
 		super(nameNew);
 		this.id = idNew;
 	}
+
 	
 	void setParent(VariableNode p){
 		this.parent=p;

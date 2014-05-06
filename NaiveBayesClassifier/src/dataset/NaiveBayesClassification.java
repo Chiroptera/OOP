@@ -52,6 +52,7 @@ public class NaiveBayesClassification {
 		 */
 		
 		Graph grafo = new Graph(traindata);
+		
 	
 	}
 
