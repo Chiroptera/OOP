@@ -22,16 +22,15 @@ public class Graph {
 	Map<List<Integer>,Integer> Nikc_JTable;
 	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 	
+	
 	ArrayList<List<Integer>> spanningTree;
 	
 	int numberOfVars;
 	int numberOfInst;
 	
-	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
-			int NT_arg,
-			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
-		varList = varList_arg;
-		classNode = classNode_arg;
+	Graph(DataSet data){
+		varList = data.getVaribleList();
+		classNode = data.getClassVariable();
 		NijkcTable = NijkcTable_arg;
 		Nijc_KTable = Nijc_KTable_arg;
 		Nikc_JTable = Nikc_JTable_arg;
@@ -40,9 +39,22 @@ public class Graph {
 
 	}
 	
+//	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
+//			int NT_arg,
+//			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
+//		varList = varList_arg;
+//		classNode = classNode_arg;
+//		NijkcTable = NijkcTable_arg;
+//		Nijc_KTable = Nijc_KTable_arg;
+//		Nikc_JTable = Nikc_JTable_arg;
+//		numberOfVars = varList_arg.length;
+//		numberOfInst = NT_arg;
+//
+//	}
+	
 	//buildmatrix()
 	//method to calculate the edges weight
-	public void buildmatrix(){
+	public void buildmatrix(DataSet data){
 		
 		float score, scoreMDL, scoreLL;
 		float occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
@@ -72,21 +84,24 @@ public class Graph {
 		
 							//calculate the respective occurrences 
 							if(Nijc_KTable.containsKey(keyIJC)){
-								occurrIJC = Nijc_KTable.get(keyIJC).intValue();	
+								occurrIJC = data.getNijc(i, ii, j, c);
+//								occurrIJC = Nijc_KTable.get(keyIJC).intValue();	
 							}
 							else{
 								continue;
 							}
 							
 							if( NijkcTable.containsKey(keyIJKC) ){
-								occurrIJKC = NijkcTable.get(keyIJKC).intValue();
+								occurrIJKC = data.getNijkc(i, ii, k, j, c);
+//								occurrIJKC = NijkcTable.get(keyIJKC).intValue();
 							}
 							else{
 								continue;
 							}
 							
 							if( Nikc_JTable.containsKey(keyIKC) ){
-								occurrIKC = Nikc_JTable.get(keyIKC).intValue();
+								occurrIKC = data.getNikc(i, k, c);
+//								occurrIKC = Nikc_JTable.get(keyIKC).intValue();
 							}
 							else{
 								continue;
@@ -241,21 +256,26 @@ public class Graph {
 			/* cycle through all the edges */
 			for(Iterator<List<Integer>> i = treeCopy.iterator(); i.hasNext();){
 				edge = i.next();
+				
+				/* cycle through all the child variables from th previous level */
 				for(VariableNode var : oldChilds){
-					/* if edge contains this variable*/
+					
+					/* if edge contains variable var*/
 					if (edge.contains(var.GetId())){
 						
+						/* get id of variables in edge */
 						id1=edge.get(0);
 						id2=edge.get(1);
 						
-						/* if variable is in position 1 of edge, make it the parent of variable in position 2*/
+						/* if var is in position 1 of edge, make it the parent of variable in position 2
+						* and add the variable in position 1 as one of the new childs to check */
 						if(id1 == var.GetId()){
 							varList[id2].setParent(var);
 //							var.addChild(varList[id2]);
 							newChilds.add(varList[id2]);
 						}
 						else{
-							/* if variable is in position 2 of edge, make it the parent of variable in position 1
+							/* if var is in position 2 of edge, make it the parent of variable in position 1
 							 * and add the variable in position 1 as one of the new childs to check*/
 							varList[id1].setParent(var);
 //							var.addChild(varList[id1]);
@@ -263,14 +283,14 @@ public class Graph {
 						}
 						
 						/* remove edge so it doesn't get checked again*/
-//						treeCopy.remove(edge);
 						i.remove();
 
 					}
 				} /* end for of variables */
 			} /* end for of edges */
 			
-			/* variables to be checked for in next iteration are the ones in newChilds */
+			/* variables to be checked in next iteration are the ones in newChilds
+			 * and have to be copied to oldChilds */
 			temp=oldChilds;
 			oldChilds=newChilds;
 			
@@ -332,7 +352,7 @@ public class Graph {
 	
 		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, obj.GetNT(), obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
 
-		grafo.buildmatrix();
+		grafo.buildmatrix(obj);
 		
 		
 		for (List<Integer> key : grafo.edgeWeight.keySet()){

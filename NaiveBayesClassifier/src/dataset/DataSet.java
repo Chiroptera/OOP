@@ -12,27 +12,27 @@ import java.util.Map;
 
 public class DataSet {
 
-	LinkedList<int[]> parsedData = new LinkedList<int[]>();
+	LinkedList<int[]> parsedData;
 	Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
 	Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
 	Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
+	
 
 	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 
-	VariableNode[] NodeList;
-	ClassifierNode ClassNode;
+	VariableNode[] NodeList; /* variable list */
+	ClassifierNode ClassNode; /* class node */
 	
 	private int NT;
 	int NX;
 
-	DataSet(){
+	DataSet (){
 		
-		
-		
-		System.err.println("Hello Dataset!");
-		
-		
-		
+	}
+	
+	DataSet(VariableNode[] NodeList, ClassifierNode ClassNode){
+		this.NodeList = NodeList;
+		this.ClassNode = ClassNode;	
 	}
 	
 	public int GetNT() {
@@ -55,9 +55,16 @@ public class DataSet {
 		return outList;
 	}
 	
+	public ClassifierNode getClassVariable(){
+		return this.ClassNode;
+	}
+	
 	public void parse(String Filename) {
+		
+		parsedData = new LinkedList<int[]>();
+		
 		//System.err.println("parse:");
-		String csvFile = (Filename + ".csv");
+		String csvFile = (Filename);
 
 		
 		
@@ -224,6 +231,36 @@ public class DataSet {
 	    } /* end cycle dataLine*/		
 	}
 
+	public int getNijkc(int i, int Pi, int k, int j, int c){
+		/*
+		 * i	- id of variable
+		 * Pi	- id of parent of variable i
+		 * k	- value of i
+		 * j	- value of j
+		 * c	- value of class variable 
+		 */
+		return NijkcTable.get(Arrays.asList(i,Pi,k,j,c)).intValue();
+	}
+	
+	public int getNikc(int i, int k, int c){
+		/*
+		 * i	- id of variable
+		 * k	- value of i
+		 * c	- value of class variable 
+		 */
+		return Nikc_JTable.get(Arrays.asList(i,k,c)).intValue();
+	}
+	
+	public int getNijc(int i, int Pi,int j, int c){
+		/*
+		 * i	- id of variable
+		 * Pi	- id of parent of variable i
+		 * j	- value of j
+		 * c	- value of class variable 
+		 */
+		return Nijc_KTable.get(Arrays.asList(i,Pi,j,c)).intValue();
+	}
+
 	
 	/**
 	 * @param args
@@ -241,12 +278,14 @@ public class DataSet {
 				obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
 		
 		
-		graphB.buildmatrix();
+		graphB.buildmatrix(obj);
 		
 		
 		System.out.println("Building the classifier: " +  timeElapsed.toString());
 
 	
-	}  
+	}
+	
+	
 }
 

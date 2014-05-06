@@ -6,10 +6,6 @@ import java.util.LinkedList;
 
 public class NaiveBayesClassification {
 	
-	private FileReader train;
-	private FileReader test;
-	
-	
 	private LinkedList<int[]> parsedData;
 	
 	private String scoreType;
@@ -22,29 +18,41 @@ public class NaiveBayesClassification {
 	private int nVariable;
 	private int nInstances;
 	
-	NaiveBayesClassification(){
+	NaiveBayesClassification(String score){
 		
-	}
-
-	public void parseArg(String[] args) throws FileNotFoundException, NBCException{
-		
-		if(args[2].equals("LL") || args[2].equals("MDL")){
-			scoreType = args[2];
-		}else{
-			 throw new NBCException(args[2]);
+		try {
+			checkScore(score);
+		} catch (NBCException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		train = new FileReader(args[0] + ".csv");
-		test = new FileReader(args[1] + ".csv");
 		
 	}
 	
-	public void Train(){
+	NaiveBayesClassification(DataSet traindata){
 		
-		ParseTrainCSV trainCSV = new ParseTrainCSV();
-		trainCSV.parse(this.test, this.VariableArray, this.ClassNode);
-		trainCSV.getParsedData();
+	}
+
+	public void checkScore(String args) throws NBCException{
 		
+		if(args.equals("LL") || args.equals("MDL")){
+			scoreType = args;
+		}else{
+			 throw new NBCException(args);
+		}
+		
+
+	}
+	
+	public void Train(DataSet traindata){
+		/*
+		 * 1. Compute edge weight
+		 * 2. build undirected graph
+		 * 3. make graph directed
+		 */
+		
+		Graph grafo = new Graph(traindata);
+	
 	}
 
 	public void Test(){
@@ -59,15 +67,6 @@ public class NaiveBayesClassification {
 		return ClassNode;
 	}
 	
-	public FileReader getTrainFile(){
-		
-		return train;
-	}
-	
-	public FileReader getTestFile(){
-		
-		return test;
-	}
 	
 	public String getScoreType(){
 		
