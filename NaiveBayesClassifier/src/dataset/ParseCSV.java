@@ -87,9 +87,7 @@ public class ParseCSV {
 	}
 	
 	public int[] middleLine(int index, int value){
-		
-
-		}
+		return null;
 	}
 
 
