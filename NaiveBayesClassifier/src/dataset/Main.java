@@ -11,9 +11,7 @@ public class Main {
 		}
 		
 		ElapsedTime time = new ElapsedTime();
-		time.
-		
-		
+		time.start();
 		
 		ParseLearnCSV trainset = new ParseLearnCSV(args[0]);
 		

@@ -47,7 +47,6 @@ public class VariableNode extends BayesNode {
 
 	public void addChild(VariableNode child){
 		this.children.add(child);
-
 	}
 	
 	public static void main(String[] args) {		

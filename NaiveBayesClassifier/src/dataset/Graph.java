@@ -54,7 +54,7 @@ public class Graph {
 	
 	//buildmatrix()
 	//method to calculate the edges weight
-	public void buildmatrix(DataSet data){
+	public void weightEdges(DataSet data){
 		
 		
 		
@@ -335,10 +335,10 @@ public class Graph {
 		}
 
 				
-		for (List<Integer> key : obj.edgeWeight.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + obj.edgeWeight.get(key));
-		}
+//		for (List<Integer> key : obj.edgeWeight.keySet()){
+//			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+//			System.out.println("\t\t" + obj.edgeWeight.get(key));
+//		}
 
 	
 //		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, 
@@ -346,7 +346,7 @@ public class Graph {
 //				obj.Nikc_JTable, obj.edgeWeight);
 		Graph grafo = new Graph(obj);
 
-		grafo.buildmatrix(obj);
+		grafo.weightEdges(obj);
 		
 		
 		for (List<Integer> key : grafo.edgeWeight.keySet()){

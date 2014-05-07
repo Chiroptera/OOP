@@ -3,10 +3,9 @@ package dataset;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.LinkedList;
+import java.util.List;
 
 public class NaiveBayesClassification {
-	
-	private LinkedList<int[]> parsedData;
 	
 	private String scoreType;
 	
@@ -51,7 +50,33 @@ public class NaiveBayesClassification {
 		 * 3. make graph directed
 		 */
 		
+		traindata.buildTable();
+		
 		Graph grafo = new Graph(traindata);
+		
+		grafo.weightEdges(traindata);
+		
+		grafo.Kruskal(grafo.edgeWeight);
+		
+		grafo.makeTreeDirected();
+		
+		
+		
+		System.err.println("Edges in tree");
+		for (List<Integer> edge : grafo.spanningTree){
+			System.err.println(edge);
+		}
+		
+		System.err.println("hello");
+		for(VariableNode var : grafo.varList){
+			System.err.println("Variable " + var.getName() + " has parent ");
+			if (var.parent!= null){
+				System.err.println(var.parent.getName());
+				continue;
+			}
+			System.err.println("null");
+		}
+		
 		
 	
 	}
@@ -68,9 +93,18 @@ public class NaiveBayesClassification {
 		return ClassNode;
 	}
 	
+	void computeParameters(){
+		
+		
+		
+	}
+	
 	
 	public String getScoreType(){
 		
 		return scoreType;
 	}
+	
+	
+	
 }

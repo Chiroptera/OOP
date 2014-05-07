@@ -18,7 +18,7 @@ public class DataSet {
 	Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
 	
 
-	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
+//	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 
 	VariableNode[] NodeList; /* variable list */
 	ClassifierNode ClassNode; /* class node */
@@ -293,8 +293,8 @@ public class DataSet {
 		obj.parse(args[0]);
 		obj.buildTable();
 		
-		Graph graphB = new Graph(obj.NodeList, obj.ClassNode, obj.NT,
-				obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
+//		Graph graphB = new Graph(obj.NodeList, obj.ClassNode, obj.NT,
+//				obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
 		
 		
 		graphB.buildmatrix(obj);
