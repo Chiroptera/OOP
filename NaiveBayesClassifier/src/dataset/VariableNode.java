@@ -6,14 +6,12 @@ import java.util.LinkedList;
 public class VariableNode extends BayesNode {
 	
 
-	private int id; //index
 	private int r; //number of values in variable
 	VariableNode parent; //graph built by saying who is the father
 	LinkedList<VariableNode> children;
 	
-	VariableNode(String nameNew, int idNew) {
+	VariableNode(String nameNew) {
 		super(nameNew);
-		this.id = idNew;
 	}
 
 	
@@ -24,11 +22,7 @@ public class VariableNode extends BayesNode {
 	VariableNode GetParent(){
 		return this.parent;
 	}
-	
-	public int GetId(){
-		
-		return this.id;
-	}
+
 	
 	//this method can be abstract and implemented by each node variable
 	public void UpdateSR(int rUp){

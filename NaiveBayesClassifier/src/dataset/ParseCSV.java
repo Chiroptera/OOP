@@ -11,25 +11,33 @@ import java.util.LinkedList;
 
 public class ParseCSV {
 	
-	protected LinkedList<int[]> parsedData;
+	protected LinkedList<int[]> parsedDataList;
 	protected int colSize;
 	protected int rowSize;
+	protected DataSet data;
+	protected FileReader toParse;
 	
 	ParseCSV(){
 		
-		parsedData = new LinkedList<int[]>();
+		parsedDataList = new LinkedList<int[]>();
 	}
 	
 	ParseCSV(String filename){
 		
-		parsedData = new LinkedList<int[]>();
-		parse(filename);
+		parsedDataList = new LinkedList<int[]>();
+	
+		try {
+			toParse = new FileReader(filename + ".csv");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 	
 	public LinkedList<int[]> getParsedData(){
 		
-		return parsedData;
+		return parsedDataList;
 	}
 	
 	public int getcolSize(){
@@ -37,15 +45,11 @@ public class ParseCSV {
 		return colSize;
 	}
 
-	public void parse(String filename){
+	public void parse(DataSet data){
 		
-		FileReader toParse;
-		try {
-			toParse = new FileReader(filename);
-			
 			/*************************************************************************************/
 			/* this was outside try/catch block before*/
-			
+			data = data;
 			BufferedReader br = null;
 			String line;
 			String cvsSplitBy = ",";
@@ -58,7 +62,7 @@ public class ParseCSV {
 
 				/* if first line not null */
 				if((line = br.readLine()) != null){
-					
+
 					lineparse = line.split(cvsSplitBy); /* split string by commas */
 					colSize = lineparse.length; /* number of variables + 1 (class variable)*/
 					firstLine(lineparse);				
@@ -75,7 +79,8 @@ public class ParseCSV {
 							temp[j] = Integer.parseInt(lineparse[j]);
 							middleLine(temp[j], j);
 						}
-						parsedData.add(temp);
+						rowSize ++;
+						parsedDataList.add(temp);
 
 					}
 			//TO DO: BETTER TREATMENT TO EXCEPTION
@@ -92,15 +97,9 @@ public class ParseCSV {
 					}
 				}
 			}
-			/*************************************************************************************/
+			/***********************************************************************************/
+			lastLine();
 			
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-
 	}
 	
 	//by default the first line is ignored
@@ -110,6 +109,10 @@ public class ParseCSV {
 	}
 	
 	public void middleLine(int index, int value){
+
+	}
+	
+	public void lastLine(){
 
 	}
 }

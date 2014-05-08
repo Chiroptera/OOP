@@ -304,15 +304,15 @@ public class Graph {
 		obj.buildTable();
 		
 		
-		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
-			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
-		}
-		System.out.println("Number of instances: " + obj.GetNT());
-		
-		
-		for(int i = 0;  i < obj.NX; i++){
-			System.out.println("Variable OUTSIDE" + i +  " has " + obj.NodeList[i].GetSR() + " instances.");
-		}
+//		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
+//			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
+//		}
+//		System.out.println("Number of instances: " + obj.GetNT());
+//		
+//		
+//		for(int i = 0;  i < obj.NX; i++){
+//			System.out.println("Variable OUTSIDE" + i +  " has " + obj.NodeList[i].GetSR() + " instances.");
+//		}
 
 
 		/* print Nijkc*/

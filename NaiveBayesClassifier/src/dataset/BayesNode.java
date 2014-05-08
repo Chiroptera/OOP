@@ -3,7 +3,6 @@ package dataset;
 public abstract class BayesNode {
 
 	private String name; //name
-	private int value; //??
 	
 	BayesNode(String nameNew){
 		
@@ -15,10 +14,6 @@ public abstract class BayesNode {
 		return this.name;
 	}
 	
-	public int getValue(){
-		
-		return this.value;
-	}
 	
 	public abstract void UpdateSR(int rs);
 	public abstract int GetSR();

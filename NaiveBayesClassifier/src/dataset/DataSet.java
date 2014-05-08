@@ -12,155 +12,177 @@ import java.util.Map;
 
 public class DataSet {
 
-	LinkedList<int[]> parsedData;
+	LinkedList<int[]> parsedDataList;
 	Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
 	Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
 	Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
-	
 
 //	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 
-	VariableNode[] NodeList; /* variable list */
-	ClassifierNode ClassNode; /* class node */
+	private VariableNode[] variableArray; /* variable list */
+	private ClassifierNode classNode; /* class node */
 	
-	private int NT;
-	int NX;
+	private int nInstances;
+	private int nVariables;
 
 	DataSet (){
 		
 	}
 	
-	DataSet(VariableNode[] NodeList, ClassifierNode ClassNode){
-		this.NodeList = NodeList;
-		this.ClassNode = ClassNode;	
+	public void createVarArray(int size){
+		
+//check if not null
+		this.variableArray = new VariableNode[size];
 	}
 	
-	public int GetNT() {
+	public void addVarNode(int index, String name){
 		
-		return NT;
+//check if not null, if not then do what? exception, ignore?
+		this.variableArray[index] = new VariableNode(name);
 	}
 	
-	public int GetNX() {
+	public void createClassNode(String name){
 		
-		return NX;
+		//check if not null, if not then do what? exception, ignore?
+				this.classNode = new ClassifierNode(name);
+	}
+	
+	public void setnInstances(int numI){
+		
+		this.nInstances = numI;
+	}
+	
+	public void setnVariables(int numV){
+		
+		this.nVariables = numV;
+	}
+		
+	public int GetnInstances() {
+		
+		return nInstances;
+	}
+	
+	public int GetnVariables() {
+		
+		return nVariables;
 	}
 
-	public VariableNode[] getVaribleList(){
+	public VariableNode[] getVariableArray(){
 		/* if list hasn't been assigned yet, return null*/
-		if(NodeList == null) return null;
-		VariableNode[] outList = new VariableNode[NodeList.length-1];
-		for(int i=0;i<NodeList.length-1;i++){
-			outList[i]=(VariableNode)NodeList[i];
-		}
-		return outList;
+		if(variableArray == null) return null;
+//		VariableNode[] outList = new VariableNode[variableArray.length-1];
+//		for(int i=0;i<variableArray.length-1;i++){
+//			outList[i]=(VariableNode)variableArray[i];
+//		}
+		return variableArray;
 	}
 	
 	public ClassifierNode getClassVariable(){
-		return this.ClassNode;
+		return this.classNode;
 	}
 	
-	public void parse(String Filename) {
-		
-		parsedData = new LinkedList<int[]>();
-		
-		//System.err.println("parse:");
-		String csvFile = (Filename);
-
-		
-		
-		BufferedReader br = null;
-		String line;
-		String cvsSplitBy = ",";
-		int sSize;
-		
-		try {
-			br = new BufferedReader(new FileReader(csvFile));
-			
-			String[] lineparse;
-			int[] temp;
-
-			/* while exists lines*/
-
-			/* if first line not null */
-			if((line = br.readLine()) != null){
-
-			    // use comma as separator
-				lineparse = line.split(cvsSplitBy); /* split string by commas */
-				sSize = lineparse.length; /* number of variables + 1 (class variable)*/
-				this.NX = sSize -1;
-				
-				NodeList = new VariableNode[this.NX+1];
-
-				/* go through all strings in line (seperated by commas)*/
-				for(int j=0;j<this.NX;j++){
-					
-					NodeList[j] = new VariableNode(lineparse[j], j);
-					System.out.println("Variable " + j + " name: " + NodeList[j].getName());
-				}
-
-				ClassNode = new ClassifierNode(lineparse[sSize-1]);
-				
-				/* while there are other lines*/
-				while ((line = br.readLine()) != null) {
-
-				    // use comma as separator
-					lineparse = line.split(cvsSplitBy); /* split string by commas */
-					sSize = lineparse.length; /* number of variables + 1 (class variable)*/
-
-					temp = new int[sSize];
-					System.out.println("Size: " + sSize );
-						for(int j=0 ; j<sSize;j++){
-							
-							temp[j] = Integer.parseInt(lineparse[j]);
-							
-							if( j == sSize-1){
-								System.out.println("C:"+ Integer.parseInt(lineparse[sSize-1]));
-								ClassNode.UpdateSR(Integer.parseInt(lineparse[sSize-1]));
-								parsedData.add(temp);
-								continue;
-							}
-								
-							NodeList[j].UpdateSR((temp[j]));
-							
-						}
-						this.NT ++;
-
-					}
-
-					System.out.println();
-			}	
-
-		} catch (FileNotFoundException e) {
-				e.printStackTrace();
-		} catch (IOException e) {
-				e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		ClassNode.CreateNC();
-  }
+//	public void parse(String Filename) {
+//		
+//		parsedDataList = new LinkedList<int[]>();
+//		
+//		//System.err.println("parse:");
+//		String csvFile = (Filename);
+//
+//		
+//		
+//		BufferedReader br = null;
+//		String line;
+//		String cvsSplitBy = ",";
+//		int sSize;
+//		
+//		try {
+//			br = new BufferedReader(new FileReader(csvFile));
+//			
+//			String[] lineparse;
+//			int[] temp;
+//
+//			/* while exists lines*/
+//
+//			/* if first line not null */
+//			if((line = br.readLine()) != null){
+//
+//			    // use comma as separator
+//				lineparse = line.split(cvsSplitBy); /* split string by commas */
+//				sSize = lineparse.length; /* number of variables + 1 (class variable)*/
+//				this.nVariables = sSize -1;
+//				
+//				variableArray = new VariableNode[this.nVariables+1];
+//
+//				/* go through all strings in line (seperated by commas)*/
+//				for(int j=0;j<this.nVariables;j++){
+//					
+//					variableArray[j] = new VariableNode(lineparse[j], j);
+//					System.out.println("Variable " + j + " name: " + variableArray[j].getName());
+//				}
+//
+//				classNode = new ClassifierNode(lineparse[sSize-1]);
+//				
+//				/* while there are other lines*/
+//				while ((line = br.readLine()) != null) {
+//
+//				    // use comma as separator
+//					lineparse = line.split(cvsSplitBy); /* split string by commas */
+//					sSize = lineparse.length; /* number of variables + 1 (class variable)*/
+//
+//					temp = new int[sSize];
+//					System.out.println("Size: " + sSize );
+//						for(int j=0 ; j<sSize;j++){
+//							
+//							temp[j] = Integer.parseInt(lineparse[j]);
+//							
+//							if( j == sSize-1){
+//								System.out.println("C:"+ Integer.parseInt(lineparse[sSize-1]));
+//								classNode.UpdateSR(Integer.parseInt(lineparse[sSize-1]));
+//								parsedDataList.add(temp);
+//								continue;
+//							}
+//								
+//							variableArray[j].UpdateSR((temp[j]));
+//							
+//						}
+//						this.nInstances ++;
+//
+//					}
+//
+//					System.out.println();
+//			}	
+//
+//		} catch (FileNotFoundException e) {
+//				e.printStackTrace();
+//		} catch (IOException e) {
+//				e.printStackTrace();
+//		} finally {
+//			if (br != null) {
+//				try {
+//					br.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//
+//		classNode.CreateNC();
+//  }
 
 	public void buildTable(){
-	    /*for(Iterator iter = parsedData.iterator();iter.hasNext();){*/
+	    /*for(Iterator iter = parsedDataList.iterator();iter.hasNext();){*/
 		List<Integer> key,keyInv;
 		Integer value;
 		int classe;
 				
 
 		/* for each line of parsed data*/
-		for(int[] dataLine : parsedData){
-			classe = dataLine[this.NX];
+		for(int[] dataLine : parsedDataList){
+			classe = dataLine[this.nVariables];
 			
 			System.out.println("classe: " + classe);
 			
-			ClassNode.UpdateNC(classe);
+			classNode.UpdateNC(classe);
 
 			/* for each variable excluding the class */
 			for(int i=0;i<dataLine.length-1;i++){
@@ -290,14 +312,14 @@ public class DataSet {
 
 		System.err.println("Hello hashTable!");
 		DataSet obj = new DataSet();
-		obj.parse(args[0]);
-		obj.buildTable();
+//		obj.parse(args[0]);
+//		obj.buildTable();
 		
-//		Graph graphB = new Graph(obj.NodeList, obj.ClassNode, obj.NT,
+//		Graph graphB = new Graph(obj.variableArray, obj.ClassNode, obj.nInstances,
 //				obj.NijkcTable,obj.Nijc_KTable, obj.Nikc_JTable, obj.edgeWeight);
 		
 		
-		graphB.buildmatrix(obj);
+//		graphB.buildmatrix(obj);
 		
 		
 		System.out.println("Building the classifier: " +  timeElapsed.toString());

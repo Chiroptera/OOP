@@ -52,23 +52,23 @@ public class NaiveBayesClassification {
 		
 		traindata.buildTable();
 		
-		Graph grafo = new Graph(traindata);
+		Graph graph = new Graph(traindata);
 		
-		grafo.weightEdges(traindata);
+		graph.weightEdges(traindata);
 		
-		grafo.Kruskal(grafo.edgeWeight);
+		graph.Kruskal(graph.edgeWeight);
 		
-		grafo.makeTreeDirected();
+		graph.makeTreeDirected();
 		
 		
 		
 		System.err.println("Edges in tree");
-		for (List<Integer> edge : grafo.spanningTree){
+		for (List<Integer> edge : graph.spanningTree){
 			System.err.println(edge);
 		}
 		
 		System.err.println("hello");
-		for(VariableNode var : grafo.varList){
+		for(VariableNode var : graph.varList){
 			System.err.println("Variable " + var.getName() + " has parent ");
 			if (var.parent!= null){
 				System.err.println(var.parent.getName());

@@ -13,9 +13,17 @@ public class Main {
 		ElapsedTime time = new ElapsedTime();
 		time.start();
 		
-		ParseLearnCSV trainset = new ParseLearnCSV(args[0]);
+		//nao convem chamar metodos nao privados/finais no constructor
+		//http://www.javaspecialists.eu/archive/Issue210.html
 		
-		DataSet trainData = new DataSet(trainset.getVariableList(),trainset.getClassVariable());
+		ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
+		
+		DataSet trainData = new DataSet();
+		
+		trainSet.parse(trainData);
+		//Insert: Parse do Learn
+		//Tested until here!!!
+		
 		trainData.buildTable();
 		
 		NaiveBayesClassification BNClass = new NaiveBayesClassification(trainData);
@@ -30,20 +38,16 @@ public class Main {
 //			e.printStackTrace();
 //			return;
 //		}
-		
-		
-		
-		
-		
-
-		
-		
 		//trying to open the files, if not, error and return.
 		//deal with parsing?
 		//save files on class open files, with method to close?
 
-		
+		time.stop();
 		System.out.println("Building the classifier: " + time.toString());
 		
 	}
+	
+	
+	//MUDANCAS
+	//constructor nao chama parse - parse agora e 
 }

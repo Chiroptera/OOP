@@ -9,7 +9,6 @@ public class ElapsedTime {
 		
 	}
 
-	
 	public void start(){
 		time = System.nanoTime();
 	}
