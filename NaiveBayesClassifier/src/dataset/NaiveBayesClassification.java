@@ -28,8 +28,15 @@ public class NaiveBayesClassification {
 		
 	}
 	
-	NaiveBayesClassification(DataSet traindata){
+	NaiveBayesClassification(String score, DataSet traindata){
+		try {
+			checkScore(score);
+		} catch (NBCException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		this.Train(traindata);
 	}
 
 	public void checkScore(String args) throws NBCException{
@@ -50,14 +57,49 @@ public class NaiveBayesClassification {
 		 * 3. make graph directed
 		 */
 		
+		traindata.printData();
+		
+		System.out.println("Building tables...");		
 		traindata.buildTable();
 		
+		if(true){
+			
+			/* print Nijkc*/
+			System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
+			for (List<Integer> key : traindata.NijkcTable.keySet()){
+				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+				System.out.println("\t\t" + traindata.NijkcTable.get(key));
+			}
+			/* print Nikc_J*/
+			System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
+			for (List<Integer> key : traindata.Nikc_JTable.keySet()){
+				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+				System.out.println("\t\t" + traindata.Nikc_JTable.get(key));
+			}
+			/* print Nijc_K*/
+			System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
+			for (List<Integer> key : traindata.Nijc_KTable.keySet()){
+				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+				System.out.println("\t\t" + traindata.Nijc_KTable.get(key));
+			}
+		
+		}
+		
+		System.out.println("Creating graph...");	
 		Graph graph = new Graph(traindata);
 		
+		System.out.println("Weighting edges...");
 		graph.weightEdges(traindata);
 		
+		for (List<Integer> key : graph.edgeWeight.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + graph.edgeWeight.get(key));
+		}
+		
+		System.out.println("Kruskal...");
 		graph.Kruskal(graph.edgeWeight);
 		
+		System.out.println("Final treeing...");
 		graph.makeTreeDirected();
 		
 		

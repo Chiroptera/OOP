@@ -1,10 +1,5 @@
 package dataset;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 //TO DO: extends this to accept any number or object
 //extends the class that puts a csv file with integer entries to 
 //treat the NaiveBayesClass variables

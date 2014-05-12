@@ -27,7 +27,7 @@ public class ParseCSV {
 		parsedDataList = new LinkedList<int[]>();
 	
 		try {
-			toParse = new FileReader(filename + ".csv");
+			toParse = new FileReader(filename);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,7 +49,7 @@ public class ParseCSV {
 		
 			/*************************************************************************************/
 			/* this was outside try/catch block before*/
-			data = data;
+			this.data = data;
 			BufferedReader br = null;
 			String line;
 			String cvsSplitBy = ",";
@@ -68,21 +68,24 @@ public class ParseCSV {
 					firstLine(lineparse);				
 				}
 					
-					/* while there are other lines*/
-					while ((line = br.readLine()) != null) {
+				/* while there are other lines*/
+				while ((line = br.readLine()) != null) {
 
-					    // use comma as separator
-						//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
-						lineparse = line.split(cvsSplitBy); /* split string by commas */
-						temp = new int[colSize];
-						for(int j=0 ; j<colSize;j++){
-							temp[j] = Integer.parseInt(lineparse[j]);
-							middleLine(temp[j], j);
-						}
-						rowSize ++;
-						parsedDataList.add(temp);
-
+				    // use comma as separator
+					//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
+					lineparse = line.split(cvsSplitBy); /* split string by commas */
+					temp = new int[colSize];
+					for(int j=0 ; j<colSize;j++){
+						temp[j] = Integer.parseInt(lineparse[j]);
+						middleLine(temp[j], j);
 					}
+					rowSize ++;
+					parsedDataList.add(temp);
+
+				}
+				
+//				lastLine(); (?)
+				
 			//TO DO: BETTER TREATMENT TO EXCEPTION
 			} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -98,8 +101,8 @@ public class ParseCSV {
 				}
 			}
 			/***********************************************************************************/
-			lastLine();
 			
+			data.setData(parsedDataList);
 	}
 	
 	//by default the first line is ignored

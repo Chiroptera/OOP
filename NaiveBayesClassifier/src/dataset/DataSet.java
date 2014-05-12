@@ -29,6 +29,21 @@ public class DataSet {
 		
 	}
 	
+	public void printData(){
+		for(int[] line:parsedDataList){
+			for(int val:line){
+				System.out.print(String.valueOf(val)+",");
+			}
+			System.out.println();
+			
+		}
+	}
+	
+	public void setData(LinkedList<int[]> parsedDataList){
+		this.parsedDataList=parsedDataList;
+		this.nInstances = parsedDataList.size();
+	}
+	
 	public void createVarArray(int size){
 		
 //check if not null
@@ -38,13 +53,14 @@ public class DataSet {
 	public void addVarNode(int index, String name){
 		
 //check if not null, if not then do what? exception, ignore?
-		this.variableArray[index] = new VariableNode(name);
+		this.variableArray[index] = new VariableNode(name,index);
+		this.nVariables++;
 	}
 	
 	public void createClassNode(String name){
 		
 		//check if not null, if not then do what? exception, ignore?
-				this.classNode = new ClassifierNode(name);
+		this.classNode = new ClassifierNode(name);
 	}
 	
 	public void setnInstances(int numI){
@@ -174,11 +190,12 @@ public class DataSet {
 		List<Integer> key,keyInv;
 		Integer value;
 		int classe;
+		classNode.CreateNC();
 				
 
 		/* for each line of parsed data*/
 		for(int[] dataLine : parsedDataList){
-			classe = dataLine[this.nVariables];
+			classe = dataLine[dataLine.length-1];
 			
 			System.out.println("classe: " + classe);
 			
@@ -201,6 +218,7 @@ public class DataSet {
 				else{
 					Nikc_JTable.put(key, 1);
 				}
+				
 
 
 

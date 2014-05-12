@@ -33,10 +33,10 @@ public class Graph {
 	}
 	
 	Graph(DataSet data){
-		varList = data.getVaribleList().clone();
+		varList = data.getVariableArray().clone();
 		classNode = data.getClassVariable();
 		numberOfVars = varList.length;
-		numberOfInst = data.GetNT();
+		numberOfInst = data.GetnInstances();
 	}
 	
 	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
@@ -66,7 +66,7 @@ public class Graph {
 		System.out.println("number of vars: " + numberOfVars + "Number of inst: " + this.numberOfInst);
 		
 		for(int i = 0;  i < numberOfVars; i++){
-			System.out.println("Variable " + i +  " has " + varList[i].GetSR() + " instances.");
+			System.out.println("Variable " + i +  " has " + varList[i].GetSR() + " values.");
 		}
 
 		
@@ -252,7 +252,7 @@ public class Graph {
 				for(VariableNode var : oldChilds){
 					
 					/* if edge contains variable var*/
-					if (edge.contains(var.GetId())){
+					if (edge.contains(var.getID())){
 						
 						/* get id of variables in edge */
 						id1=edge.get(0);
@@ -260,7 +260,7 @@ public class Graph {
 						
 						/* if var is in position 1 of edge, make it the parent of variable in position 2
 						* and add the variable in position 1 as one of the new childs to check */
-						if(id1 == var.GetId()){
+						if(id1 == var.getID()){
 							varList[id2].setParent(var);
 //							var.addChild(varList[id2]);
 							newChilds.add(varList[id2]);
@@ -299,54 +299,57 @@ public class Graph {
 		// TODO Auto-generated method stub
 		
 		System.err.println("Hello hashTable!");
-		DataSet obj = new DataSet();
-		obj.parse(args[0]);
-		obj.buildTable();
+
+		ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
+		
+		DataSet traindata = new DataSet();
+		
+		trainSet.parse(traindata);
 		
 		
-//		for(int i = 0;  i < obj.ClassNode.GetSR(); i++){
-//			System.out.println("Class " + i +  " has " + obj.ClassNode.GetNC(i) + " instances.");
+//		for(int i = 0;  i < traindata.ClassNode.GetSR(); i++){
+//			System.out.println("Class " + i +  " has " + traindata.ClassNode.GetNC(i) + " instances.");
 //		}
-//		System.out.println("Number of instances: " + obj.GetNT());
+//		System.out.println("Number of instances: " + traindata.GetNT());
 //		
 //		
-//		for(int i = 0;  i < obj.NX; i++){
-//			System.out.println("Variable OUTSIDE" + i +  " has " + obj.NodeList[i].GetSR() + " instances.");
+//		for(int i = 0;  i < traindata.NX; i++){
+//			System.out.println("Variable OUTSIDE" + i +  " has " + traindata.NodeList[i].GetSR() + " instances.");
 //		}
 
 
 		/* print Nijkc*/
 		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : obj.NijkcTable.keySet()){
+		for (List<Integer> key : traindata.NijkcTable.keySet()){
 			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + obj.NijkcTable.get(key));
+			System.out.println("\t\t" + traindata.NijkcTable.get(key));
 		}
 		/* print Nikc_J*/
 		System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : obj.Nikc_JTable.keySet()){
+		for (List<Integer> key : traindata.Nikc_JTable.keySet()){
 			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + obj.Nikc_JTable.get(key));
+			System.out.println("\t\t" + traindata.Nikc_JTable.get(key));
 		}
 		/* print Nijc_K*/
 		System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : obj.Nijc_KTable.keySet()){
+		for (List<Integer> key : traindata.Nijc_KTable.keySet()){
 			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + obj.Nijc_KTable.get(key));
+			System.out.println("\t\t" + traindata.Nijc_KTable.get(key));
 		}
 
 				
-//		for (List<Integer> key : obj.edgeWeight.keySet()){
+//		for (List<Integer> key : traindata.edgeWeight.keySet()){
 //			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-//			System.out.println("\t\t" + obj.edgeWeight.get(key));
+//			System.out.println("\t\t" + traindata.edgeWeight.get(key));
 //		}
 
 	
-//		Graph grafo = new Graph(obj.getVaribleList(),obj.ClassNode, 
-//				obj.GetNT(), obj.NijkcTable,obj.Nijc_KTable, 
-//				obj.Nikc_JTable, obj.edgeWeight);
-		Graph grafo = new Graph(obj);
+//		Graph grafo = new Graph(traindata.getVaribleList(),traindata.ClassNode, 
+//				traindata.GetNT(), traindata.NijkcTable,traindata.Nijc_KTable, 
+//				traindata.Nikc_JTable, traindata.edgeWeight);
+		Graph grafo = new Graph(traindata);
 
-		grafo.weightEdges(obj);
+		grafo.weightEdges(traindata);
 		
 		
 		for (List<Integer> key : grafo.edgeWeight.keySet()){

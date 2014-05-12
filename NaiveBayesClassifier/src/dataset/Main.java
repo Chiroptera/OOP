@@ -24,9 +24,17 @@ public class Main {
 		//Insert: Parse do Learn
 		//Tested until here!!!
 		
-		trainData.buildTable();
+
 		
-		NaiveBayesClassification BNClass = new NaiveBayesClassification(trainData);
+//		trainData.buildTable();
+		
+		System.err.println("********************************************");
+		System.err.println("*                                          *");
+		System.err.println("*           TAN                            *");
+		System.err.println("*                                          *");
+		System.err.println("********************************************");
+		
+		NaiveBayesClassification BNClass = new NaiveBayesClassification(args[2],trainData);
 		
 //		try {
 //			BNClass.parseArg(args);
