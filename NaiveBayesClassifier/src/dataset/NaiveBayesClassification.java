@@ -1,9 +1,9 @@
 package dataset;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NaiveBayesClassification {
 	
@@ -16,6 +16,8 @@ public class NaiveBayesClassification {
 	
 	private int nVariable;
 	private int nInstances;
+	
+	Map<List<Integer>,Double> parameters;
 	
 	NaiveBayesClassification(String score){
 		
@@ -56,13 +58,13 @@ public class NaiveBayesClassification {
 		 * 2. build undirected graph
 		 * 3. make graph directed
 		 */
-		
+		boolean verbose = false;
 		traindata.printData();
 		
 		System.out.println("Building tables...");		
 		traindata.buildTable();
 		
-		if(true){
+		if(verbose){
 			
 			/* print Nijkc*/
 			System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
@@ -91,32 +93,36 @@ public class NaiveBayesClassification {
 		System.out.println("Weighting edges...");
 		graph.weightEdges(traindata);
 		
-		for (List<Integer> key : graph.edgeWeight.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + graph.edgeWeight.get(key));
+		if(verbose){
+			for (List<Integer> key : graph.edgeWeight.keySet()){
+				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+				System.out.println("\t\t" + graph.edgeWeight.get(key));
+			}
 		}
-		
 		System.out.println("Kruskal...");
 		graph.Kruskal(graph.edgeWeight);
+		
+		if(verbose) {
+			System.err.println("Edges in tree");
+			for (List<Integer> edge : graph.spanningTree){
+				System.err.println(edge);
+			}
+		}
 		
 		System.out.println("Final treeing...");
 		graph.makeTreeDirected();
 		
 		
-		
-		System.err.println("Edges in tree");
-		for (List<Integer> edge : graph.spanningTree){
-			System.err.println(edge);
-		}
-		
-		System.err.println("hello");
-		for(VariableNode var : graph.varList){
-			System.err.println("Variable " + var.getName() + " has parent ");
-			if (var.parent!= null){
-				System.err.println(var.parent.getName());
-				continue;
+
+		if(verbose){
+			for(VariableNode var : graph.varList){
+				System.err.println("Variable " + var.getName() + " has parent ");
+				if (var.parent!= null){
+					System.err.println(var.parent.getName());
+					continue;
+				}
+				System.err.println("null");
 			}
-			System.err.println("null");
 		}
 		
 		
@@ -135,8 +141,36 @@ public class NaiveBayesClassification {
 		return ClassNode;
 	}
 	
-	void computeParameters(){
+	void computeParameters(DataSet traindata){
+		parameters = new HashMap<List<Integer>,Double>();
+		List<Integer> parameterKey;
 		
+		
+		/*
+		 * For each variable i
+		 * */
+		for(VariableNode i : traindata.getVariableArray()){
+			/*
+			 * for each possibe value x_ik of variable i 
+			 * */
+			for(int k=0;k < i.GetSR();k++){
+				/*
+				 * for each possibe configuration (value) w_ij of parent of variable i 
+				 * */
+				for(int j=0;j<i.GetParent().GetSR();j++){
+					/*
+					 * for each class
+					 * */
+					for(int c=0;c<traindata.getClassVariable().GetSR();c++){
+						parameterKey=Arrays.asList(i.getID(),k,j,c);
+						ocur
+						
+						double parameterValue = traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
+						parameters.put(parameterKey, value)
+					}
+				}
+			}
+		}
 		
 		
 	}

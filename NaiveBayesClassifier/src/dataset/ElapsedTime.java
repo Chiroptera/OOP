@@ -18,7 +18,8 @@ public class ElapsedTime {
 	}
 
 	public String toString() {
-		return ((long) (time * Math.pow (10,-9))) + " seconds.";
+		return String.valueOf(time/1000000) + " miliseconds.";
+//		return ((long) (time * Math.pow (10,-9))) + " seconds.";
 	}
 
 
