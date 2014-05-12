@@ -16,8 +16,11 @@ public class NaiveBayesClassification {
 	
 	private int nVariable;
 	private int nInstances;
+	protected double Nl=0.5;
 	
-	Map<List<Integer>,Double> parameters;
+	Map<List<Integer>,Double> varParameters;
+	double[] classParameters;
+	
 	
 	NaiveBayesClassification(String score){
 		
@@ -39,6 +42,10 @@ public class NaiveBayesClassification {
 		}
 		
 		this.Train(traindata);
+	}
+	
+	public void setNl(double Nl){
+		this.Nl=Nl;
 	}
 
 	public void checkScore(String args) throws NBCException{
@@ -141,10 +148,11 @@ public class NaiveBayesClassification {
 		return ClassNode;
 	}
 	
-	void computeParameters(DataSet traindata){
-		parameters = new HashMap<List<Integer>,Double>();
+	protected void computeParameters(DataSet traindata){
+		varParameters = new HashMap<List<Integer>,Double>();
 		List<Integer> parameterKey;
-		
+		int occurrIJKC, occurrIJC;
+		double parameterValue;
 		
 		/*
 		 * For each variable i
@@ -163,18 +171,27 @@ public class NaiveBayesClassification {
 					 * */
 					for(int c=0;c<traindata.getClassVariable().GetSR();c++){
 						parameterKey=Arrays.asList(i.getID(),k,j,c);
-						ocur
-						
-						double parameterValue = traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
-						parameters.put(parameterKey, value)
+						occurrIJKC=traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
+						occurrIJC=traindata.getNijc(i.getID(), i.GetParent().getID(), j, c);
+						parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
+						varParameters.put(parameterKey, parameterValue);
 					}
 				}
 			}
 		}
 		
+		classParameters = new double[traindata.getClassVariable().GetSR()];
+		for(int c=0;c<traindata.getClassVariable().GetSR();c++){
+			parameterValue= (traindata.getClassVariable().GetNC(c) + Nl) / 
+							(traindata.GetnInstances() + traindata.getClassVariable().GetSR() * Nl);
+			classParameters[c]= parameterValue;
+		}
 		
 	}
 	
+	protected void jointProbabiliy(int[] varValues,int c){
+		
+	}
 	
 	public String getScoreType(){
 		
