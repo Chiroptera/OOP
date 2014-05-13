@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class NaiveBayesClassification {
 	
+	private boolean verbose = true;
+	
 	private String scoreType;
 	
 	//
@@ -18,8 +20,8 @@ public class NaiveBayesClassification {
 	private int nInstances;
 	protected double Nl=0.5;
 	
-	Map<List<Integer>,Double> varParameters;
-	double[] classParameters;
+	protected Map<List<Integer>,Double> varParameters;
+	protected double[] classParameters;
 	
 	
 	NaiveBayesClassification(String score){
@@ -65,7 +67,7 @@ public class NaiveBayesClassification {
 		 * 2. build undirected graph
 		 * 3. make graph directed
 		 */
-		boolean verbose = false;
+		
 		traindata.printData();
 		
 		System.out.println("Building tables...");		
@@ -132,6 +134,8 @@ public class NaiveBayesClassification {
 			}
 		}
 		
+		computeParameters(traindata);
+		
 		
 	
 	}
@@ -162,19 +166,41 @@ public class NaiveBayesClassification {
 			 * for each possibe value x_ik of variable i 
 			 * */
 			for(int k=0;k < i.GetSR();k++){
+
 				/*
-				 * for each possibe configuration (value) w_ij of parent of variable i 
+				 * for each class
 				 * */
-				for(int j=0;j<i.GetParent().GetSR();j++){
+				for(int c=0;c<traindata.getClassVariable().GetSR();c++){
 					/*
-					 * for each class
+					 * for each possibe configuration (value) w_ij of parent of variable i 
 					 * */
-					for(int c=0;c<traindata.getClassVariable().GetSR();c++){
-						parameterKey=Arrays.asList(i.getID(),k,j,c);
-						occurrIJKC=traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
-						occurrIJC=traindata.getNijc(i.getID(), i.GetParent().getID(), j, c);
+					if (i.GetParent() != null){
+						for(int j=0;j<i.GetParent().GetSR();j++){
+							parameterKey=Arrays.asList(i.getID(),k,j,c);
+							occurrIJKC=traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
+							occurrIJC=traindata.getNijc(i.getID(), i.GetParent().getID(), j, c);
+							parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
+							varParameters.put(parameterKey, parameterValue);
+							
+							if(verbose)
+							System.out.println("VarParam" +
+												parameterKey + 
+												"=" + String.valueOf(parameterValue)
+												);
+						}
+					}
+					else{
+						parameterKey=Arrays.asList(i.getID(),k,c);
+						occurrIJKC=traindata.getNikc(i.getID(), k,c); 
+						occurrIJC=traindata.getClassVariable().GetNC(c);
 						parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
 						varParameters.put(parameterKey, parameterValue);
+						
+						if(verbose)
+						System.out.println("VarParam" +
+								parameterKey + 
+								"=" + String.valueOf(parameterValue)
+								);
 					}
 				}
 			}
@@ -185,6 +211,12 @@ public class NaiveBayesClassification {
 			parameterValue= (traindata.getClassVariable().GetNC(c) + Nl) / 
 							(traindata.GetnInstances() + traindata.getClassVariable().GetSR() * Nl);
 			classParameters[c]= parameterValue;
+			
+			if (verbose)
+			System.out.println("ClassParam[" +
+					String.valueOf(c) + 
+					"]=" + String.valueOf(parameterValue)
+					);
 		}
 		
 	}

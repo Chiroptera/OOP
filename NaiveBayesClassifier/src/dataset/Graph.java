@@ -99,7 +99,7 @@ public class Graph {
 							}
 
 							score += (occurrIJKC / (this.numberOfInst)) * 
-									( Math.log( (occurrIJKC * classNode.GetNC(c)) / (occurrIKC*occurrIJC )) 
+									( Math.log( (occurrIJKC * classNode.GetNC(c)) / (occurrIKC * occurrIJC )) 
 									/ Math.log(2));
 
 						}
