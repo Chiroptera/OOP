@@ -36,7 +36,7 @@ public class Graph {
 		varList = data.getVariableArray().clone();
 		classNode = data.getClassVariable();
 		numberOfVars = varList.length;
-		numberOfInst = data.GetnInstances();
+		numberOfInst = data.getnInstances();
 	}
 	
 	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,

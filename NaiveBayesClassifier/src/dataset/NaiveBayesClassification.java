@@ -35,17 +35,6 @@ public class NaiveBayesClassification {
 		
 	}
 	
-	NaiveBayesClassification(String score, DataSet traindata){
-		try {
-			checkScore(score);
-		} catch (NBCException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.Train(traindata);
-	}
-	
 	public void setNl(double Nl){
 		this.Nl=Nl;
 	}
@@ -56,9 +45,7 @@ public class NaiveBayesClassification {
 			scoreType = args;
 		}else{
 			 throw new NBCException(args);
-		}
-		
-
+		}	
 	}
 	
 	public void Train(DataSet traindata){
@@ -140,7 +127,11 @@ public class NaiveBayesClassification {
 	
 	}
 
-	public void Test(){
+	public void Test(DataSet test){
+		
+		
+		
+		
 		
 	}
 	
@@ -209,7 +200,7 @@ public class NaiveBayesClassification {
 		classParameters = new double[traindata.getClassVariable().GetSR()];
 		for(int c=0;c<traindata.getClassVariable().GetSR();c++){
 			parameterValue= (traindata.getClassVariable().GetNC(c) + Nl) / 
-							(traindata.GetnInstances() + traindata.getClassVariable().GetSR() * Nl);
+							(traindata.getnInstances() + traindata.getClassVariable().GetSR() * Nl);
 			classParameters[c]= parameterValue;
 			
 			if (verbose)
@@ -222,6 +213,14 @@ public class NaiveBayesClassification {
 	}
 	
 	protected void jointProbabiliy(int[] varValues,int c){
+		
+		for(int i = 0; i < testdata.getnVariables(); i++){
+			
+			PV(C) * MUT TETAijkc
+			
+			
+		}
+		
 		
 	}
 	

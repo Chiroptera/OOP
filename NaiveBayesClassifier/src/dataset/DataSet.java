@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DataSet {
-
-	LinkedList<int[]> parsedDataList;
-	Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
-	Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
-	Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
+	
+	protected LinkedList<int[]> parsedDataList;
+	protected Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
+	protected Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
+	protected Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
 
 //	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
 
@@ -73,12 +73,12 @@ public class DataSet {
 		this.nVariables = numV;
 	}
 		
-	public int GetnInstances() {
+	public int getnInstances() {
 		
 		return nInstances;
 	}
 	
-	public int GetnVariables() {
+	public int getnVariables() {
 		
 		return nVariables;
 	}
@@ -96,98 +96,10 @@ public class DataSet {
 	public ClassifierNode getClassVariable(){
 		return this.classNode;
 	}
-	
-//	public void parse(String Filename) {
-//		
-//		parsedDataList = new LinkedList<int[]>();
-//		
-//		//System.err.println("parse:");
-//		String csvFile = (Filename);
-//
-//		
-//		
-//		BufferedReader br = null;
-//		String line;
-//		String cvsSplitBy = ",";
-//		int sSize;
-//		
-//		try {
-//			br = new BufferedReader(new FileReader(csvFile));
-//			
-//			String[] lineparse;
-//			int[] temp;
-//
-//			/* while exists lines*/
-//
-//			/* if first line not null */
-//			if((line = br.readLine()) != null){
-//
-//			    // use comma as separator
-//				lineparse = line.split(cvsSplitBy); /* split string by commas */
-//				sSize = lineparse.length; /* number of variables + 1 (class variable)*/
-//				this.nVariables = sSize -1;
-//				
-//				variableArray = new VariableNode[this.nVariables+1];
-//
-//				/* go through all strings in line (seperated by commas)*/
-//				for(int j=0;j<this.nVariables;j++){
-//					
-//					variableArray[j] = new VariableNode(lineparse[j], j);
-//					System.out.println("Variable " + j + " name: " + variableArray[j].getName());
-//				}
-//
-//				classNode = new ClassifierNode(lineparse[sSize-1]);
-//				
-//				/* while there are other lines*/
-//				while ((line = br.readLine()) != null) {
-//
-//				    // use comma as separator
-//					lineparse = line.split(cvsSplitBy); /* split string by commas */
-//					sSize = lineparse.length; /* number of variables + 1 (class variable)*/
-//
-//					temp = new int[sSize];
-//					System.out.println("Size: " + sSize );
-//						for(int j=0 ; j<sSize;j++){
-//							
-//							temp[j] = Integer.parseInt(lineparse[j]);
-//							
-//							if( j == sSize-1){
-//								System.out.println("C:"+ Integer.parseInt(lineparse[sSize-1]));
-//								classNode.UpdateSR(Integer.parseInt(lineparse[sSize-1]));
-//								parsedDataList.add(temp);
-//								continue;
-//							}
-//								
-//							variableArray[j].UpdateSR((temp[j]));
-//							
-//						}
-//						this.nInstances ++;
-//
-//					}
-//
-//					System.out.println();
-//			}	
-//
-//		} catch (FileNotFoundException e) {
-//				e.printStackTrace();
-//		} catch (IOException e) {
-//				e.printStackTrace();
-//		} finally {
-//			if (br != null) {
-//				try {
-//					br.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//
-//		classNode.CreateNC();
-//  }
 
 	public void buildTable(){
 	    /*for(Iterator iter = parsedDataList.iterator();iter.hasNext();){*/
-		List<Integer> key,keyInv;
+		List<Integer> key;
 		Integer value;
 		int classe;
 		classNode.CreateNC();

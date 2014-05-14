@@ -34,7 +34,20 @@ public class Main {
 		System.err.println("*                                          *");
 		System.err.println("********************************************");
 		
-		NaiveBayesClassification BNClass = new NaiveBayesClassification(args[2],trainData);
+		NaiveBayesClassification BNClass = new NaiveBayesClassification(args[2]);
+		
+		BNClass.Train(trainData);
+		//BNClass
+		
+		ParseCSV testSet = new ParseCSV(args[1]);
+		
+		DataSet testData = new DataSet();
+		
+		testSet.parse(testData);
+		
+		
+		BNClass.Test(testData);
+
 		
 //		try {
 //			BNClass.parseArg(args);

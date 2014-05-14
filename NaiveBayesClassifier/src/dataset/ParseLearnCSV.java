@@ -46,8 +46,6 @@ public class ParseLearnCSV extends ParseCSV {
 	
 	public void lastLine(){
 		
-		
-
 	}
 	
 	
