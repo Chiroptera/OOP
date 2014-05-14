@@ -1,4 +1,4 @@
-package dataset;
+package bayesClassification;
 
 
 public class NBCException extends Exception{

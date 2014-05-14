@@ -1,8 +1,9 @@
 //TO DO
 //VERFY
 
-package dataset;
+package parseCSV;
 
+import dataset.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,7 +23,7 @@ public class ParseCSV {
 		parsedDataList = new LinkedList<int[]>();
 	}
 	
-	ParseCSV(String filename){
+	public ParseCSV(String filename){
 		
 		parsedDataList = new LinkedList<int[]>();
 	
@@ -112,10 +113,6 @@ public class ParseCSV {
 	}
 	
 	public void middleLine(int index, int value){
-
-	}
-	
-	public void lastLine(){
 
 	}
 }

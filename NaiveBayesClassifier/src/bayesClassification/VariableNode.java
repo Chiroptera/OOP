@@ -1,4 +1,4 @@
-package dataset;
+package bayesClassification;
 
 import java.util.LinkedList;
 
@@ -15,7 +15,7 @@ public class VariableNode extends BayesNode {
 		super(nameNew);
 	}
 
-	VariableNode(String nameNew, int id) {
+	public VariableNode(String nameNew, int id) {
 		super(nameNew);
 		setID(id);
 	}

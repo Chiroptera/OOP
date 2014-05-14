@@ -1,10 +1,14 @@
-package dataset;
+package bayesClassification;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import dataset.DataSet;
+import dataset.TrainDataSet;
 
 public class NaiveBayesClassification {
 	
@@ -26,8 +30,12 @@ public class NaiveBayesClassification {
 	protected Map<List<Integer>,Double> varParameters;
 	protected double[] classParameters;
 	
-	
-	NaiveBayesClassification(String score){
+	/**
+	 * Score can either be log-likelihood (LL) or minimum description length (MDL).
+	 * @throws NBCException.
+	 * @param String score
+	 * */
+	public NaiveBayesClassification(String score){
 		
 		try {
 			checkScore(score);
@@ -37,11 +45,20 @@ public class NaiveBayesClassification {
 		}
 		
 	}
+	/**
+	 * 
+	 * @param Nl
+	 */
 	
 	public void setNl(double Nl){
 		this.Nl=Nl;
 	}
 
+	/**
+	 * Check if the input score is valid.
+	 * @param String args
+	 * @throws NBCException Exception of score not valid.	
+	 */
 	public void checkScore(String args) throws NBCException{
 		
 		if(args.equals("LL") || args.equals("MDL")){
@@ -51,7 +68,11 @@ public class NaiveBayesClassification {
 		}	
 	}
 	
-	public void Train(DataSet traindata){
+	/**
+	 *  This 
+	 * @param traindata A traindata with data.
+	 */
+	public void Train(TrainDataSet traindata){
 		/*
 		 * 1. Compute edge weight
 		 * 2. build undirected graph
@@ -65,24 +86,9 @@ public class NaiveBayesClassification {
 		
 		if(verbose){
 			
-			/* print Nijkc*/
-			System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
-			for (List<Integer> key : traindata.NijkcTable.keySet()){
-				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-				System.out.println("\t\t" + traindata.NijkcTable.get(key));
-			}
-			/* print Nikc_J*/
-			System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
-			for (List<Integer> key : traindata.Nikc_JTable.keySet()){
-				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-				System.out.println("\t\t" + traindata.Nikc_JTable.get(key));
-			}
-			/* print Nijc_K*/
-			System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
-			for (List<Integer> key : traindata.Nijc_KTable.keySet()){
-				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-				System.out.println("\t\t" + traindata.Nijc_KTable.get(key));
-			}
+			traindata.printNijkc();
+			traindata.printNijc();
+			traindata.printNikc();
 		
 		}
 		
@@ -132,7 +138,11 @@ public class NaiveBayesClassification {
 	
 	}
 
-	protected void computeParameters(DataSet traindata){
+	/**
+	 * 
+	 * @param traindata
+	 */
+	protected void computeParameters(TrainDataSet traindata){
 		varParameters = new HashMap<List<Integer>,Double>();
 		List<Integer> parameterKey;
 		int occurrIJKC, occurrIJC;
@@ -200,7 +210,12 @@ public class NaiveBayesClassification {
 		}
 		
 	}
-	
+	/**
+	 * This method should only be called after calling the method <b>train()</b>.
+	 * This method receives a DataSet containing the test data and, using the <b>Graph</b> built during training, 
+	 * the computes the most probable classifier for each test instance.
+	 * @param test A DataSet containing the test data.
+	 */
 	public void Test(DataSet test){
 		
 		double paramsSumOverClass;
@@ -209,13 +224,17 @@ public class NaiveBayesClassification {
 		double maxProb;
 		int chosenC=0;
 		
+		
+		int[] dataLine;
 		/* iterate over each test line */
-		for(int[] dataLine : test.parsedDataList){
+		for(Iterator<int[]> iterLine = test.iterator(); iterLine.hasNext();){
+			dataLine = iterLine.next();
+			
 			paramsSumOverClass=0;
 			
 			if(verbose) System.out.println("dataline = " + Arrays.toString(dataLine));
 			
-			/* iterate over each possibl value for the class variable */
+			/* iterate over each possible value for the class variable */
 			for(int c=0; c<mygrah.getClassVariable().GetSR();c++){
 				joints[c]=jointProbabiliy(dataLine,c);
 				paramsSumOverClass += joints[c];
@@ -253,17 +272,27 @@ public class NaiveBayesClassification {
 	}
 	
 	
-	
+	/**
+	 * Uses the information of the TAN's <b>Graph</b> containing the tree variables.
+	 * @param varValues Array of integers equivalent to a line of test data,
+	 * @param c Valid value for a class.
+	 * @return Returns a double containing the jointProbability
+	 */
 	protected double jointProbabiliy(int[] varValues,int c){
 		
 		/* create product and assign the parameter of root node */
 		/* variabl ID, variable value, class value */
-		double varParamsProduct=varParameters.get(Arrays.asList(0,varValues[0],c));
+		double varParamsProduct=1;
 		
 		
 		for(int i = 1; i < varValues.length; i++){
 			/* variabl ID, variable value, parent value, class value */
-			varParamsProduct *= varParameters.get(Arrays.asList(i,varValues[i],varValues[mygrah.getParentID(i)],c));
+			try {
+				varParamsProduct *= varParameters.get(Arrays.asList(i,varValues[i],varValues[mygrah.getParentID(i)],c));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				varParamsProduct *= varParameters.get(Arrays.asList(i,varValues[i],c));
+			}
 		}
 		
 		return varParamsProduct * classParameters[c];

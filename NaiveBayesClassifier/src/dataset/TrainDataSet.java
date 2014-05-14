@@ -5,29 +5,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bayesClassification.ClassifierNode;
 
 
-public class trainDataSet extends DataSet {
+
+public class TrainDataSet extends DataSet {
 	
-	Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
-	Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
-	Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
+	protected Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
+	protected Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
+	protected Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
 	
+	protected ClassifierNode classNode; /* class node */
 	
+	public TrainDataSet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public void buildTable(){
-	    /*for(Iterator iter = parsedData.iterator();iter.hasNext();){*/
-		List<Integer> key,keyInv;
+	    /*for(Iterator iter = parsedDataList.iterator();iter.hasNext();){*/
+		List<Integer> key;
 		Integer value;
 		int classe;
+		classNode.CreateNC();
 				
 
 		/* for each line of parsed data*/
-		for(int[] dataLine : parsedData){
-			classe = dataLine[this.NX];
+		for(int[] dataLine : parsedDataList){
+			classe = dataLine[dataLine.length-1];
 			
 			System.out.println("classe: " + classe);
 			
-			ClassNode.UpdateNC(classe);
+			classNode.UpdateNC(classe);
 
 			/* for each variable excluding the class */
 			for(int i=0;i<dataLine.length-1;i++){
@@ -46,6 +55,7 @@ public class trainDataSet extends DataSet {
 				else{
 					Nikc_JTable.put(key, 1);
 				}
+				
 
 
 
@@ -98,6 +108,17 @@ public class trainDataSet extends DataSet {
 	    } /* end cycle dataLine*/		
 	}
 
+	public ClassifierNode getClassVariable(){
+
+		return this.classNode;
+	}
+	
+	public void createClassNode(String name){
+		
+		//check if not null, if not then do what? exception, ignore?
+		this.classNode = new ClassifierNode(name);
+	}
+	
 	public int getNijkc(int i, int Pi, int k, int j, int c){
 		/*
 		 * i	- id of variable
@@ -147,7 +168,36 @@ public class trainDataSet extends DataSet {
 		return Nijc_KTable.containsKey(Arrays.asList(i,Pi,j,c));
 	}
 	
-	
+	public void printNijkc(){
+		/* print Nijkc*/
+		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : NijkcTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + NijkcTable.get(key));
+		}
 
+	}
+
+	public void printNikc(){
+
+		/* print Nikc_J*/
+		System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : Nikc_JTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + Nikc_JTable.get(key));
+		}
+
+	}
+	
+	public void printNijc(){
+
+		/* print Nijc_K*/
+		System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
+		for (List<Integer> key : Nijc_KTable.keySet()){
+			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+			System.out.println("\t\t" + Nijc_KTable.get(key));
+		}
+	}
+	
 }
 

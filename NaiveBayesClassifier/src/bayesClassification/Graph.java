@@ -1,4 +1,4 @@
-package dataset;
+package bayesClassification;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import dataset.TrainDataSet;
 
 public class Graph {
 
@@ -32,29 +34,16 @@ public class Graph {
 		
 	}
 	
-	Graph(DataSet data){
+	Graph(TrainDataSet data){
 		varList = data.getVariableArray().clone();
 		classNode = data.getClassVariable();
 		numberOfVars = varList.length;
 		numberOfInst = data.getnInstances();
 	}
 	
-	Graph(VariableNode[] varList_arg,ClassifierNode classNode_arg,
-			int NT_arg,
-			Map<List<Integer>,Integer> NijkcTable_arg,Map<List<Integer>,Integer> Nijc_KTable_arg, Map<List<Integer>,Integer> Nikc_JTable_arg, Map<List<Integer>, Float> edgeWeight_arg){
-		varList = varList_arg;
-		classNode = classNode_arg;
-		NijkcTable = NijkcTable_arg;
-		Nijc_KTable = Nijc_KTable_arg;
-		Nikc_JTable = Nikc_JTable_arg;
-		numberOfVars = varList_arg.length;
-		numberOfInst = NT_arg;
-
-	}
-	
 	//buildmatrix()
 	//method to calculate the edges weight
-	public void weightEdges(DataSet data){
+	public void weightEdges(TrainDataSet data){
 		
 		
 		
@@ -124,16 +113,27 @@ public class Graph {
 		System.out.println("network LL=" + sumLL);
 	}
 	
-	public int getParentID(int sonID){
-		if (varList[sonID].GetParent() == null) return 0;
+	
+	/**********************************************
+	 * 
+	 *             GETTERS
+	 * 
+	 */
+	
+	/**
+	 * Receives an integer ID of a variable. Returns the ID of parent.
+	 * @param sonID Variable ID's integer.
+	 * @return ID of parent.
+	 * @throws Exception 
+	 */
+	public int getParentID(int sonID) throws Exception{
+		if (varList[sonID].GetParent() == null) throw new Exception("This variable doesn't have a parent.");
 		return varList[sonID].GetParent().getID();
 	}
 	
 	public ClassifierNode getClassVariable(){
 		return classNode;
 	}
-	
-	
 	
 	/* function that converts from Hashtable to an ordered ArrayList*/
     public static ArrayList<Map.Entry<List<Integer>, Double>> sortValue(Map<List<Integer>, Double> edgeWeight2){
@@ -237,6 +237,7 @@ public class Graph {
 		
 	}
 	
+	
 	void makeTreeDirected(){
 		
 		/* pick some node for root*/
@@ -302,101 +303,4 @@ public class Graph {
 			
 		}/* end while */
 	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		System.err.println("Hello hashTable!");
-
-		ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
-		
-		DataSet traindata = new DataSet();
-		
-		trainSet.parse(traindata);
-		
-		
-//		for(int i = 0;  i < traindata.ClassNode.GetSR(); i++){
-//			System.out.println("Class " + i +  " has " + traindata.ClassNode.GetNC(i) + " instances.");
-//		}
-//		System.out.println("Number of instances: " + traindata.GetNT());
-//		
-//		
-//		for(int i = 0;  i < traindata.NX; i++){
-//			System.out.println("Variable OUTSIDE" + i +  " has " + traindata.NodeList[i].GetSR() + " instances.");
-//		}
-
-
-		/* print Nijkc*/
-		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : traindata.NijkcTable.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + traindata.NijkcTable.get(key));
-		}
-		/* print Nikc_J*/
-		System.out.println("\nNikc_J:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : traindata.Nikc_JTable.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + traindata.Nikc_JTable.get(key));
-		}
-		/* print Nijc_K*/
-		System.out.println("\nNijc_K:\nKeys:\t\tValues:\n");
-		for (List<Integer> key : traindata.Nijc_KTable.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + traindata.Nijc_KTable.get(key));
-		}
-
-				
-//		for (List<Integer> key : traindata.edgeWeight.keySet()){
-//			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-//			System.out.println("\t\t" + traindata.edgeWeight.get(key));
-//		}
-
-	
-//		Graph grafo = new Graph(traindata.getVaribleList(),traindata.ClassNode, 
-//				traindata.GetNT(), traindata.NijkcTable,traindata.Nijc_KTable, 
-//				traindata.Nikc_JTable, traindata.edgeWeight);
-		Graph grafo = new Graph(traindata);
-
-		grafo.weightEdges(traindata);
-		
-		
-		for (List<Integer> key : grafo.edgeWeight.keySet()){
-			for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-			System.out.println("\t\t" + grafo.edgeWeight.get(key));
-		}
-
-		grafo.Kruskal(grafo.edgeWeight);
-
-		
-		
-		System.err.println("Edges in tree");
-		for (List<Integer> edge : grafo.spanningTree){
-			System.err.println(edge);
-		}
-		
-		grafo.makeTreeDirected();
-		
-//		for(VariableNode var : grafo.varList){
-//			System.err.println("Variable " + var.getName() + " has childs ");
-//			for(VariableNode childVar : var.children){
-//				System.err.println(childVar.getName() + ", ");
-//			}
-//		}
-		
-		System.err.println("hello");
-		for(VariableNode var : grafo.varList){
-			System.err.println("Variable " + var.getName() + " has parent ");
-			if (var.parent!= null){
-				System.err.println(var.parent.getName());
-				continue;
-			}
-			System.err.println("null");
-		}
-	}
-
-//	}
-
 }

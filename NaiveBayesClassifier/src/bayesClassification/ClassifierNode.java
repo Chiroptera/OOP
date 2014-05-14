@@ -1,11 +1,11 @@
-package dataset;
+package bayesClassification;
 
 public class ClassifierNode extends BayesNode {
 	
 	private int s; //number of classifications
 	private int[] NC;
 
-	ClassifierNode(String nameNew) {
+	public ClassifierNode(String nameNew) {
 		super(nameNew);
 	}
 	

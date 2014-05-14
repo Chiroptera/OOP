@@ -1,5 +1,9 @@
 package dataset;
 
+import bayesClassification.NaiveBayesClassification;
+import parseCSV.ParseCSV;
+import parseCSV.ParseLearnCSV;
+
 
 public class Main {
 	
@@ -18,7 +22,7 @@ public class Main {
 		
 		ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
 		
-		DataSet trainData = new DataSet();
+		TrainDataSet trainData = new TrainDataSet();
 		
 		trainSet.parse(trainData);
 		//Insert: Parse do Learn
@@ -28,11 +32,11 @@ public class Main {
 		
 //		trainData.buildTable();
 		
-		System.err.println("********************************************");
-		System.err.println("*                                          *");
-		System.err.println("*           TAN                            *");
-		System.err.println("*                                          *");
-		System.err.println("********************************************");
+		System.out.println("********************************************");
+		System.out.println("*                                          *");
+		System.out.println("*           TAN                            *");
+		System.out.println("*                                          *");
+		System.out.println("********************************************");
 		
 		NaiveBayesClassification BNClass = new NaiveBayesClassification(args[2]);
 		

@@ -1,4 +1,6 @@
-package dataset;
+package parseCSV;
+
+import dataset.*;
 
 //TO DO: extends this to accept any number or object
 //extends the class that puts a csv file with integer entries to 
@@ -10,7 +12,7 @@ public class ParseLearnCSV extends ParseCSV {
 		super();
 	}
 	
-	ParseLearnCSV(String filename){
+	public ParseLearnCSV(String filename){
 		super(filename);		
 	}
 	
@@ -28,14 +30,14 @@ public class ParseLearnCSV extends ParseCSV {
 			data.addVarNode(j, line[j]);
 		}
 	
-		data.createClassNode(line[colSize-1]);
+		((TrainDataSet) data).createClassNode(line[colSize-1]);
 	}
 	
 	public void middleLine(int value, int index){
 				
 			if(index == (colSize-1)){
 				
-				data.getClassVariable().UpdateSR(value);
+				((TrainDataSet) data).getClassVariable().UpdateSR(value);
 			}
 			else{
 				System.out.println("Variable Name: " + data.getVariableArray()[index].getName());
@@ -43,20 +45,5 @@ public class ParseLearnCSV extends ParseCSV {
 			}
 
 	}
-	
-	public void lastLine(){
-		
-	}
-	
-	
-//	public VariableNode[] getVariableList(){
-//		return this.variableArray;
-//	}
-//	
-//	public ClassifierNode getClassVariable(){
-//		return this.classNode;
-//	}
-//	
-	
 
 }
