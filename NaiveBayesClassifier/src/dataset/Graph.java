@@ -13,14 +13,14 @@ import java.util.Map.Entry;
 
 public class Graph {
 
-	VariableNode[] varList;
+	protected VariableNode[] varList;
 	ClassifierNode classNode;
 	VariableNode root;
 
 	Map<List<Integer>,Integer> NijkcTable;
 	Map<List<Integer>,Integer> Nijc_KTable;
 	Map<List<Integer>,Integer> Nikc_JTable;
-	Map<List<Integer>, Float> edgeWeight = new HashMap<List<Integer>, Float>();
+	Map<List<Integer>, Double> edgeWeight = new HashMap<List<Integer>, Double>();
 	
 	
 	ArrayList<List<Integer>> spanningTree;
@@ -58,8 +58,8 @@ public class Graph {
 		
 		
 		
-		float score, scoreMDL, scoreLL;
-		float occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
+		double score, scoreMDL, scoreLL, sumLL=0,sumMDL=0;
+		double occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
 		
 		List<Integer> edgeKey;
 		
@@ -108,30 +108,41 @@ public class Graph {
 
 				edgeKey = Arrays.asList(i,ii);
 				scoreLL = score;
+				sumLL+=scoreLL;
 				
 				scoreMDL = (float) (score - (((classNode.GetSR() * (varList[i].GetSR() - 1) * (varList[ii].GetSR() - 1)) / 2) * Math.log(numberOfInst)));
+				sumMDL += sumLL;
 				
 				edgeWeight.put(edgeKey,scoreLL);
 				
 				System.out.println("edgekey: " + edgeKey + "score :" + score);
 				
 			}
+			
 		}
+		
+		System.out.println("network LL=" + sumLL);
+	}
+	
+	public int getParentID(int sonID){
+		if (varList[sonID].GetParent() == null) return 0;
+		return varList[sonID].GetParent().getID();
+	}
+	
+	public ClassifierNode getClassVariable(){
+		return classNode;
 	}
 	
 	
 	
-	
-	
-	
 	/* function that converts from Hashtable to an ordered ArrayList*/
-    public static ArrayList<Map.Entry<List<Integer>, Float>> sortValue(Map<List<Integer>, Float> edgeWeight){
+    public static ArrayList<Map.Entry<List<Integer>, Double>> sortValue(Map<List<Integer>, Double> edgeWeight2){
 
         //Transfer as List and sort it
-        ArrayList<Entry<List<Integer>, Float>> l = new ArrayList(edgeWeight.entrySet());
-        Collections.sort(l, new Comparator<Map.Entry<?, Float>>(){
+        ArrayList<Entry<List<Integer>, Double>> l = new ArrayList(edgeWeight2.entrySet());
+        Collections.sort(l, new Comparator<Map.Entry<?, Double>>(){
 
-          public int compare(Map.Entry<?, Float> o1, Map.Entry<?, Float> o2) {
+          public int compare(Map.Entry<?, Double> o1, Map.Entry<?, Double> o2) {
              return o2.getValue().compareTo(o1.getValue());
          }});
 
@@ -139,7 +150,7 @@ public class Graph {
      }
 	
 	/* build Maximum Weighted Spanning Tree*/
-	void Kruskal(Map<List<Integer>, Float> edgeWeight){
+	void Kruskal(Map<List<Integer>, Double> edgeWeight){
 		/* 
 		 * Algorithm Steps from http://www.stats.ox.ac.uk/~konis/Rcourse/exercise1.pdf
 		 * 
@@ -156,7 +167,7 @@ public class Graph {
 		*/
 		
 		/* order edges by descending weight */
-		ArrayList<Entry<List<Integer>, Float>> orderedEdges = sortValue(edgeWeight);
+		ArrayList<Entry<List<Integer>, Double>> orderedEdges = sortValue(edgeWeight);
 		
 		/* array to hold var identifier of edge*/
 		int[] varsNumber = new int[numberOfVars];
@@ -171,7 +182,7 @@ public class Graph {
 		int edgeCounter=0;
 		
 		/* assumes edges is an ordered ArrayList with all the edges */
-		for(Entry<List<Integer>, Float> edge : orderedEdges){
+		for(Entry<List<Integer>, Double> edge : orderedEdges){
 			
 			/* 
 			 * 

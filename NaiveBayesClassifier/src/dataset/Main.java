@@ -66,6 +66,8 @@ public class Main {
 		time.stop();
 		System.out.println("Building the classifier: " + time.toString());
 		
+		
+		
 	}
 	
 	

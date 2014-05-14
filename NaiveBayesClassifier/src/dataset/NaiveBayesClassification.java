@@ -1,5 +1,6 @@
 package dataset;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ public class NaiveBayesClassification {
 	private int nInstances;
 	protected double Nl=0.5;
 	
+	
+	protected Graph mygrah;
 	protected Map<List<Integer>,Double> varParameters;
 	protected double[] classParameters;
 	
@@ -108,6 +111,8 @@ public class NaiveBayesClassification {
 		System.out.println("Final treeing...");
 		graph.makeTreeDirected();
 		
+		mygrah = graph;
+		
 		
 
 		if(verbose){
@@ -127,22 +132,6 @@ public class NaiveBayesClassification {
 	
 	}
 
-	public void Test(DataSet test){
-		
-		
-		
-		
-		
-	}
-	
-	public VariableNode[] getVarList(){
-		return VariableArray;
-	}
-	
-	public ClassifierNode getClassNode(){
-		return ClassNode;
-	}
-	
 	protected void computeParameters(DataSet traindata){
 		varParameters = new HashMap<List<Integer>,Double>();
 		List<Integer> parameterKey;
@@ -212,14 +201,72 @@ public class NaiveBayesClassification {
 		
 	}
 	
-	protected void jointProbabiliy(int[] varValues,int c){
+	public void Test(DataSet test){
 		
-		for(int i = 0; i < testdata.getnVariables(); i++){
+		double paramsSumOverClass;
+		double[] joints = new double[mygrah.getClassVariable().GetSR()];
+
+		double maxProb;
+		int chosenC=0;
+		
+		/* iterate over each test line */
+		for(int[] dataLine : test.parsedDataList){
+			paramsSumOverClass=0;
 			
-			PV(C) * MUT TETAijkc
+			if(verbose) System.out.println("dataline = " + Arrays.toString(dataLine));
 			
+			/* iterate over each possibl value for the class variable */
+			for(int c=0; c<mygrah.getClassVariable().GetSR();c++){
+				joints[c]=jointProbabiliy(dataLine,c);
+				paramsSumOverClass += joints[c];
+				
+				if(verbose) System.out.println("joint[" + String.valueOf(c) + "]=" + String.valueOf(joints[c]));
+			}
+			
+			if(verbose) System.out.println("joints sum = " + String.valueOf(paramsSumOverClass));
+			
+			maxProb=0;
+			
+			/* compute and iterate over the array of computed conditional probabilities*/
+			for(int c=0;c<joints.length;c++){
+				joints[c] /= paramsSumOverClass;
+				/* compute maximum & classify*/
+				if (joints[c] > maxProb ){
+					maxProb = joints[c];
+					chosenC = c;
+				}
+			}
+			
+			if(verbose) System.out.println("instance " + Arrays.toString(dataLine) + "\t->\t" + 
+											String.valueOf(chosenC) + "\t\t" + 
+											String.valueOf(joints[chosenC]));
 			
 		}
+		
+		
+		
+	}
+	
+	
+	public ClassifierNode getClassNode(){
+		return ClassNode;
+	}
+	
+	
+	
+	protected double jointProbabiliy(int[] varValues,int c){
+		
+		/* create product and assign the parameter of root node */
+		/* variabl ID, variable value, class value */
+		double varParamsProduct=varParameters.get(Arrays.asList(0,varValues[0],c));
+		
+		
+		for(int i = 1; i < varValues.length; i++){
+			/* variabl ID, variable value, parent value, class value */
+			varParamsProduct *= varParameters.get(Arrays.asList(i,varValues[i],varValues[mygrah.getParentID(i)],c));
+		}
+		
+		return varParamsProduct * classParameters[c];
 		
 		
 	}
