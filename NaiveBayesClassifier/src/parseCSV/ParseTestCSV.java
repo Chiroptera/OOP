@@ -21,8 +21,8 @@ public class ParseTestCSV extends ParseCSV {
 	//by default the first line is ignored, only used to know column size
 	//can be extended to not ignore first line, just by redefining method to do something
 	public void firstLine(String[] line, DataSet data){
-
-		data.createVarArray(colSize-1);
+		
+		data.createVarArray(colSize);
 
 		/* go through all strings in line (seperated by commas)*/
 		for(int j=0 ; j < colSize ; j++){

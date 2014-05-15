@@ -1,5 +1,6 @@
 package bayesClassification;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -185,6 +186,7 @@ public class NaiveBayesClassification {
 		}
 		
 		classParameters = new double[traindata.getClassVariable().GetSR()];
+		/* iterate over every value of class */
 		for(int c=0;c<traindata.getClassVariable().GetSR();c++){
 			parameterValue= (traindata.getClassVariable().GetNC(c) + Nl) / 
 							(traindata.getnInstances() + traindata.getClassVariable().GetSR() * Nl);
@@ -207,6 +209,8 @@ public class NaiveBayesClassification {
 	public void Test(DataSet test){
 		
 		double paramsSumOverClass;
+		
+		/* array for the parameters of the class values */
 		double[] joints = new double[mygrah.getClassVariable().GetSR()];
 
 		double maxProb;
@@ -214,15 +218,17 @@ public class NaiveBayesClassification {
 		
 		
 		int[] dataLine;
+		
 		/* iterate over each test line */
 		for(Iterator<int[]> iterLine = test.iterator(); iterLine.hasNext();){
 			dataLine = iterLine.next();
 			
+			/* reset sum */
 			paramsSumOverClass=0;
 			
 			if(verbose) System.out.println("dataline = " + Arrays.toString(dataLine));
 			
-			/* iterate over each possible value for the class variable */
+			/* iterate over each possible value for the class variable and compute the joint probability of instance for that class */
 			for(int c=0; c<mygrah.getClassVariable().GetSR();c++){
 				joints[c]=jointProbabiliy(dataLine,c);
 				paramsSumOverClass += joints[c];
@@ -247,8 +253,9 @@ public class NaiveBayesClassification {
 			/* if test is TestDataSet, then we can tell it its assignment*/
 			if (test instanceof TestDataSet){
 				/* convert instance (array of int) to a List*/
-				List<Integer> instance = Arrays.asList(new Integer(dataLine[0]));
+				ArrayList<Integer> instance = new ArrayList<Integer>();
 				for(int i : dataLine){
+	
 					instance.add(new Integer(i));
 				}
 				((TestDataSet) test).classifyInstance(instance, chosenC);
