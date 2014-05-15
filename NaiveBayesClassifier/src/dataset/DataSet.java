@@ -6,7 +6,7 @@ import bayesClassification.VariableNode;
 
 public class DataSet implements Iterable<int[]>{
 	
-	protected LinkedList<int[]> parsedDataList;
+	protected LinkedList<int[]> parsedDataList = new LinkedList<int[]>();
 
 	private VariableNode[] variableArray; /* variable list */
 	
@@ -15,6 +15,10 @@ public class DataSet implements Iterable<int[]>{
 
 	DataSet (){
 		
+	}
+	
+	public void addDataLine(int[] dataline){
+		parsedDataList.add(dataline);
 	}
 	
 	public void printData(){
@@ -78,6 +82,7 @@ public class DataSet implements Iterable<int[]>{
 	@Override
 	public Iterator<int[]> iterator() {
 		// TODO Auto-generated method stub
+
 		return parsedDataList.iterator();
 	}
 	

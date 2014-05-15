@@ -5,14 +5,14 @@ import dataset.*;
 //TO DO: extends this to accept any number or object
 //extends the class that puts a csv file with integer entries to 
 //treat the NaiveBayesClass variables
-public class ParseLearnCSV extends ParseCSV {
+public class ParseTestCSV extends ParseCSV {
 	
 	
-	ParseLearnCSV(){
+	ParseTestCSV(){
 		super();
 	}
 	
-	public ParseLearnCSV(String filename){
+	public ParseTestCSV(String filename){
 		super(filename);		
 	}
 	
@@ -25,12 +25,10 @@ public class ParseLearnCSV extends ParseCSV {
 		data.createVarArray(colSize-1);
 
 		/* go through all strings in line (seperated by commas)*/
-		for(int j=0 ; j < colSize-1 ; j++){
+		for(int j=0 ; j < colSize ; j++){
 			
 			data.addVarNode(j, line[j]);
 		}
-	
-		((TrainDataSet) data).createClassNode(line[colSize-1]);
 	}
 	
 	public void middleLine(String[] lineparse, DataSet data) throws Exception{
@@ -40,16 +38,6 @@ public class ParseLearnCSV extends ParseCSV {
 		int[] temp = new int[colSize];
 		for(int j=0 ; j<colSize;j++){
 			temp[j] = Integer.parseInt(lineparse[j]);
-			
-			if(j == (colSize-1)){
-				
-				((TrainDataSet) data).getClassVariable().UpdateSR(temp[j]);
-			}
-			else{
-//				System.out.println("Variable Name: " + data.getVariableArray()[j].getName());
-				data.getVariableArray()[j].UpdateSR(j);
-			}
-			
 		}
 		
 		data.addDataLine(temp);

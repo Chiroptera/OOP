@@ -1,14 +1,12 @@
 package bayesClassification;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import dataset.DataSet;
-import dataset.TrainDataSet;
+import dataset.*;
 
 public class NaiveBayesClassification {
 	
@@ -16,13 +14,7 @@ public class NaiveBayesClassification {
 	
 	private String scoreType;
 	
-	//
-	private VariableNode[] VariableArray;
-	private ClassifierNode ClassNode;
-	//
-	
-	private int nVariable;
-	private int nInstances;
+
 	protected double Nl=0.5;
 	
 	
@@ -34,15 +26,11 @@ public class NaiveBayesClassification {
 	 * Score can either be log-likelihood (LL) or minimum description length (MDL).
 	 * @throws NBCException.
 	 * @param String score
+	 * @throws NBCException 
 	 * */
-	public NaiveBayesClassification(String score){
-		
-		try {
+	public NaiveBayesClassification(String score) throws NBCException{
+
 			checkScore(score);
-		} catch (NBCException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	/**
@@ -256,6 +244,16 @@ public class NaiveBayesClassification {
 				}
 			}
 			
+			/* if test is TestDataSet, then we can tell it its assignment*/
+			if (test instanceof TestDataSet){
+				/* convert instance (array of int) to a List*/
+				List<Integer> instance = Arrays.asList(new Integer(dataLine[0]));
+				for(int i : dataLine){
+					instance.add(new Integer(i));
+				}
+				((TestDataSet) test).classifyInstance(instance, chosenC);
+			}
+			
 			if(verbose) System.out.println("instance " + Arrays.toString(dataLine) + "\t->\t" + 
 											String.valueOf(chosenC) + "\t\t" + 
 											String.valueOf(joints[chosenC]));
@@ -266,10 +264,7 @@ public class NaiveBayesClassification {
 		
 	}
 	
-	
-	public ClassifierNode getClassNode(){
-		return ClassNode;
-	}
+
 	
 	
 	/**

@@ -8,24 +8,25 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ParseCSV {
+public class ParseCSV implements Iterable<String[]>{
 	
-	protected LinkedList<int[]> parsedDataList;
+	protected LinkedList<String[]> parsedDataList;
 	protected int colSize;
 	protected int rowSize;
-	protected DataSet data;
+//	protected DataSet data;
 	protected FileReader toParse;
 	
 	ParseCSV(){
 		
-		parsedDataList = new LinkedList<int[]>();
+		parsedDataList = new LinkedList<String[]>();
 	}
 	
 	public ParseCSV(String filename){
 		
-		parsedDataList = new LinkedList<int[]>();
+		parsedDataList = new LinkedList<String[]>();
 	
 		try {
 			toParse = new FileReader(filename);
@@ -36,7 +37,7 @@ public class ParseCSV {
 	}
 	
 	
-	public LinkedList<int[]> getParsedData(){
+	public LinkedList<String[]> getParsedData(){
 		
 		return parsedDataList;
 	}
@@ -46,27 +47,26 @@ public class ParseCSV {
 		return colSize;
 	}
 
-	public void parse(DataSet data){
+	public void parseTo(DataSet data) throws IOException, Exception, FileNotFoundException{
 		
 			/*************************************************************************************/
 			/* this was outside try/catch block before*/
-			this.data = data;
+//			this.data = data;
 			BufferedReader br = null;
 			String line;
 			String cvsSplitBy = ",";
 			
-			try {
+//			try {
 				br = new BufferedReader(toParse);
 				
 				String[] lineparse;
-				int[] temp;
 
 				/* if first line not null */
 				if((line = br.readLine()) != null){
 
 					lineparse = line.split(cvsSplitBy); /* split string by commas */
 					colSize = lineparse.length; /* number of variables + 1 (class variable)*/
-					firstLine(lineparse);				
+					firstLine(lineparse,data);				
 				}
 					
 				/* while there are other lines*/
@@ -75,45 +75,48 @@ public class ParseCSV {
 				    // use comma as separator
 					//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
 					lineparse = line.split(cvsSplitBy); /* split string by commas */
-					temp = new int[colSize];
-					for(int j=0 ; j<colSize;j++){
-						temp[j] = Integer.parseInt(lineparse[j]);
-						middleLine(temp[j], j);
-					}
+					parsedDataList.add(lineparse);
+					middleLine(lineparse, data);
+					
 					rowSize ++;
-					parsedDataList.add(temp);
+					
 
 				}
 				
 //				lastLine(); (?)
 				
 			//TO DO: BETTER TREATMENT TO EXCEPTION
-			} catch (FileNotFoundException e) {
-					e.printStackTrace();
-			} catch (IOException e) {
-					e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+//			} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//			} catch (IOException e) {
+//					e.printStackTrace();
+//			} finally {
+//				if (br != null) {
+//					try {
+//						br.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
 			/***********************************************************************************/
 			
-			data.setData(parsedDataList);
 	}
 	
 	//by default the first line is ignored
 	//can be extended to not ignore first line, just by redefining method to do something
-	public void firstLine(String[] line){
+	public void firstLine(String[] line, DataSet data){
 
 	}
 	
-	public void middleLine(int index, int value){
+	public void middleLine(String[] line, DataSet data) throws Exception{
 
+	}
+
+	@Override
+	public Iterator<String[]> iterator() {
+		// TODO Auto-generated method stub
+		return parsedDataList.iterator();
 	}
 }
 
