@@ -11,7 +11,7 @@ import dataset.*;
 
 public class NaiveBayesClassification {
 	
-	private boolean verbose = true;
+	private boolean verbose = false;
 	
 	private String scoreType;
 	
@@ -68,7 +68,10 @@ public class NaiveBayesClassification {
 		 * 3. make graph directed
 		 */
 		
-		traindata.printData();
+		if (verbose){
+			System.out.println("Data received is:");
+			traindata.printData();
+		}
 		
 		System.out.println("Building tables...");		
 		traindata.buildTable();
@@ -161,8 +164,7 @@ public class NaiveBayesClassification {
 							parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
 							varParameters.put(parameterKey, parameterValue);
 							
-							if(verbose)
-							System.out.println("VarParam" +
+							if(verbose) System.out.println("VarParam" +
 												parameterKey + 
 												"=" + String.valueOf(parameterValue)
 												);
@@ -215,9 +217,10 @@ public class NaiveBayesClassification {
 
 		double maxProb;
 		int chosenC=0;
-		
+		int intNb=0;
 		
 		int[] dataLine;
+		
 		
 		/* iterate over each test line */
 		for(Iterator<int[]> iterLine = test.iterator(); iterLine.hasNext();){
@@ -252,19 +255,14 @@ public class NaiveBayesClassification {
 			
 			/* if test is TestDataSet, then we can tell it its assignment*/
 			if (test instanceof TestDataSet){
-				/* convert instance (array of int) to a List*/
-				ArrayList<Integer> instance = new ArrayList<Integer>();
-				for(int i : dataLine){
-	
-					instance.add(new Integer(i));
-				}
-				((TestDataSet) test).classifyInstance(instance, chosenC);
+				((TestDataSet) test).classifyInstance(intNb++, chosenC);
 			}
 			
 			if(verbose) System.out.println("instance " + Arrays.toString(dataLine) + "\t->\t" + 
 											String.valueOf(chosenC) + "\t\t" + 
 											String.valueOf(joints[chosenC]));
 			
+		
 		}
 		
 		

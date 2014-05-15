@@ -15,6 +15,8 @@ import dataset.TrainDataSet;
 
 public class Graph {
 
+	boolean verbose=false;
+	
 	protected VariableNode[] varList;
 	ClassifierNode classNode;
 	VariableNode root;
@@ -52,11 +54,14 @@ public class Graph {
 		
 		List<Integer> edgeKey;
 		
-		System.out.println("number of vars: " + numberOfVars + "Number of inst: " + this.numberOfInst);
-		
-		for(int i = 0;  i < numberOfVars; i++){
-			System.out.println("Variable " + i +  " has " + varList[i].GetSR() + " values.");
+		if (verbose){
+			System.out.println("number of vars: " + numberOfVars + "\tNumber of inst: " + this.numberOfInst);
+			for(int i = 0;  i < numberOfVars; i++){
+				System.out.println("Variable " + varList[i].getName() + "-" + i +  " has " + varList[i].GetSR() + " values.");
+			}
 		}
+		
+
 
 		
 		for(int i = 0; i < numberOfVars; i++){
@@ -104,13 +109,13 @@ public class Graph {
 				
 				edgeWeight.put(edgeKey,scoreLL);
 				
-				System.out.println("edgekey: " + edgeKey + "score :" + score);
+				if (verbose) System.out.println("edgekey: " + edgeKey + "score :" + score);
 				
 			}
 			
 		}
 		
-		System.out.println("network LL=" + sumLL);
+		if (verbose) System.out.println("network LL=" + sumLL);
 	}
 	
 	

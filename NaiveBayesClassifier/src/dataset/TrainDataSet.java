@@ -34,7 +34,7 @@ public class TrainDataSet extends DataSet {
 		for(int[] dataLine : parsedDataList){
 			classe = dataLine[dataLine.length-1];
 			
-			System.out.println("classe: " + classe);
+//			System.out.println("classe: " + classe);
 			
 			classNode.UpdateNC(classe);
 

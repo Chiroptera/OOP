@@ -14,8 +14,8 @@ import java.util.LinkedList;
 public class ParseCSV implements Iterable<String[]>{
 	
 	protected LinkedList<String[]> parsedDataList;
-	protected int colSize;
-	protected int rowSize;
+	protected int colSize=0;
+	protected int rowSize=0;
 //	protected DataSet data;
 	protected FileReader toParse;
 	
@@ -51,54 +51,35 @@ public class ParseCSV implements Iterable<String[]>{
 		
 			/*************************************************************************************/
 			/* this was outside try/catch block before*/
-//			this.data = data;
 			BufferedReader br = null;
 			String line;
 			String cvsSplitBy = ",";
 			
-//			try {
-				br = new BufferedReader(toParse);
+			br = new BufferedReader(toParse);
+			
+			String[] lineparse;
+
+			/* if first line not null */
+			if((line = br.readLine()) != null){
+
+				lineparse = line.split(cvsSplitBy); /* split string by commas */
+				colSize = lineparse.length; /* number of variables + 1 (class variable)*/
+				firstLine(lineparse,data);				
+			}
 				
-				String[] lineparse;
+			/* while there are other lines*/
+			while ((line = br.readLine()) != null) {
 
-				/* if first line not null */
-				if((line = br.readLine()) != null){
-
-					lineparse = line.split(cvsSplitBy); /* split string by commas */
-					colSize = lineparse.length; /* number of variables + 1 (class variable)*/
-					firstLine(lineparse,data);				
-				}
-					
-				/* while there are other lines*/
-				while ((line = br.readLine()) != null) {
-
-				    // use comma as separator
-					//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
-					lineparse = line.split(cvsSplitBy); /* split string by commas */
-					parsedDataList.add(lineparse);
-					middleLine(lineparse, data);
-					
-					rowSize ++;
-					
-
-				}
+			    // use comma as separator
+				//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
+				lineparse = line.split(cvsSplitBy); /* split string by commas */
+				parsedDataList.add(lineparse);
+				middleLine(lineparse, data);
 				
-//				lastLine(); (?)
+				rowSize++;
+			}
+			data.setnInstances(rowSize);
 				
-			//TO DO: BETTER TREATMENT TO EXCEPTION
-//			} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//			} catch (IOException e) {
-//					e.printStackTrace();
-//			} finally {
-//				if (br != null) {
-//					try {
-//						br.close();
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
 			/***********************************************************************************/
 			
 	}

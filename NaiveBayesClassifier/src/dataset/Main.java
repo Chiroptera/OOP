@@ -75,8 +75,6 @@ public class Main {
 		
 		TestDataSet testData = new TestDataSet();
 		
-		if (testData instanceof TestDataSet) System.out.println("IT IS TEST!!!!");
-		
 		try {
 			testSet.parseTo(testData);
 

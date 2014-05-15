@@ -42,7 +42,7 @@ public class VariableNode extends BayesNode {
 		
 		if(rUp + 1 > this.r){
 			this.r = rUp + 1;
-		}		
+		}
 	}
 	
 

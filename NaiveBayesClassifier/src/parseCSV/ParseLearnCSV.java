@@ -46,16 +46,11 @@ public class ParseLearnCSV extends ParseCSV {
 				((TrainDataSet) data).getClassVariable().UpdateSR(temp[j]);
 			}
 			else{
-				System.out.println("Variable Name: " + data.getVariableArray()[j].getName());
-				data.getVariableArray()[j].UpdateSR(j);
+//				System.out.println("Variable Name: " + data.getVariableArray()[j].getName());
+				data.getVariableArray()[j].UpdateSR(temp[j]);
 			}
-			
 		}
-		
 		data.addDataLine(temp);
-		
-		
-
 
 	}
 

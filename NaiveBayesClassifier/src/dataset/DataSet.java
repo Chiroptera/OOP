@@ -8,10 +8,10 @@ public class DataSet implements Iterable<int[]>{
 	
 	protected LinkedList<int[]> parsedDataList = new LinkedList<int[]>();
 
-	private VariableNode[] variableArray; /* variable list */
+	protected VariableNode[] variableArray; /* variable list */
 	
-	private int nInstances;
-	private int nVariables;
+	protected int nInstances;
+	protected int nVariables;
 
 	DataSet (){
 		
