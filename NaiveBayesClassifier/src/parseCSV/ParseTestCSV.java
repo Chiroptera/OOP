@@ -1,5 +1,6 @@
 package parseCSV;
 
+import utils.ParseException;
 import dataset.*;
 
 //TO DO: extends this to accept any number or object
@@ -33,7 +34,7 @@ public class ParseTestCSV extends ParseCSV {
 	
 	public void middleLine(String[] lineparse, DataSet data) throws Exception{
 		/* if a middle line doesn't have the same number of elements throw exception.*/
-		if (lineparse.length != colSize) throw new Exception("Line has incorrect size.");
+		if (lineparse.length != colSize) throw new ParseException(rowSize, lineparse.length, colSize);
 		
 		int[] temp = new int[colSize];
 		for(int j=0 ; j<colSize;j++){

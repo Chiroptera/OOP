@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import dataset.*;
+import utils.*;
+
 
 public class NaiveBayesClassification {
 	
@@ -30,8 +32,7 @@ public class NaiveBayesClassification {
 	 * */
 	public NaiveBayesClassification(String score) throws NBCException{
 
-			checkScore(score);
-		
+			checkScore(score);	
 	}
 	
 	/**

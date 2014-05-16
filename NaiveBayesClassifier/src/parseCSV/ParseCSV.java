@@ -4,12 +4,15 @@
 package parseCSV;
 
 import dataset.*;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import utils.ParseException;
 
 public class ParseCSV implements Iterable<String[]>{
 	
@@ -88,7 +91,6 @@ public class ParseCSV implements Iterable<String[]>{
 			while ((line = br.readLine()) != null) {
 
 			    // use comma as separator
-				//TO DO: VERIFICAR QUE TODAS AS LINHAS TEM O MESMO TAMANHO(NCOLUMS)
 				lineparse = line.split(cvsSplitBy); /* split string by commas */
 				parsedDataList.add(lineparse);
 				middleLine(lineparse, data);
@@ -118,6 +120,7 @@ public class ParseCSV implements Iterable<String[]>{
 	 */
 	public void middleLine(String[] line, DataSet data) throws Exception{
 
+		
 	}
 
 	@Override

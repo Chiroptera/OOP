@@ -1,10 +1,15 @@
 package parseCSV;
 
 import dataset.*;
+import utils.*;
 
 //TO DO: extends this to accept any number or object
 //extends the class that puts a csv file with integer entries to 
 //treat the NaiveBayesClass variables
+
+/**
+ * Parse the .csv file when the file is the one that corresponds to the learn set.
+ */
 public class ParseLearnCSV extends ParseCSV {
 	
 	
@@ -20,6 +25,12 @@ public class ParseLearnCSV extends ParseCSV {
 	
 	//by default the first line is ignored, only used to know column size
 	//can be extended to not ignore first line, just by redefining method to do something
+	
+	/**
+	 * Handles the first line of the .csv file. The variables and class nodes are created.
+	 * @param line Line read.
+	 * @param data DataSet that corresponds to the file to learn.
+	 */
 	public void firstLine(String[] line, DataSet data){
 
 		data.createVarArray(colSize-1);
@@ -33,9 +44,16 @@ public class ParseLearnCSV extends ParseCSV {
 		((TrainDataSet) data).createClassNode(line[colSize-1]);
 	}
 	
+	/**
+	 * Handles the middle lines of the .csv file. In this case, the different values of each variable and class are updated.
+	 * @param lineparse Line read parsed into strings, each one corresponding to each entry of that line.
+	 * @param data DataSet that corresponds to the file to learn.
+	 * @throws e Exception that deals with the number of entries being different from the number of variables.
+	 */
+	//EXCEPTION
 	public void middleLine(String[] lineparse, DataSet data) throws Exception{
-		/* if a middle line doesn't have the same number of elements throw exception.*/
-		if (lineparse.length != colSize) throw new Exception("Line has incorrect size.");
+		
+		if (lineparse.length != colSize) throw new ParseException(rowSize, lineparse.length, colSize);
 		
 		int[] temp = new int[colSize];
 		for(int j=0 ; j<colSize;j++){
@@ -46,7 +64,6 @@ public class ParseLearnCSV extends ParseCSV {
 				((TrainDataSet) data).getClassVariable().UpdateSR(temp[j]);
 			}
 			else{
-//				System.out.println("Variable Name: " + data.getVariableArray()[j].getName());
 				data.getVariableArray()[j].UpdateSR(temp[j]);
 			}
 		}

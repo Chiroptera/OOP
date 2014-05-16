@@ -3,13 +3,13 @@ package dataset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import bayesClassification.NBCException;
 import bayesClassification.NaiveBayesClassification;
 import parseCSV.*;
+import utils.*;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		if (args.length != 3) {
 			System.out.println("Incorrect usage.");
@@ -18,9 +18,6 @@ public class Main {
 		
 		ElapsedTime time = new ElapsedTime();
 		time.start();
-		
-		//nao convem chamar metodos nao privados/finais no constructor
-		//http://www.javaspecialists.eu/archive/Issue210.html
 		
 		ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
 		
@@ -46,16 +43,16 @@ public class Main {
 						e.printStackTrace();
 						System.out.println("There was a problem reading the train file.");
 						System.exit(1);
-				} catch (Exception ef) {
+				} catch (ParseException ef) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					System.out.println("Some lines in your train file don't have the same number of elements. Please input a correct file.");
+//					System.out.println("Some lines in your train file don't have the same number of elements. Please input a correct file.");
 					System.exit(1);
 				}
-		} catch (Exception e) {
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Some lines in your train file don't have the same number of elements. Please input a correct file.");
+//			System.out.println("Some lines in your train file don't have the same number of elements. Please input a correct file.");
 			System.exit(1);
 		}
 		
@@ -65,7 +62,7 @@ public class Main {
 		} catch (NBCException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			System.out.println("The score is not valid. Choose either \"LL\" or \"MDL\".");
+			//System.out.println("The score is not valid. Choose either \"LL\" or \"MDL\".");
 			System.exit(1);
 		}
 		
@@ -95,16 +92,15 @@ public class Main {
 						e.printStackTrace();
 						System.out.println("There was a problem reading the test file.");
 						System.exit(1);
-				} catch (Exception ef) {
+				} catch (ParseException ef) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					System.out.println("Some lines in your test file don't have the same number of elements. Please input a correct file.");
+//					System.out.println("Some lines in your test file don't have the same number of elements. Please input a correct file.");
 					System.exit(1);
 				}
-		} catch (Exception e) {
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Some lines in your test file don't have the same number of elements. Please input a correct file.");
 			System.exit(1);
 		}
 		

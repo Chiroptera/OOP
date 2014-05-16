@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JList;
 
 import dataset.DataSet;
-import dataset.ElapsedTime;
+import utils.*;
 import dataset.Main;
 import dataset.TestDataSet;
 import dataset.TrainDataSet;
@@ -229,7 +229,7 @@ public class classifier {
 						try {
 							BNClass = new NaiveBayesClassification(score);
 							
-							/* este ctach nunca vai acontecer pois está a ser feita uma verificação no inicio*/
+							/* este ctach nunca vai acontecer pois est a ser feita uma verificao no inicio*/
 						} catch (NBCException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
