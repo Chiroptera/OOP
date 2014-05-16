@@ -1,6 +1,5 @@
 package bayesClassification;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,11 +33,12 @@ public class NaiveBayesClassification {
 			checkScore(score);
 		
 	}
+	
 	/**
-	 * 
+	 * The parameter Nl (N') is a pseudo-count that avoid the common mistake of assigning proability 
+	 * zero to an event that is extremely unlikely, but not impossible. The default value is 0.5.
 	 * @param Nl
 	 */
-	
 	public void setNl(double Nl){
 		this.Nl=Nl;
 	}
@@ -58,8 +58,9 @@ public class NaiveBayesClassification {
 	}
 	
 	/**
-	 *  This 
-	 * @param traindata A traindata with data.
+	 *  This method takis in a valid TrainDataSet, creates a graph from it, weights the edges, 
+	 *  runs the Kruskal algorithm to create an undirected tree, makes it directed and computed the parameters.
+	 * @param traindata A valid TrainDataSet with data.
 	 */
 	public void Train(TrainDataSet traindata){
 		/*
@@ -131,8 +132,8 @@ public class NaiveBayesClassification {
 	}
 
 	/**
-	 * 
-	 * @param traindata
+	 * This method computes the network parameters from a directed tree.
+	 * @param traindata A TrainDataSet necessary for ocurrences counts.
 	 */
 	protected void computeParameters(TrainDataSet traindata){
 		varParameters = new HashMap<List<Integer>,Double>();
@@ -202,6 +203,7 @@ public class NaiveBayesClassification {
 		}
 		
 	}
+	
 	/**
 	 * This method should only be called after calling the method <b>train()</b>.
 	 * This method receives a DataSet containing the test data and, using the <b>Graph</b> built during training, 
@@ -300,6 +302,10 @@ public class NaiveBayesClassification {
 		
 	}
 	
+	/**
+	 * Returns the score type (LL or MDL) of this TAN.
+	 * @return String with the initials of the score being used.
+	 */
 	public String getScoreType(){
 		
 		return scoreType;

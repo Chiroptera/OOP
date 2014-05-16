@@ -22,6 +22,9 @@ public class TrainDataSet extends DataSet {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * This method fills HashTables with three different types of occurences necessary for scoring variable edges and computing probabilities.
+	 */
 	public void buildTable(){
 	    /*for(Iterator iter = parsedDataList.iterator();iter.hasNext();){*/
 		List<Integer> key;
@@ -108,66 +111,110 @@ public class TrainDataSet extends DataSet {
 	    } /* end cycle dataLine*/		
 	}
 
+	/**
+	 * 
+	 * @return Returns the <b>ClassifierNode<b> of this <b>TrainDataSet<b>. 
+	 */
 	public ClassifierNode getClassVariable(){
 
 		return this.classNode;
 	}
 	
+	/**
+	 * This method creates a classifier node with the name received.
+	 * @param name String with the name of the variable.
+	 */
 	public void createClassNode(String name){
 		
 		//check if not null, if not then do what? exception, ignore?
 		this.classNode = new ClassifierNode(name);
 	}
 	
+	/**
+	 * Returns the count Nijkc.
+	 * @param i 	- id of variable
+	 * @param Pi 	- id of parent of variable i
+	 * @param k 	- value of i
+	 * @param j 	- value of j
+	 * @param c 	- value of class variable 
+	 * @return
+	 */
 	public int getNijkc(int i, int Pi, int k, int j, int c){
-		/*
-		 * i	- id of variable
-		 * Pi	- id of parent of variable i
-		 * k	- value of i
-		 * j	- value of j
-		 * c	- value of class variable 
-		 */
 		
 		Integer returnValue= NijkcTable.get(Arrays.asList(i,Pi,k,j,c));
 		
 		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
 	
+	/**
+	 * Returns the count Nikc.
+	 * @param i - id of variable
+	 * @param k - value of i
+	 * @param c - value of class variable 
+	 * @return
+	 */
 	public int getNikc(int i, int k, int c){
-		/*
-		 * i	- id of variable
-		 * k	- value of i
-		 * c	- value of class variable 
-		 */
+
 		Integer returnValue= Nikc_JTable.get(Arrays.asList(i,k,c));
 		
 		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
 	
+	/**
+	 * Returns the count Nijc.
+	 * @param i - id of variable
+	 * @param Pi - id of parent of variable i
+	 * @param j - value of j
+	 * @param c - value of class variable 
+	 * @return
+	 */
 	public int getNijc(int i, int Pi,int j, int c){
-		/*
-		 * i	- id of variable
-		 * Pi	- id of parent of variable i
-		 * j	- value of j
-		 * c	- value of class variable 
-		 */
+
 		Integer returnValue= Nijc_KTable.get(Arrays.asList(i,Pi,j,c));
 	
 		return (returnValue == null) ? 0 : returnValue.intValue();
 	}
 	
+	/**
+	 * Returns true if there is a key in the HashTable for the Nijkc occurrences with the parameters received, false otherwise.
+	 * @param i 	- id of variable
+	 * @param Pi 	- id of parent of variable i
+	 * @param k 	- value of i
+	 * @param j 	- value of j
+	 * @param c 	- value of class variable 
+	 * @return
+	 */
+	
 	public boolean containIKJC(int i, int Pi, int k, int j, int c){
 		return NijkcTable.containsKey(Arrays.asList(i,Pi,k,j,c));
 	}
 	
+	/**
+	 *  Returns true if there is a key in the HashTable for the Nikc occurrences with the parameters received, false otherwise.
+	 * @param i - id of variable
+	 * @param k - value of i
+	 * @param c - value of class variable 
+	 * @return
+	 */
 	public boolean containIKC(int i,int k, int c){
 		return Nikc_JTable.containsKey(Arrays.asList(i,k,c));
 	}
 	
+	/**
+	 *  Returns true if there is a key in the HashTable for the Nijc occurrences with the parameters received, false otherwise.
+	 * @param i - id of variable
+	 * @param Pi - id of parent of variable i
+	 * @param j - value of j
+	 * @param c - value of class variable 
+	 * @return
+	 */
 	public boolean containIJC(int i, int Pi, int j, int c){
 		return Nijc_KTable.containsKey(Arrays.asList(i,Pi,j,c));
 	}
 	
+	/**
+	 * Prints the Nijkc occurrences table.
+	 */
 	public void printNijkc(){
 		/* print Nijkc*/
 		System.out.println("\nNijkc:\nKeys:\t\tValues:\n");
@@ -178,6 +225,9 @@ public class TrainDataSet extends DataSet {
 
 	}
 
+	/**
+	 * Prints the Nikc occurrences table.
+	 */
 	public void printNikc(){
 
 		/* print Nikc_J*/
@@ -189,6 +239,9 @@ public class TrainDataSet extends DataSet {
 
 	}
 	
+	/**
+	 * Prints the Nijc occurrences table.
+	 */
 	public void printNijc(){
 
 		/* print Nijc_K*/

@@ -36,6 +36,11 @@ public class Graph {
 		
 	}
 	
+	/**
+	 * Creation of new Graph should receive a TrainDataSet to receive the variable list (VariableNode[]),
+	 * the ClassifierNode, the number of variables and the number of instances.
+	 * @param data TrainDataSet
+	 */
 	Graph(TrainDataSet data){
 		varList = data.getVariableArray().clone();
 		classNode = data.getClassVariable();
@@ -43,13 +48,16 @@ public class Graph {
 		numberOfInst = data.getnInstances();
 	}
 	
-	//buildmatrix()
-	//method to calculate the edges weight
+	/**
+	 * This method scores every possible connection between every possible variable (excluding the ClassifierNode)
+	 * and saves this score.
+	 * @param data TrainDataSet
+	 */
 	public void weightEdges(TrainDataSet data){
 		
 		
 		
-		double score, scoreMDL, scoreLL, sumLL=0,sumMDL=0;
+		double score, scoreMDL, scoreLL, sumLL=0,sumMDL=0; /* the sums are not necessary - used for result comparison */
 		double occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
 		
 		List<Integer> edgeKey;
@@ -119,12 +127,6 @@ public class Graph {
 	}
 	
 	
-	/**********************************************
-	 * 
-	 *             GETTERS
-	 * 
-	 */
-	
 	/**
 	 * Receives an integer ID of a variable. Returns the ID of parent.
 	 * @param sonID Variable ID's integer.
@@ -136,11 +138,19 @@ public class Graph {
 		return varList[sonID].GetParent().getID();
 	}
 	
+	/**
+	 * Returns the ClassifierNode of the graph.
+	 * @return ClassifierNode
+	 */
 	public ClassifierNode getClassVariable(){
 		return classNode;
 	}
 	
-	/* function that converts from Hashtable to an ordered ArrayList*/
+	/**
+	 * Method receives the list of edges and orders them by their score, from highest to lowest.
+	 * @param edgeWeight Edge list (Map).
+	 * @return ArrayList with all the edges in descending order.
+	 */
     public static ArrayList<Map.Entry<List<Integer>, Double>> sortValue(Map<List<Integer>, Double> edgeWeight2){
 
         //Transfer as List and sort it
@@ -154,7 +164,10 @@ public class Graph {
         return l;
      }
 	
-	/* build Maximum Weighted Spanning Tree*/
+	/**
+	 * Build a maximum spanning undirected tree using the Kruskal algorithm.
+	 * @param edgeWeight Edge list ordered by score from highest to lowest.
+	 */
 	void Kruskal(Map<List<Integer>, Double> edgeWeight){
 		/* 
 		 * Algorithm Steps from http://www.stats.ox.ac.uk/~konis/Rcourse/exercise1.pdf
@@ -242,7 +255,11 @@ public class Graph {
 		
 	}
 	
-	
+	/**
+	 * Uses the previously created maximum spanning undirected tree and makes it directed by choosing a node
+	 * and making it the parent of its neighbours. The same thing is done to neighbour nodes until all nodes, except the root,
+	 * have parents.
+	 */
 	void makeTreeDirected(){
 		
 		/* pick some node for root*/

@@ -36,17 +36,34 @@ public class ParseCSV implements Iterable<String[]>{
 		}		
 	}
 	
-	
+	/**
+	 * Returns a list with all the parsed data (each list entry has a String array).
+	 * @return LinkedList
+	 */
 	public LinkedList<String[]> getParsedData(){
 		
 		return parsedDataList;
 	}
 	
+	/**
+	 * Returns the number of elements in each entry.
+	 * @return int
+	 */
 	public int getcolSize(){
 		
 		return colSize;
 	}
 
+	/**
+	 * Tries to open a file, parse it to the data list and saves the number of instances.
+	 * Calls the <b>firstline()<b> and <b>middleline()<b> methods that do nothing.
+	 * The DataSet is passed to mentioned methods, and the only thing done to it in this method
+	 * is set the number of instances.
+	 * @param data DataSet
+	 * @throws IOException Error reading the file.
+	 * @throws Exception Inconsistency of number of elements in one of the file lines.
+	 * @throws FileNotFoundException File not found.
+	 */
 	public void parseTo(DataSet data) throws IOException, Exception, FileNotFoundException{
 		
 			/*************************************************************************************/
@@ -84,12 +101,21 @@ public class ParseCSV implements Iterable<String[]>{
 			
 	}
 	
-	//by default the first line is ignored
-	//can be extended to not ignore first line, just by redefining method to do something
+	/**
+	 * Does nothing.
+	 * @param line
+	 * @param data
+	 */
 	public void firstLine(String[] line, DataSet data){
 
 	}
 	
+	/**
+	 * Does nothing.
+	 * @param line
+	 * @param data
+	 * @throws Exception
+	 */
 	public void middleLine(String[] line, DataSet data) throws Exception{
 
 	}

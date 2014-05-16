@@ -1,7 +1,6 @@
 package dataset;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,37 +15,46 @@ public class TestDataSet extends DataSet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Classifies the instance identified by <b>instanceNb<b> with the class value <b>c<b>.
+	 * 
+	 * @param instanceNb Identifying int of instance (the order of the instances in the instance list is never changed).
+	 * @param c Class value of instance.
+	 */
 	public void classifyInstance(int instanceNb, int c){
 		if (classes==null) classes  = new int[super.nInstances];
  		classes[instanceNb]=c;
 	}
 	
+	/**
+	 * Returns the class value of the instance identified by <b<instID<b>.
+	 * @param instID Identifying int of instance (the order of the instances in the instance list is never changed).
+	 * @return Classe value (<b>int<b>)
+	 */
 	public int getInstanceClass(int instID){
 		return classes[instID+1];
 	}
 	
+	/**
+	 * Returns entire array of instance classification. The classification values are on the positions of the array corresponding to the instance number.
+	 * @return int[] classes 
+	 */
 	public int[] getInstanceClassArray(){
 		return classes;
 	}
 	
-//	public void printInstancesWithClass(){
-//		int intNb=1;
-//		Iterator<Map.Entry<List<Integer>,Integer>> entries = instanceClassification.entrySet().iterator();
-//		Map.Entry<List<Integer>,Integer> entry;
-//		while(entries.hasNext()){
-//			entry=entries.next();
-//			System.out.println("-> instance " + intNb++ + ":\t\t" + entry.getValue());
-//		}
-//	}
 	
+	/**
+	 * Prints all instances and corresponding classifications in the format <p>
+	 *  <b>Instance [intance number] -> [tab][tab] [instance classification]<b><p>
+	 *  e.g. <b>Instance 1 -> 		 3<b>
+	 */
 	public void printInstancesWithClass(){
 		for(int i=0;i<super.nInstances;i++){
 			System.out.println("-> instance " + (i+1) + ":\t\t" + classes[i]);
 		}
-//		for(int[] instance : super.parsedDataList){
-//			System.out.println("-> instance " + intNb + ":\t\t" + classes[intNb-1]);
-//			intNb++;
-//		}
+
 		
 	}
 	
