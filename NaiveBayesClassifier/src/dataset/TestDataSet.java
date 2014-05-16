@@ -21,6 +21,14 @@ public class TestDataSet extends DataSet {
  		classes[instanceNb]=c;
 	}
 	
+	public int getInstanceClass(int instID){
+		return classes[instID+1];
+	}
+	
+	public int[] getInstanceClassArray(){
+		return classes;
+	}
+	
 //	public void printInstancesWithClass(){
 //		int intNb=1;
 //		Iterator<Map.Entry<List<Integer>,Integer>> entries = instanceClassification.entrySet().iterator();
@@ -41,6 +49,7 @@ public class TestDataSet extends DataSet {
 //		}
 		
 	}
+	
 	
 
 }

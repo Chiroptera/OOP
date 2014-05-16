@@ -258,7 +258,7 @@ public class Graph {
 								newChilds = new ArrayList<VariableNode>(5), 
 								temp;
 		oldChilds.add(root);
-		System.err.println(newChilds.isEmpty());
+
 		
 		while(!treeCopy.isEmpty()){
 			/* cycle through all the edges */

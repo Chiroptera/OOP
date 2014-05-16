@@ -13,7 +13,7 @@ public class DataSet implements Iterable<int[]>{
 	protected int nInstances;
 	protected int nVariables;
 
-	DataSet (){
+	public DataSet (){
 		
 	}
 	

@@ -113,20 +113,6 @@ public class Main {
 
 		testData.printInstancesWithClass();
 
-		
-//		try {
-//			BNClass.parseArg(args);
-//		} catch (NBCException e) {
-//			System.out.println("[NBClassification] " + "'" + e.getMessage() + "'" + " not a correct score specification, please choose between MDL or LL.");
-//		return;
-//		} catch (Exception e) {
-//			System.out.println("[NBClassification] Unexpected error during parsing " + e.getMessage());
-//			e.printStackTrace();
-//			return;
-//		}
-		//trying to open the files, if not, error and return.
-		//deal with parsing?
-		//save files on class open files, with method to close?
 
 		time.stop();
 		System.out.println("Building the classifier: " + time.toString());

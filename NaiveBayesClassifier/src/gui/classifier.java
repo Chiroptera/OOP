@@ -1,7 +1,12 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -11,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,6 +26,9 @@ import javax.swing.JList;
 import dataset.DataSet;
 import dataset.ElapsedTime;
 import dataset.Main;
+import dataset.TestDataSet;
+import dataset.TrainDataSet;
+
 import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
@@ -31,6 +41,7 @@ import javax.swing.ListModel;
 import bayesClassification.*;
 import parseCSV.*;
 import dataset.*;
+import javax.swing.JScrollBar;
 
 public class classifier {
 	
@@ -47,6 +58,12 @@ public class classifier {
 	private JFrame frame;
 	private JButton btnGo;
 	private JTextField textField;
+	
+	int[] instanceClasses;
+	TestDataSet globalTestData;
+	
+	ElapsedTime time;
+	NaiveBayesClassification BNClass = null;
 
 
 	/**
@@ -115,7 +132,6 @@ public class classifier {
 			      testfile = file.toString();
 			      String[] toShow = testfile.split("/");
 			      lblNewLabel_1.setText(toShow[toShow.length-1]);
-			      listModel.remove(0);
 			    }
 			}
 		});
@@ -136,23 +152,20 @@ public class classifier {
 		listModel.addElement("John Smith");
 		listModel.addElement("Kathy Green");
 
-
-		list = new JList(listModel);
-		list.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), null));
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setBounds(12, 210, 155, 174);
-		frame.getContentPane().add(list);
+		
+//		JScrollPane listScroller = new JScrollPane(list);
+//		listScroller.setPreferredSize(new Dimension(250, 80));
+//		add(listScroller, BorderLayout.CENTER);
 		
 		btnGo = new JButton("Train");
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main jg = new Main();
 				String[] args = new String[]{trainfile,testfile,score};
 				
 				if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a train file.");
 				
 				/* select score in list*/
-				if(listScore.getSelectedIndex() == -1) JOptionPane.showMessageDialog(frame, "You must choose a score (LL or MDL).");
+				else if(listScore.getSelectedIndex() == -1) JOptionPane.showMessageDialog(frame, "You must choose a score (LL or MDL).");
 				else{
 					switch(listScore.getSelectedIndex()){
 						case -1:{
@@ -169,19 +182,73 @@ public class classifier {
 						}
 					}
 					
-					ElapsedTime time = new ElapsedTime();
+					/**************************************************************************************/
+					
+					time = new ElapsedTime();
 					time.start();
-					ParseLearnCSV trainSet = new ParseLearnCSV(args[0]);
+					
+					//nao convem chamar metodos nao privados/finais no constructor
+					//http://www.javaspecialists.eu/archive/Issue210.html
+					
+					ParseLearnCSV trainSet = new ParseLearnCSV(trainfile);
+					
 					TrainDataSet trainData = new TrainDataSet();
-					trainSet.parse(trainData);
-					NaiveBayesClassification BNClass = new NaiveBayesClassification(args[2]);
-					BNClass.Train(trainData);
-					ParseCSV testSet = new ParseCSV(args[1]);
-					DataSet testData = new DataSet();
-					testSet.parse(testData);
-					BNClass.Test(testData);
-					time.stop();
-					System.out.println("Building the classifier: " + time.toString());
+					
+					boolean trainfileOpened = true;
+					
+					try {
+						trainSet.parseTo(trainData);
+
+					} catch (FileNotFoundException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(frame,"Train file not found. Please input a correct file.");
+							trainfileOpened = false;
+					} catch (IOException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(frame,"There was a problem reading the train file. Retrying...");
+							try {
+								trainSet.parseTo(trainData);
+							} catch (FileNotFoundException ef) {
+									ex.printStackTrace();
+									JOptionPane.showMessageDialog(frame, "Train file not found. Please input a correct file.");
+									trainfileOpened = false;	
+							} catch (IOException ef) {
+									ex.printStackTrace();
+									JOptionPane.showMessageDialog(frame, "There was a problem reading the train file.");
+									trainfileOpened = false;
+							} catch (Exception ef) {
+								// TODO Auto-generated catch block
+								ex.printStackTrace();
+								JOptionPane.showMessageDialog(frame, "Some lines in your train file don't have the same number of elements. Please input a correct file.");
+								trainfileOpened = false;
+							}
+					} catch (Exception ex) {
+						// TODO Auto-generated catch block
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(frame, "Some lines in your train file don't have the same number of elements. Please input a correct file.");
+						trainfileOpened = false;
+					}
+					
+					if (trainfileOpened){
+						BNClass = null;
+						try {
+							BNClass = new NaiveBayesClassification(args[2]);
+							
+							/* este ctach nunca vai acontecer pois está a ser feita uma verificação no inicio*/
+						} catch (NBCException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							}
+						
+						BNClass.Train(trainData);
+						time.stop();
+						trained = true;
+
+					}
+					
+					/****************************************************************************************/
+					
+
 	
 
 				}
@@ -194,7 +261,59 @@ public class classifier {
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(trained == false) JOptionPane.showMessageDialog(frame, "You must train first.");
-				if(testfile == null) if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
+				else if(testfile == null) if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
+				else{
+				ParseTestCSV testSet = new ParseTestCSV(testfile);
+					
+					TestDataSet testData = new TestDataSet();
+					
+					try {
+						testSet.parseTo(testData);
+
+					} catch (FileNotFoundException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(frame, "Test file not found. Please input a correct file.");
+							System.exit(1);
+					} catch (IOException ex) {
+							ex.printStackTrace();
+							JOptionPane.showMessageDialog(frame, "There was a problem reading the test file. Retrying...");
+							try {
+								testSet.parseTo(testData);
+							} catch (FileNotFoundException ef) {
+									ex.printStackTrace();
+									JOptionPane.showMessageDialog(frame, "Test file not found. Please input a correct file.");
+									System.exit(1);
+							} catch (IOException ef) {
+									ex.printStackTrace();
+									JOptionPane.showMessageDialog(frame, "There was a problem reading the test file.");
+									System.exit(1);
+							} catch (Exception ef) {
+								// TODO Auto-generated catch block
+								ef.printStackTrace();
+								JOptionPane.showMessageDialog(frame, "Some lines in your test file don't have the same number of elements. Please input a correct file.");
+								System.exit(1);
+							}
+					} catch (Exception ex) {
+						// TODO Auto-generated catch block
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(frame, "Some lines in your test file don't have the same number of elements. Please input a correct file.");
+						System.exit(1);
+					}
+					
+
+					BNClass.Test(testData);
+					globalTestData = testData;
+					listModel.clear();
+//					int counter=0;
+//					for (Iterator<int[]> instIter = testData.iterator();instIter.hasNext();){
+//						listModel.addElement(new String(counter++ + ". " + instIter.next().toString()));
+//					}
+					
+					for (int i=0;i<testData.getnInstances();i++){
+						listModel.addElement(i);
+					}
+
+				}
 				
 			}
 		});
@@ -204,6 +323,10 @@ public class classifier {
 		JButton btnShowClass = new JButton("Show class");
 		btnShowClass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				listModel	.clear();
+				for (int i=0;i<5000;i++){
+					listModel.addElement(i);
+				}
 			}
 		});
 		btnShowClass.setBounds(197, 226, 117, 25);
@@ -224,6 +347,19 @@ public class classifier {
 		listScore.setBounds(147, 114, 155, 57);
 		listScore.setSelectedIndex(0);		
 		frame.getContentPane().add(listScore);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(12, 199, 161, 193);
+		panel.setBorder(panel.getBorder());
+		frame.getContentPane().add(panel);
+		
+				list = new JList(listModel);
+				panel.add(list);
+				list.setBorder(panel.getBorder());
+				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+				list.setVisibleRowCount(-1);
+				panel.add(new JScrollPane(list));
 		
 		
 	}

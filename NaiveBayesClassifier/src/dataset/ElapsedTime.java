@@ -5,7 +5,7 @@ public class ElapsedTime {
 	
 	protected long time;
 	
-	ElapsedTime(){
+	public ElapsedTime(){
 		
 	}
 
