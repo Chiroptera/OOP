@@ -105,7 +105,7 @@ public class Graph {
 				sumLL+=scoreLL;
 				
 				scoreMDL = (float) (score - (((classNode.GetSR() * (varList[i].GetSR() - 1) * (varList[ii].GetSR() - 1)) / 2) * Math.log(numberOfInst)));
-				sumMDL += sumLL;
+				sumMDL += scoreMDL;
 				
 				edgeWeight.put(edgeKey,scoreLL);
 				
@@ -144,7 +144,7 @@ public class Graph {
     public static ArrayList<Map.Entry<List<Integer>, Double>> sortValue(Map<List<Integer>, Double> edgeWeight2){
 
         //Transfer as List and sort it
-        ArrayList<Entry<List<Integer>, Double>> l = new ArrayList(edgeWeight2.entrySet());
+        ArrayList<Entry<List<Integer>, Double>> l = new ArrayList<Entry<List<Integer>, Double>>(edgeWeight2.entrySet());
         Collections.sort(l, new Comparator<Map.Entry<?, Double>>(){
 
           public int compare(Map.Entry<?, Double> o1, Map.Entry<?, Double> o2) {

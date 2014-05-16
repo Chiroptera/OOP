@@ -47,7 +47,7 @@ public class classifier {
 	
 	private boolean trained = false;
 	
-	private String trainfile=null,testfile=null,score;
+	private String trainfile=null,testfile=null,score=null;
 	
 	private JLabel lblNewLabel,lblNewLabel_1;
 	
@@ -102,7 +102,7 @@ public class classifier {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			    JFileChooser fileopen = new JFileChooser();
-			    FileFilter filter = new FileNameExtensionFilter("c files", "c");
+			    FileFilter filter = new FileNameExtensionFilter("CSV files", ".csv");
 			    fileopen.addChoosableFileFilter(filter);
 
 			    int ret = fileopen.showDialog(null, "Open file");
@@ -122,7 +122,7 @@ public class classifier {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			    JFileChooser fileopen = new JFileChooser();
-			    FileFilter filter = new FileNameExtensionFilter("c files", "c");
+			    FileFilter filter = new FileNameExtensionFilter("CSV files", ".csv");
 			    fileopen.addChoosableFileFilter(filter);
 
 			    int ret = fileopen.showDialog(null, "Open file");
@@ -153,14 +153,9 @@ public class classifier {
 		listModel.addElement("Kathy Green");
 
 		
-//		JScrollPane listScroller = new JScrollPane(list);
-//		listScroller.setPreferredSize(new Dimension(250, 80));
-//		add(listScroller, BorderLayout.CENTER);
-		
 		btnGo = new JButton("Train");
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[] args = new String[]{trainfile,testfile,score};
 				
 				if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a train file.");
 				
@@ -232,7 +227,7 @@ public class classifier {
 					if (trainfileOpened){
 						BNClass = null;
 						try {
-							BNClass = new NaiveBayesClassification(args[2]);
+							BNClass = new NaiveBayesClassification(score);
 							
 							/* este ctach nunca vai acontecer pois está a ser feita uma verificação no inicio*/
 						} catch (NBCException e1) {
@@ -263,17 +258,20 @@ public class classifier {
 				if(trained == false) JOptionPane.showMessageDialog(frame, "You must train first.");
 				else if(testfile == null) if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
 				else{
-				ParseTestCSV testSet = new ParseTestCSV(testfile);
-					
+					System.out.println("Creating ParseTestCSV...");
+					ParseTestCSV testSet = new ParseTestCSV(testfile);
+					System.out.println("Creating TestDataSet...");
 					TestDataSet testData = new TestDataSet();
+					boolean parsedFile = true;
 					
 					try {
+						System.out.println("Parsing...");
 						testSet.parseTo(testData);
 
 					} catch (FileNotFoundException ex) {
 							ex.printStackTrace();
 							JOptionPane.showMessageDialog(frame, "Test file not found. Please input a correct file.");
-							System.exit(1);
+							parsedFile = false;
 					} catch (IOException ex) {
 							ex.printStackTrace();
 							JOptionPane.showMessageDialog(frame, "There was a problem reading the test file. Retrying...");
@@ -282,35 +280,38 @@ public class classifier {
 							} catch (FileNotFoundException ef) {
 									ex.printStackTrace();
 									JOptionPane.showMessageDialog(frame, "Test file not found. Please input a correct file.");
-									System.exit(1);
+									parsedFile = false;
 							} catch (IOException ef) {
 									ex.printStackTrace();
 									JOptionPane.showMessageDialog(frame, "There was a problem reading the test file.");
-									System.exit(1);
+									parsedFile = false;
 							} catch (Exception ef) {
 								// TODO Auto-generated catch block
 								ef.printStackTrace();
 								JOptionPane.showMessageDialog(frame, "Some lines in your test file don't have the same number of elements. Please input a correct file.");
-								System.exit(1);
+								parsedFile = false;
 							}
 					} catch (Exception ex) {
 						// TODO Auto-generated catch block
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(frame, "Some lines in your test file don't have the same number of elements. Please input a correct file.");
-						System.exit(1);
+						parsedFile = false;
 					}
 					
-
-					BNClass.Test(testData);
-					globalTestData = testData;
-					listModel.clear();
-//					int counter=0;
-//					for (Iterator<int[]> instIter = testData.iterator();instIter.hasNext();){
-//						listModel.addElement(new String(counter++ + ". " + instIter.next().toString()));
-//					}
-					
-					for (int i=0;i<testData.getnInstances();i++){
-						listModel.addElement(i);
+					if(parsedFile){
+						System.out.println("Testing...");
+						BNClass.Test(testData);
+						testData.printInstancesWithClass();
+						globalTestData = testData;
+						listModel.clear();
+	//					int counter=0;
+	//					for (Iterator<int[]> instIter = testData.iterator();instIter.hasNext();){
+	//						listModel.addElement(new String(counter++ + ". " + instIter.next().toString()));
+	//					}
+						
+						for (int i=0;i<testData.getnInstances();i++){
+							listModel.addElement(i);
+						}
 					}
 
 				}
