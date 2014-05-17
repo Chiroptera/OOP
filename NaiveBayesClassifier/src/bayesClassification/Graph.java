@@ -22,20 +22,16 @@ public class Graph {
 
 	boolean verbose=false;
 	
-	protected VariableNode[] varList;
-	ClassifierNode classNode;
-	VariableNode root;
+	private VariableNode[] varList;
+	private ClassifierNode classNode;
+	private VariableNode root;
 
-	Map<List<Integer>,Integer> NijkcTable;
-	Map<List<Integer>,Integer> Nijc_KTable;
-	Map<List<Integer>,Integer> Nikc_JTable;
-	Map<List<Integer>, Double> edgeWeight = new HashMap<List<Integer>, Double>();
+	private Map<List<Integer>, Double> edgeWeight = new HashMap<List<Integer>, Double>(); //resolve private conflict
 	
+	private ArrayList<List<Integer>> spanningTree; //resolve private conflict
 	
-	ArrayList<List<Integer>> spanningTree;
-	
-	int numberOfVars;
-	int numberOfInst;
+	private int numberOfVars;
+	private int numberOfInst;
 	
 	Graph(){
 		
@@ -47,11 +43,19 @@ public class Graph {
 	 * @param data TrainDataSet
 	 */
 	Graph(TrainDataSet data){
+
+		
 		varList = data.getVariableArray().clone();
 		classNode = data.getClassVariable();
 		numberOfVars = varList.length;
 		numberOfInst = data.getnInstances();
 	}
+	
+	
+	public Map<List<Integer>, Double> getEdgeWeight(){
+		return edgeWeight;
+	}
+	
 	
 	/**
 	 * This method scores every possible connection between every possible variable (excluding the ClassifierNode)
@@ -129,13 +133,16 @@ public class Graph {
 					if (verbose) System.out.println("edgekey: " + edgeKey + "score :" + scoreMDL);
 
 				}
-				
-				
 			}
-			
 		}
 		
 		if (verbose) System.out.println("network LL=" + sumLL);
+		if(verbose){
+			for (List<Integer> key : edgeWeight.keySet()){
+				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
+				System.out.println("\t\t" + edgeWeight.get(key));
+			}
+		}
 	}
 	
 	
@@ -263,8 +270,12 @@ public class Graph {
 			
 		}
 		
-
-		
+		if(verbose) {
+			System.err.println("Edges in tree");
+			for (List<Integer> edge : spanningTree){
+				System.err.println(edge);
+			}
+		}
 	}
 	
 	/**
@@ -334,6 +345,19 @@ public class Graph {
 			/* clear newChilds for next iteration  */
 			newChilds=temp;
 			newChilds.clear();
+			
+			if(verbose){
+				for(VariableNode var : varList){
+					System.err.println("Variable " + var.getName() + " has parent ");
+					if (var.parent!= null){
+						System.err.println(var.parent.getName());
+						continue;
+					}
+					System.err.println("null");
+				}
+			}
+			
+			
 			
 		}/* end while */
 	}

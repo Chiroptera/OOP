@@ -13,10 +13,7 @@ import utils.*;
 public class NaiveBayesClassification {
 	
 	private boolean verbose = false;
-	
 	private String scoreType;
-	
-
 	protected double Nl=0.5;
 	
 	
@@ -92,44 +89,19 @@ public class NaiveBayesClassification {
 		System.out.println("Weighting edges...");
 		graph.weightEdges(traindata, this.getScoreType());
 		
-		if(verbose){
-			for (List<Integer> key : graph.edgeWeight.keySet()){
-				for(Integer iKey : key) System.out.print(String.valueOf(iKey) + ",");
-				System.out.println("\t\t" + graph.edgeWeight.get(key));
-			}
-		}
+
 		System.out.println("Kruskal...");
-		graph.Kruskal(graph.edgeWeight);
+		graph.Kruskal(graph.getEdgeWeight());
 		
-		if(verbose) {
-			System.err.println("Edges in tree");
-			for (List<Integer> edge : graph.spanningTree){
-				System.err.println(edge);
-			}
-		}
+
 		
 		System.out.println("Final treeing...");
 		graph.makeTreeDirected();
 		
 		mygrah = graph;
-		
-		
 
-		if(verbose){
-			for(VariableNode var : graph.varList){
-				System.err.println("Variable " + var.getName() + " has parent ");
-				if (var.parent!= null){
-					System.err.println(var.parent.getName());
-					continue;
-				}
-				System.err.println("null");
-			}
-		}
-		
 		computeParameters(traindata);
-		
-		
-	
+
 	}
 
 	/**
