@@ -90,7 +90,7 @@ public class NaiveBayesClassification {
 		Graph graph = new Graph(traindata);
 		
 		System.out.println("Weighting edges...");
-		graph.weightEdges(traindata);
+		graph.weightEdges(traindata, this.getScoreType());
 		
 		if(verbose){
 			for (List<Integer> key : graph.edgeWeight.keySet()){

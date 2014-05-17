@@ -15,7 +15,7 @@ import dataset.TrainDataSet;
 /**
  * Class that works on the test data and constructs the graph that will permit the prior classification.
  * The construction is made by measuring the weight of between the nodes to then build a maximal
-weighted (undirected) spanning tree. Then one node is choosen as the root and based on that a directed tree is build.
+weighted (undirected) spanning tree. Then one node is chosen as the root and based on that a directed tree is build.
  */
 
 public class Graph {
@@ -58,11 +58,11 @@ public class Graph {
 	 * and saves this score.
 	 * @param data TrainDataSet
 	 */
-	public void weightEdges(TrainDataSet data){
+	public void weightEdges(TrainDataSet data, String scoreType){
 		
 		
 		
-		double score, scoreMDL, scoreLL, sumLL=0,sumMDL=0; /* the sums are not necessary - used for result comparison */
+		double score, scoreMDL, scoreLL, sumLL=0, sumMDL=0; /* the sums are not necessary - used for result comparison */
 		double occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
 		
 		List<Integer> edgeKey;
@@ -120,9 +120,16 @@ public class Graph {
 				scoreMDL = (float) (score - (((classNode.GetSR() * (varList[i].GetSR() - 1) * (varList[ii].GetSR() - 1)) / 2) * Math.log(numberOfInst)));
 				sumMDL += scoreMDL;
 				
-				edgeWeight.put(edgeKey,scoreLL);
+				if(scoreType.equals("LL")){
+					edgeWeight.put(edgeKey,scoreLL);
+					if (verbose) System.out.println("edgekey: " + edgeKey + "score :" + scoreLL);
+				}
+				else if(scoreType.equals("MDL")){
+					edgeWeight.put(edgeKey,scoreMDL);
+					if (verbose) System.out.println("edgekey: " + edgeKey + "score :" + scoreMDL);
+
+				}
 				
-				if (verbose) System.out.println("edgekey: " + edgeKey + "score :" + score);
 				
 			}
 			
