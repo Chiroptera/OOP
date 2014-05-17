@@ -6,6 +6,12 @@ import dataset.*;
 //TO DO: extends this to accept any number or object
 //extends the class that puts a csv file with integer entries to 
 //treat the NaiveBayesClass variables
+
+
+/**
+ * Class that parse the .csv file when the file is the one that corresponds to the test set.
+ * Each line is saved in a list to further classification of the instance.
+ */
 public class ParseTestCSV extends ParseCSV {
 	
 	
@@ -17,20 +23,12 @@ public class ParseTestCSV extends ParseCSV {
 		super(filename);		
 	}
 	
-
-	
-	//by default the first line is ignored, only used to know column size
-	//can be extended to not ignore first line, just by redefining method to do something
-	public void firstLine(String[] line, DataSet data){
-		
-		data.createVarArray(colSize);
-
-		/* go through all strings in line (seperated by commas)*/
-		for(int j=0 ; j < colSize ; j++){
-			
-			data.addVarNode(j, line[j]);
-		}
-	}
+	/**
+	 * Handles the middle lines of the .csv file. In this case, the line is saved for further classification of this instance
+	 * @param lineparse Line read parsed into strings, each one corresponding to each entry of that line.
+	 * @param data DataSet that corresponds to the file to test.
+	 * @throws e Exception that deals with the number of entries being different from the number of variables.
+	 */
 	
 	public void middleLine(String[] lineparse, DataSet data) throws Exception{
 		/* if a middle line doesn't have the same number of elements throw exception.*/
@@ -42,10 +40,6 @@ public class ParseTestCSV extends ParseCSV {
 		}
 		
 		data.addDataLine(temp);
-		
-		
-
-
 	}
 
 }

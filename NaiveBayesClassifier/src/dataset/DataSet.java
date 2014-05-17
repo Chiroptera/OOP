@@ -7,7 +7,6 @@ import bayesClassification.VariableNode;
 public class DataSet implements Iterable<int[]>{
 	
 	protected LinkedList<int[]> parsedDataList = new LinkedList<int[]>();
-
 	protected VariableNode[] variableArray; /* variable list */
 	
 	protected int nInstances;

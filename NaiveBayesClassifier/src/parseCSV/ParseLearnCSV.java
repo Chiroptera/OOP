@@ -8,7 +8,10 @@ import utils.*;
 //treat the NaiveBayesClass variables
 
 /**
- * Parse the .csv file when the file is the one that corresponds to the learn set.
+ * Class that parse the .csv file when the file is the one that corresponds to the learn set.
+ * With this class are created the variables nodes and class node by reading the first line of the file
+ * and with the middle lines the number of different values of each "node" are updated. Each line is
+ * saved in a list to further analysis of the number of occurrencies.
  */
 public class ParseLearnCSV extends ParseCSV {
 	
@@ -45,7 +48,8 @@ public class ParseLearnCSV extends ParseCSV {
 	}
 	
 	/**
-	 * Handles the middle lines of the .csv file. In this case, the different values of each variable and class are updated.
+	 * Handles the middle lines of the .csv file. In this case, the different values of each variable and class are updated
+	 * and the line is saved for further analysis.
 	 * @param lineparse Line read parsed into strings, each one corresponding to each entry of that line.
 	 * @param data DataSet that corresponds to the file to learn.
 	 * @throws e Exception that deals with the number of entries being different from the number of variables.

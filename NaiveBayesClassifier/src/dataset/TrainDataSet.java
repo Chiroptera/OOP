@@ -15,6 +15,8 @@ public class TrainDataSet extends DataSet {
 	protected Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
 	protected Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
 	
+
+	
 	protected ClassifierNode classNode; /* class node */
 	
 	public TrainDataSet() {
@@ -251,6 +253,8 @@ public class TrainDataSet extends DataSet {
 			System.out.println("\t\t" + Nijc_KTable.get(key));
 		}
 	}
+	
+	
 	
 }
 
