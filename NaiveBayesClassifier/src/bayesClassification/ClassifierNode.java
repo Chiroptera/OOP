@@ -1,5 +1,11 @@
 package bayesClassification;
 
+
+/**
+ * Class that extends the BayesNode class and contains information about the classification,
+ * including the number of classification and the occurrence of each one,
+ */
+
 public class ClassifierNode extends BayesNode {
 	
 	private int s; //number of classifications
@@ -9,17 +15,25 @@ public class ClassifierNode extends BayesNode {
 		super(nameNew);
 	}
 	
+	/**
+	 * @return s Different values possible of the variable/classification.
+	 */
 	public int GetSR(){
 		
 		return this.s;
 	}
 	
+	/**
+	 * @return NC Vector with the occurrences for each different classification.
+	 */
 	public int GetNC(int index){
 		
 		return this.NC[index];
 	}
 	
-	
+	/**
+	 * Method that creates the vector of occurrences.
+	 */
 	public void CreateNC(){
 
 		int i;
@@ -31,32 +45,22 @@ public class ClassifierNode extends BayesNode {
 		}
 	}
 	
+	/**
+	 * Method that updates the number of occurrencies for each classification value.
+	 */
 	public void UpdateNC(int index){
 		
 		NC[index] = NC[index] + 1;
 	}
-	
+	/**
+	 * 
+	 * Method that updates the number of different values of the classification.
+	 */
 	public void UpdateSR(int sUp){
 		
 		if(sUp + 1 > this.s){
 			this.s = sUp + 1;
 		}		
-	}
-	
-	public static void main(String[] args) {	
-		
-		ClassifierNode test1 = new ClassifierNode("name");
-		test1.UpdateSR(10);
-		System.out.println(test1.GetSR());
-
-		test1.CreateNC();
-		System.out.println(test1.GetNC(9));
-
-		test1.UpdateNC(8);
-		
-		
-		System.out.println(test1.GetNC(8));
-		
 	}
 	
 }

@@ -6,12 +6,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import dataset.TrainDataSet;
+
+/**
+ * Class that works on the test data and constructs the graph that will permit the prior classification.
+ * The construction is made by measuring the weight of between the nodes to then build a maximal
+weighted (undirected) spanning tree. Then one node is choosen as the root and based on that a directed tree is build.
+ */
 
 public class Graph {
 
