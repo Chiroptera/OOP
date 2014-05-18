@@ -64,6 +64,7 @@ public class classifier {
 	
 	ElapsedTime time;
 	NaiveBayesClassification BNClass = null;
+	private JTextField timeB;
 
 
 	/**
@@ -181,6 +182,8 @@ public class classifier {
 					
 					time = new ElapsedTime();
 					time.start();
+					timeB.setText(time.getTime());
+
 					
 					//nao convem chamar metodos nao privados/finais no constructor
 					//http://www.javaspecialists.eu/archive/Issue210.html
@@ -236,6 +239,8 @@ public class classifier {
 							}
 						
 						BNClass.Train(trainData);
+						timeB.setText(time.getTime());
+
 						time.stop();
 						trained = true;
 
@@ -249,7 +254,7 @@ public class classifier {
 				}
 			}
 		});
-		btnGo.setBounds(12, 111, 117, 25);
+		btnGo.setBounds(12, 96, 117, 25);
 		frame.getContentPane().add(btnGo);
 		
 		JButton btnTest = new JButton("Test");
@@ -318,7 +323,7 @@ public class classifier {
 				
 			}
 		});
-		btnTest.setBounds(12, 148, 117, 25);
+		btnTest.setBounds(12, 133, 117, 25);
 		frame.getContentPane().add(btnTest);
 		
 		JButton btnShowClass = new JButton("Show class");
@@ -345,7 +350,7 @@ public class classifier {
 		listScore = new JList(listModelScore);
 		listScore.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listScore.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), null));
-		listScore.setBounds(147, 114, 155, 57);
+		listScore.setBounds(147, 98, 155, 57);
 		listScore.setSelectedIndex(0);		
 		frame.getContentPane().add(listScore);
 		
@@ -361,6 +366,15 @@ public class classifier {
 				list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 				list.setVisibleRowCount(-1);
 				panel.add(new JScrollPane(list));
+				
+				JLabel lblTimeBuildThe = new JLabel("Time Build the Classifier:");
+				lblTimeBuildThe.setBounds(22, 171, 161, 16);
+				frame.getContentPane().add(lblTimeBuildThe);
+				
+				timeB = new JTextField();
+				timeB.setBounds(184, 167, 72, 20);
+				frame.getContentPane().add(timeB);
+				timeB.setColumns(10);
 		
 		
 	}

@@ -14,9 +14,7 @@ public class TrainDataSet extends DataSet {
 	protected Map<List<Integer>,Integer> NijkcTable = new HashMap<List<Integer>,Integer>();
 	protected Map<List<Integer>,Integer> Nikc_JTable = new HashMap<List<Integer>,Integer>();
 	protected Map<List<Integer>,Integer> Nijc_KTable = new HashMap<List<Integer>,Integer>();
-	
 
-	
 	protected ClassifierNode classNode; /* class node */
 	
 	public TrainDataSet() {
