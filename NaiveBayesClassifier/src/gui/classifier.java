@@ -50,6 +50,7 @@ public class classifier {
 	private String trainfile=null,testfile=null,score=null;
 	
 	private JLabel lblNewLabel,lblNewLabel_1;
+	private JLabel lblInstClass;
 	
 	private DefaultListModel listModel,listModelScore;
 	
@@ -57,7 +58,7 @@ public class classifier {
 
 	private JFrame frame;
 	private JButton btnGo;
-	private JTextField textField;
+	private JTextField textInst;
 	
 	int[] instanceClasses;
 	TestDataSet globalTestData;
@@ -261,7 +262,7 @@ public class classifier {
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(trained == false) JOptionPane.showMessageDialog(frame, "You must train first.");
-				else if(testfile == null) if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
+				else if(testfile == null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
 				else{
 					System.out.println("Creating ParseTestCSV...");
 					ParseTestCSV testSet = new ParseTestCSV(testfile);
@@ -315,7 +316,7 @@ public class classifier {
 	//					}
 						
 						for (int i=0;i<testData.getnInstances();i++){
-							listModel.addElement(i);
+							listModel.addElement(i+1);
 						}
 					}
 
@@ -329,19 +330,23 @@ public class classifier {
 		JButton btnShowClass = new JButton("Show class");
 		btnShowClass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				listModel	.clear();
-				for (int i=0;i<5000;i++){
-					listModel.addElement(i);
-				}
+					int instID;
+					if((instID=list.getSelectedIndex())!=-1){
+						
+						textInst.setText(globalTestData.getStringOfInstance(instID));
+						
+						lblInstClass.setText(String.valueOf(globalTestData.getInstanceClass(instID)));
+						
+					}
 			}
 		});
 		btnShowClass.setBounds(197, 226, 117, 25);
 		frame.getContentPane().add(btnShowClass);
 		
-		textField = new JTextField();
-		textField.setBounds(200, 278, 114, 25);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		textInst = new JTextField();
+		textInst.setBounds(200, 278, 114, 25);
+		frame.getContentPane().add(textInst);
+		textInst.setColumns(10);
 		
 		listModelScore = new DefaultListModel();
 		listModelScore.addElement("LL");
@@ -375,6 +380,18 @@ public class classifier {
 				timeB.setBounds(184, 167, 72, 20);
 				frame.getContentPane().add(timeB);
 				timeB.setColumns(10);
+				
+				JLabel lblInstance = new JLabel("Instance");
+				lblInstance.setBounds(197, 263, 70, 15);
+				frame.getContentPane().add(lblInstance);
+				
+				JLabel lblClass = new JLabel("Class");
+				lblClass.setBounds(335, 263, 70, 15);
+				frame.getContentPane().add(lblClass);
+				
+				lblInstClass = new JLabel("");
+				lblInstClass.setBounds(332, 288, 70, 15);
+				frame.getContentPane().add(lblInstClass);
 		
 		
 	}

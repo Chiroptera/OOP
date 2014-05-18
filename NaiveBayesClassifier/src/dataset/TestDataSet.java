@@ -33,7 +33,7 @@ public class TestDataSet extends DataSet {
 	 * @return Classe value (<b>int<b>)
 	 */
 	public int getInstanceClass(int instID){
-		return classes[instID+1];
+		return classes[instID];
 	}
 	
 	/**
@@ -42,6 +42,16 @@ public class TestDataSet extends DataSet {
 	 */
 	public int[] getInstanceClassArray(){
 		return classes;
+	}
+	
+	public String getStringOfInstance(int instID){
+		String stringResult = "";
+		int[] instance = super.parsedDataList.get(instID);
+		for (int i=0;i<instance.length-1;i++){
+			stringResult += String.valueOf(instance[i]) + ",";
+		}
+		stringResult += String.valueOf(instance.length-1);
+		return stringResult;
 	}
 	
 	
