@@ -1,6 +1,8 @@
 package parseCSV;
 
-import utils.ParseException;
+import java.io.FileNotFoundException;
+
+import utils.*;
 import dataset.*;
 
 //TO DO: extends this to accept any number or object
@@ -36,7 +38,12 @@ public class ParseTestCSV extends ParseCSV {
 		
 		int[] temp = new int[colSize];
 		for(int j=0 ; j<colSize;j++){
-			temp[j] = Integer.parseInt(lineparse[j]);
+			
+			try {
+				temp[j] = Integer.parseInt(lineparse[j]);
+			} catch (NumberFormatException e) {
+					throw new ParseIntCSVException(rowSize, j);
+			}
 		}
 		
 		data.addDataLine(temp);
