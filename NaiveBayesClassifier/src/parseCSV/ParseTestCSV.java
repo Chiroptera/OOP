@@ -5,9 +5,6 @@ import java.io.FileNotFoundException;
 import utils.*;
 import dataset.*;
 
-//TO DO: extends this to accept any number or object
-//extends the class that puts a csv file with integer entries to 
-//treat the NaiveBayesClass variables
 
 
 /**

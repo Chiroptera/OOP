@@ -3,9 +3,6 @@ package parseCSV;
 import dataset.*;
 import utils.*;
 
-//TO DO: extends this to accept any number or object
-//extends the class that puts a csv file with integer entries to 
-//treat the NaiveBayesClass variables
 
 /**
  * Class that parse the .csv file when the file is the one that corresponds to the learn set.
