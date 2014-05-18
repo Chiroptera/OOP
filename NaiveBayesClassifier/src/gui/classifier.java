@@ -240,7 +240,7 @@ public class classifier {
 							}
 						
 						BNClass.Train(trainData);
-						timeB.setText(time.getTime());
+						timeB.setText(time.getTime() + " miliseconds");
 
 						time.stop();
 						trained = true;
@@ -355,7 +355,7 @@ public class classifier {
 		listScore = new JList(listModelScore);
 		listScore.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listScore.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), null));
-		listScore.setBounds(147, 98, 155, 57);
+		listScore.setBounds(190, 98, 219, 62);
 		listScore.setSelectedIndex(0);		
 		frame.getContentPane().add(listScore);
 		
@@ -377,7 +377,7 @@ public class classifier {
 				frame.getContentPane().add(lblTimeBuildThe);
 				
 				timeB = new JTextField();
-				timeB.setBounds(184, 167, 72, 20);
+				timeB.setBounds(184, 167, 232, 20);
 				frame.getContentPane().add(timeB);
 				timeB.setColumns(10);
 				
