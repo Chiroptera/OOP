@@ -8,7 +8,6 @@ package bayesClassification;
 public class VariableNode extends BayesNode {
 	
 
-	private int r; //number of values in variable
 	VariableNode parent; //graph built by saying who is the father
 	int id;
 	
@@ -24,7 +23,7 @@ public class VariableNode extends BayesNode {
 	/**
 	 * Defines the parent node.
 	 * */
-	void setParent(VariableNode p){
+	public void setParent(VariableNode p){
 		this.parent=p;
 	}
 	
@@ -32,7 +31,7 @@ public class VariableNode extends BayesNode {
 	 * Returns the parent node.
 	 * @return parent 
 	 * */
-	VariableNode GetParent(){
+	VariableNode getParent(){
 		return this.parent;
 	}
 	
@@ -50,22 +49,4 @@ public class VariableNode extends BayesNode {
 		return id;
 	}
 	
-	/**
-	 * Update the different number of values for the variable.
-	 * */
-	public void UpdateSR(int rUp){
-		
-		if(rUp + 1 > this.r){
-			this.r = rUp + 1;
-		}
-	}
-	
-	/**
-	 * Returns the different number of values for the variable.
-	 * */
-	
-	public int GetSR(){
-		
-		return r;
-	}
 }

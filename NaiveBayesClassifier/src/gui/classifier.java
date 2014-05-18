@@ -180,10 +180,7 @@ public class classifier {
 					}
 					
 					/**************************************************************************************/
-					
-					time = new ElapsedTime();
-					time.start();
-					timeB.setText(time.getTime());
+
 
 					
 					//nao convem chamar metodos nao privados/finais no constructor
@@ -240,9 +237,9 @@ public class classifier {
 							}
 						
 						BNClass.Train(trainData);
-						timeB.setText(time.getTime() + " miliseconds");
 
-						time.stop();
+
+
 						trained = true;
 
 					}
@@ -264,6 +261,11 @@ public class classifier {
 				if(trained == false) JOptionPane.showMessageDialog(frame, "You must train first.");
 				else if(testfile == null) JOptionPane.showMessageDialog(frame, "You must provide a test file.");
 				else{
+					
+					
+					time = new ElapsedTime();
+					time.start();
+					
 					System.out.println("Creating ParseTestCSV...");
 					ParseTestCSV testSet = new ParseTestCSV(testfile);
 					System.out.println("Creating TestDataSet...");
@@ -308,6 +310,11 @@ public class classifier {
 						System.out.println("Testing...");
 						BNClass.Test(testData);
 						testData.printInstancesWithClass();
+						
+						
+						time.stop();
+						timeB.setText(time.toString());
+						
 						globalTestData = testData;
 						listModel.clear();
 	//					int counter=0;

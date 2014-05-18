@@ -7,7 +7,8 @@ package bayesClassification;
 
 public abstract class BayesNode {
 
-	private String name; //name
+	protected String name; //name
+	protected int rs;
 	
 	BayesNode(String nameNew){
 		
@@ -26,11 +27,17 @@ public abstract class BayesNode {
 	/**
 	 * Update the different values possible to the variable/classification.
 	 */
-	public abstract void UpdateSR(int rs);
+	public void updateSR(int rsUp){
+		if(rsUp + 1 > this.rs){
+			this.rs = rsUp + 1;
+		}	
+	}
 	
 	/**
 	 * @return Different values possible of the variable/classification,
 	 */
-	public abstract int GetSR();
+	public int getSR(){
+		return rs;
+	}
 
 }

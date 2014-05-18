@@ -70,10 +70,10 @@ public class ParseLearnCSV extends ParseCSV {
 			
 			if(j == (colSize-1)){
 				
-				((TrainDataSet) data).getClassVariable().UpdateSR(temp[j]);
+				((TrainDataSet) data).getClassVariable().updateSR(temp[j]);
 			}
 			else{
-				data.getVariableArray()[j].UpdateSR(temp[j]);
+				data.getVariableArray()[j].updateSR(temp[j]);
 			}
 		}
 		data.addDataLine(temp);

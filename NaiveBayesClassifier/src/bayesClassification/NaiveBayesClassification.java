@@ -16,7 +16,6 @@ public class NaiveBayesClassification {
 	private String scoreType;
 	protected double Nl=0.5;
 	
-	
 	protected Graph mygrah;
 	protected Map<List<Integer>,Double> varParameters;
 	protected double[] classParameters;
@@ -121,21 +120,21 @@ public class NaiveBayesClassification {
 			/*
 			 * for each possibe value x_ik of variable i 
 			 * */
-			for(int k=0;k < i.GetSR();k++){
+			for(int k=0;k < i.getSR();k++){
 
 				/*
 				 * for each class
 				 * */
-				for(int c=0;c<traindata.getClassVariable().GetSR();c++){
+				for(int c=0;c<traindata.getClassVariable().getSR();c++){
 					/*
 					 * for each possibe configuration (value) w_ij of parent of variable i 
 					 * */
-					if (i.GetParent() != null){
-						for(int j=0;j<i.GetParent().GetSR();j++){
+					if (i.getParent() != null){
+						for(int j=0;j<i.getParent().getSR();j++){
 							parameterKey=Arrays.asList(i.getID(),k,j,c);
-							occurrIJKC=traindata.getNijkc(i.getID(), i.GetParent().getID(), k, j, c); 
-							occurrIJC=traindata.getNijc(i.getID(), i.GetParent().getID(), j, c);
-							parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
+							occurrIJKC=traindata.getNijkc(i.getID(), i.getParent().getID(), k, j, c); 
+							occurrIJC=traindata.getNijc(i.getID(), i.getParent().getID(), j, c);
+							parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.getSR() * Nl);
 							varParameters.put(parameterKey, parameterValue);
 							
 							if(verbose) System.out.println("VarParam" +
@@ -148,7 +147,7 @@ public class NaiveBayesClassification {
 						parameterKey=Arrays.asList(i.getID(),k,c);
 						occurrIJKC=traindata.getNikc(i.getID(), k,c); 
 						occurrIJC=traindata.getClassVariable().GetNC(c);
-						parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.GetSR() * Nl);
+						parameterValue = (occurrIJKC + Nl) / (occurrIJC + i.getSR() * Nl);
 						varParameters.put(parameterKey, parameterValue);
 						
 						if(verbose)
@@ -161,11 +160,11 @@ public class NaiveBayesClassification {
 			}
 		}
 		
-		classParameters = new double[traindata.getClassVariable().GetSR()];
+		classParameters = new double[traindata.getClassVariable().getSR()];
 		/* iterate over every value of class */
-		for(int c=0;c<traindata.getClassVariable().GetSR();c++){
+		for(int c=0;c<traindata.getClassVariable().getSR();c++){
 			parameterValue= (traindata.getClassVariable().GetNC(c) + Nl) / 
-							(traindata.getnInstances() + traindata.getClassVariable().GetSR() * Nl);
+							(traindata.getnInstances() + traindata.getClassVariable().getSR() * Nl);
 			classParameters[c]= parameterValue;
 			
 			if (verbose)
@@ -188,7 +187,7 @@ public class NaiveBayesClassification {
 		double paramsSumOverClass;
 		
 		/* array for the parameters of the class values */
-		double[] joints = new double[mygrah.getClassVariable().GetSR()];
+		double[] joints = new double[mygrah.getClassVariable().getSR()];
 
 		double maxProb;
 		int chosenC=0;
@@ -207,7 +206,7 @@ public class NaiveBayesClassification {
 			if(verbose) System.out.println("dataline = " + Arrays.toString(dataLine));
 			
 			/* iterate over each possible value for the class variable and compute the joint probability of instance for that class */
-			for(int c=0; c<mygrah.getClassVariable().GetSR();c++){
+			for(int c=0; c<mygrah.getClassVariable().getSR();c++){
 				joints[c]=jointProbabiliy(dataLine,c);
 				paramsSumOverClass += joints[c];
 				

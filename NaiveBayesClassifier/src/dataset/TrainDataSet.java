@@ -30,7 +30,7 @@ public class TrainDataSet extends DataSet {
 		List<Integer> key;
 		Integer value;
 		int classe;
-		classNode.CreateNC();
+		classNode.createNC();
 				
 
 		/* for each line of parsed data*/
@@ -39,7 +39,7 @@ public class TrainDataSet extends DataSet {
 			
 //			System.out.println("classe: " + classe);
 			
-			classNode.UpdateNC(classe);
+			classNode.updateNC(classe);
 
 			/* for each variable excluding the class */
 			for(int i=0;i<dataLine.length-1;i++){

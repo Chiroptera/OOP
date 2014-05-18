@@ -8,21 +8,11 @@ package bayesClassification;
 
 public class ClassifierNode extends BayesNode {
 	
-	private int s; //number of classifications
 	private int[] NC;
 
 	public ClassifierNode(String nameNew) {
 		super(nameNew);
 	}
-	
-	/**
-	 * @return s Different values possible of the variable/classification.
-	 */
-	public int GetSR(){
-		
-		return this.s;
-	}
-	
 	/**
 	 * @return NC Vector with the occurrences for each different classification.
 	 */
@@ -34,13 +24,13 @@ public class ClassifierNode extends BayesNode {
 	/**
 	 * Method that creates the vector of occurrences.
 	 */
-	public void CreateNC(){
+	public void createNC(){
 
 		int i;
 		
-		NC = new int[this.s];
+		NC = new int[this.rs];
 		
-		for(i=0; i < this.s;i++){
+		for(i=0; i < this.rs;i++){
 			NC[i] = 0;
 		}
 	}
@@ -48,19 +38,9 @@ public class ClassifierNode extends BayesNode {
 	/**
 	 * Method that updates the number of occurrencies for each classification value.
 	 */
-	public void UpdateNC(int index){
+	public void updateNC(int index){
 		
 		NC[index] = NC[index] + 1;
 	}
-	/**
-	 * 
-	 * Method that updates the number of different values of the classification.
-	 */
-	public void UpdateSR(int sUp){
-		
-		if(sUp + 1 > this.s){
-			this.s = sUp + 1;
-		}		
-	}
-	
+
 }

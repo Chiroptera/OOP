@@ -74,7 +74,7 @@ public class Graph {
 		if (verbose){
 			System.out.println("number of vars: " + numberOfVars + "\tNumber of inst: " + this.numberOfInst);
 			for(int i = 0;  i < numberOfVars; i++){
-				System.out.println("Variable " + varList[i].getName() + "-" + i +  " has " + varList[i].GetSR() + " values.");
+				System.out.println("Variable " + varList[i].getName() + "-" + i +  " has " + varList[i].getSR() + " values.");
 			}
 		}
 		
@@ -84,9 +84,9 @@ public class Graph {
 		for(int i = 0; i < numberOfVars; i++){
 			for(int ii = i+1 ; ii < numberOfVars; ii++){
 				score = 0;
-				for(int j = 0; j < varList[ii].GetSR(); j++){
-					for(int k = 0; k < varList[i].GetSR(); k++){
-						for(int c = 0; c < classNode.GetSR(); c++){
+				for(int j = 0; j < varList[ii].getSR(); j++){
+					for(int k = 0; k < varList[i].getSR(); k++){
+						for(int c = 0; c < classNode.getSR(); c++){
 
 							//calculate the respective occurrences 
 							if(data.containIJC(i, ii, j, c)){
@@ -121,7 +121,7 @@ public class Graph {
 				scoreLL = score;
 				sumLL+=scoreLL;
 				
-				scoreMDL = (float) (score - (((classNode.GetSR() * (varList[i].GetSR() - 1) * (varList[ii].GetSR() - 1)) / 2) * Math.log(numberOfInst)));
+				scoreMDL = (float) (score - (((classNode.getSR() * (varList[i].getSR() - 1) * (varList[ii].getSR() - 1)) / 2) * Math.log(numberOfInst)));
 				sumMDL += scoreMDL;
 				
 				if(scoreType.equals("LL")){
@@ -153,8 +153,8 @@ public class Graph {
 	 * @throws Exception 
 	 */
 	public int getParentID(int sonID) throws Exception{
-		if (varList[sonID].GetParent() == null) throw new Exception("This variable doesn't have a parent.");
-		return varList[sonID].GetParent().getID();
+		if (varList[sonID].getParent() == null) throw new Exception("This variable doesn't have a parent.");
+		return varList[sonID].getParent().getID();
 	}
 	
 	/**
