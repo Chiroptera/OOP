@@ -39,6 +39,10 @@ public class Main {
 						e.printStackTrace();
 						System.out.println("Train file not found. Please input a correct file.");
 						System.exit(1);
+				} catch (ParseIntCSVException ef) {
+					e.printStackTrace();
+//					System.out.println("Values in train instances file must be an integer number.");
+					System.exit(1);
 				} catch (IOException ef) {
 						e.printStackTrace();
 						System.out.println("There was a problem reading the train file.");
@@ -53,6 +57,10 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 //			System.out.println("Some lines in your train file don't have the same number of elements. Please input a correct file.");
+			System.exit(1);
+		} catch (ParseIntCSVException e) {
+			e.printStackTrace();
+//			System.out.println("Values in test instances file must be an integer number.");
 			System.exit(1);
 		}
 		
@@ -92,6 +100,10 @@ public class Main {
 						e.printStackTrace();
 						System.out.println("There was a problem reading the test file.");
 						System.exit(1);
+				} catch (ParseIntCSVException ef) {
+							e.printStackTrace();
+//							System.out.println("Values in test instances file must be an integer number.");
+							System.exit(1);
 				} catch (ParseException ef) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -102,7 +114,12 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.exit(1);
+		} catch (ParseIntCSVException e) {
+			e.printStackTrace();
+//			System.out.println("Values in test instances file must be an integer number.");
+			System.exit(1);
 		}
+		
 		
 
 		if (BNClass != null) BNClass.Test(testData);

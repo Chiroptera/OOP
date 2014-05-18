@@ -61,7 +61,12 @@ public class ParseLearnCSV extends ParseCSV {
 		
 		int[] temp = new int[colSize];
 		for(int j=0 ; j<colSize;j++){
-			temp[j] = Integer.parseInt(lineparse[j]);
+			
+			try {
+				temp[j] = Integer.parseInt(lineparse[j]);
+			} catch (NumberFormatException e) {
+					throw new ParseIntCSVException(rowSize, j);
+			}
 			
 			if(j == (colSize-1)){
 				
