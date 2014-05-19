@@ -1,7 +1,5 @@
 package parseCSV;
 
-import java.io.FileNotFoundException;
-
 import utils.*;
 import dataset.*;
 

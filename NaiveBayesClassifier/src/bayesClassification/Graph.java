@@ -67,7 +67,7 @@ public class Graph {
 		
 		
 		
-		double score, scoreMDL, scoreLL, sumLL=0, sumMDL=0; /* the sums are not necessary - used for result comparison */
+		double score, scoreMDL, scoreLL, sumLL=0; /* the sums are not necessary - used for result comparison */
 		double occurrIJC, occurrIJKC, occurrIKC; //number of instances of each table
 		
 		List<Integer> edgeKey;
@@ -121,7 +121,6 @@ public class Graph {
 				sumLL+=scoreLL;
 				
 				scoreMDL = (float) (score - (((classNode.getSR() * (varList[i].getSR() - 1) * (varList[ii].getSR() - 1)) / 2) * Math.log(numberOfInst)));
-				sumMDL += scoreMDL;
 				
 				if(scoreType.equals("LL")){
 					edgeWeight.put(edgeKey,scoreLL);
