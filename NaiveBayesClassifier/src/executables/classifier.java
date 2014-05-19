@@ -45,9 +45,9 @@ public class classifier {
 	private JLabel lblNewLabel,lblNewLabel_1;
 	private JLabel lblInstClass;
 	
-	private DefaultListModel listModel,listModelScore;
+	private DefaultListModel<String> listModel,listModelScore;
 	
-	private JList list, listScore;
+	private JList<String> list, listScore;
 
 	private JFrame frame;
 	private JButton btnGo;
@@ -97,7 +97,7 @@ public class classifier {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			    JFileChooser fileopen = new JFileChooser();
-			    FileFilter filter = new FileNameExtensionFilter("CSV files", ".csv");
+			    FileFilter filter = new FileNameExtensionFilter("CSV files", "csv");
 			    fileopen.addChoosableFileFilter(filter);
 
 			    int ret = fileopen.showDialog(null, "Open file");
@@ -117,7 +117,7 @@ public class classifier {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			    JFileChooser fileopen = new JFileChooser();
-			    FileFilter filter = new FileNameExtensionFilter("CSV files", ".csv");
+			    FileFilter filter = new FileNameExtensionFilter("CSV files", "csv");
 			    fileopen.addChoosableFileFilter(filter);
 
 			    int ret = fileopen.showDialog(null, "Open file");
@@ -177,13 +177,14 @@ public class classifier {
 					//nao convem chamar metodos nao privados/finais no constructor
 					//http://www.javaspecialists.eu/archive/Issue210.html
 					
-					ParseLearnCSV trainSet = new ParseLearnCSV(trainfile);
+					ParseLearnCSV trainSet =null;
 					
 					TrainDataSet trainData = new TrainDataSet();
 					
 					boolean trainfileOpened = true;
 					
 					try {
+						trainSet = new ParseLearnCSV(trainfile);
 						trainSet.parseTo(trainData);
 
 					} catch (FileNotFoundException ex) {
@@ -226,12 +227,14 @@ public class classifier {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 							}
-						
+						time = new ElapsedTime();
+						time.start();
 						BNClass.Train(trainData);
-
+						time.stop();
 
 
 						trained = true;
+						timeB.setText(time.toString());
 
 					}
 					
@@ -254,17 +257,17 @@ public class classifier {
 				else{
 					
 					
-					time = new ElapsedTime();
-					time.start();
+
 					
 					System.out.println("Creating ParseTestCSV...");
-					ParseTestCSV testSet = new ParseTestCSV(testfile);
+					ParseTestCSV testSet = null;
 					System.out.println("Creating TestDataSet...");
 					TestDataSet testData = new TestDataSet();
 					boolean parsedFile = true;
 					
 					try {
 						System.out.println("Parsing...");
+						testSet = new ParseTestCSV(testfile);
 						testSet.parseTo(testData);
 
 					} catch (FileNotFoundException ex) {
@@ -303,8 +306,8 @@ public class classifier {
 						testData.printInstancesWithClass();
 						
 						
-						time.stop();
-						timeB.setText(time.toString());
+
+						
 						
 						globalTestData = testData;
 						listModel.clear();
@@ -314,7 +317,8 @@ public class classifier {
 	//					}
 						
 						for (int i=0;i<testData.getnInstances();i++){
-							listModel.addElement(i+1);
+							listModel.addElement(String.valueOf(i+1));
+							
 						}
 					}
 
@@ -367,19 +371,19 @@ public class classifier {
 		
 				list = new JList<String>(listModel);
 				panel.add(list);
-				list.setBounds(12, 199, 161, 193);
-//				list.setBounds(panel.getBounds());
+				//list.setBounds(12, 199, 161, 193);
+				list.setBounds(panel.getBounds());
 				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 				list.setVisibleRowCount(-1);
 				panel.add(new JScrollPane(list));
 				
 				JLabel lblTimeBuildThe = new JLabel("Time Build the Classifier:");
-				lblTimeBuildThe.setBounds(22, 171, 161, 16);
+				lblTimeBuildThe.setBounds(187, 172, 218, 16);
 				frame.getContentPane().add(lblTimeBuildThe);
 				
 				timeB = new JTextField();
-				timeB.setBounds(184, 167, 232, 20);
+				timeB.setBounds(184, 194, 232, 20);
 				frame.getContentPane().add(timeB);
 				timeB.setColumns(10);
 				

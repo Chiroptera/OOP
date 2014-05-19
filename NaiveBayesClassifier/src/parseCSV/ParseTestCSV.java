@@ -1,5 +1,7 @@
 package parseCSV;
 
+import java.io.FileNotFoundException;
+
 import utils.*;
 import dataset.*;
 
@@ -16,7 +18,7 @@ public class ParseTestCSV extends ParseCSV {
 		super();
 	}
 	
-	public ParseTestCSV(String filename){
+	public ParseTestCSV(String filename) throws FileNotFoundException{
 		super(filename);		
 	}
 	

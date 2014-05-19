@@ -136,7 +136,7 @@ public class TrainDataSet extends DataSet {
 	 * @param k 	- value of i
 	 * @param j 	- value of j
 	 * @param c 	- value of class variable 
-	 * @return
+	 * @return 
 	 */
 	public int getNijkc(int i, int Pi, int k, int j, int c){
 		

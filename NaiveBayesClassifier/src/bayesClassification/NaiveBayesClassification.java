@@ -72,7 +72,7 @@ public class NaiveBayesClassification {
 			traindata.printData();
 		}
 		
-		System.out.println("Building tables...");		
+		if (verbose)System.out.println("Building tables...");		
 		traindata.buildTable();
 		
 		if(verbose){
@@ -83,19 +83,19 @@ public class NaiveBayesClassification {
 		
 		}
 		
-		System.out.println("Creating graph...");	
+		if (verbose)System.out.println("Creating graph...");	
 		Graph graph = new Graph(traindata);
 		
-		System.out.println("Weighting edges...");
+		if (verbose)System.out.println("Weighting edges...");
 		graph.weightEdges(traindata, this.getScoreType());
 		
 
-		System.out.println("Kruskal...");
+		if (verbose)System.out.println("Kruskal...");
 		graph.Kruskal(graph.getEdgeWeight());
 		
 
 		
-		System.out.println("Final treeing...");
+		if (verbose)System.out.println("Final treeing...");
 		graph.makeTreeDirected();
 		
 		mygrah = graph;

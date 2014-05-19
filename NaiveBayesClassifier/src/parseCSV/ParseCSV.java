@@ -25,16 +25,13 @@ public class ParseCSV implements Iterable<String[]>{
 		parsedDataList = new LinkedList<String[]>();
 	}
 	
-	public ParseCSV(String filename){
+	public ParseCSV(String filename) throws FileNotFoundException{
 		
 		parsedDataList = new LinkedList<String[]>();
 	
-		try {
+
 			toParse = new FileReader(filename);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+	
 	}
 	
 	/**
