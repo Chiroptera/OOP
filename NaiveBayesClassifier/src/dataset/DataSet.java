@@ -2,7 +2,7 @@ package dataset;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import bayesClassification.VariableNode;
+import nodes.*;
 
 public class DataSet implements Iterable<int[]>{
 	

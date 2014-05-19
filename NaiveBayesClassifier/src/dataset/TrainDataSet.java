@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bayesClassification.ClassifierNode;
-
+import nodes.*;
 
 
 public class TrainDataSet extends DataSet {

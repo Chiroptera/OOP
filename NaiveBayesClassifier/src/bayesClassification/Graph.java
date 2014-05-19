@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import dataset.TrainDataSet;
+import nodes.*;
 
 /**
  * Class that works on the test data and constructs the graph that will permit the prior classification.
@@ -346,16 +347,7 @@ public class Graph {
 			newChilds=temp;
 			newChilds.clear();
 			
-			if(verbose){
-				for(VariableNode var : varList){
-					System.err.println("Variable " + var.getName() + " has parent ");
-					if (var.parent!= null){
-						System.err.println(var.parent.getName());
-						continue;
-					}
-					System.err.println("null");
-				}
-			}
+
 			
 			
 			
