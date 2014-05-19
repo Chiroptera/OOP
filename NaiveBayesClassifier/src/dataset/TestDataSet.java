@@ -1,14 +1,9 @@
 package dataset;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 
 public class TestDataSet extends DataSet {
 
-	protected Map<List<Integer>,Integer> instanceClassification = new HashMap<List<Integer>,Integer>();
 	int[] classes=null;
 	
 	public TestDataSet() {
@@ -50,7 +45,7 @@ public class TestDataSet extends DataSet {
 		for (int i=0;i<instance.length-1;i++){
 			stringResult += String.valueOf(instance[i]) + ",";
 		}
-		stringResult += String.valueOf(instance.length-1);
+		stringResult += String.valueOf(instance[instance.length-1]);
 		return stringResult;
 	}
 	

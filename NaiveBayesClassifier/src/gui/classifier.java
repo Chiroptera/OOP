@@ -149,12 +149,13 @@ public class classifier {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		
-		listModel = new DefaultListModel();
-
+		listModel = new DefaultListModel<String>();
+		listModel.addElement("                      ");
+//		listModel.addElement("John");
 		
 		btnGo = new JButton("Train");
 		btnGo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvents e) {
+			public void actionPerformed(ActionEvent e) {
 				
 				if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a train file.");
 				
@@ -331,11 +332,13 @@ public class classifier {
 		btnTest.setBounds(12, 133, 117, 25);
 		frame.getContentPane().add(btnTest);
 		
+		
 		JButton btnShowClass = new JButton("Show class");
+
 		btnShowClass.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					int instID;
-					if((instID=list.getSelectedIndex())!=-1){
+					if((instID=list.getSelectedIndex())!=-1 && globalTestData!= null){
 						
 						textInst.setText(globalTestData.getStringOfInstance(instID));
 						
@@ -352,11 +355,11 @@ public class classifier {
 		frame.getContentPane().add(textInst);
 		textInst.setColumns(10);
 		
-		listModelScore = new DefaultListModel();
+		listModelScore = new DefaultListModel<String>();
 		listModelScore.addElement("LL");
 		listModelScore.addElement("MDL");
 		
-		listScore = new JList(listModelScore);
+		listScore = new JList<String>(listModelScore);
 		listScore.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listScore.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), null));
 		listScore.setBounds(190, 98, 219, 62);
@@ -365,12 +368,14 @@ public class classifier {
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 199, 161, 193);
-		panel.setBorder(panel.getBorder());
+
+//		panel.setBorder(panel.getBorder());
 		frame.getContentPane().add(panel);
 		
-				list = new JList(listModel);
+				list = new JList<String>(listModel);
 				panel.add(list);
-				list.setBorder(panel.getBorder());
+				list.setBounds(12, 199, 161, 193);
+//				list.setBounds(panel.getBounds());
 				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 				list.setVisibleRowCount(-1);
