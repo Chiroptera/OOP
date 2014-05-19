@@ -150,14 +150,11 @@ public class classifier {
 		
 		
 		listModel = new DefaultListModel();
-		listModel.addElement("Jane Doe");
-		listModel.addElement("John Smith");
-		listModel.addElement("Kathy Green");
 
 		
 		btnGo = new JButton("Train");
 		btnGo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvents e) {
 				
 				if(trainfile==null) JOptionPane.showMessageDialog(frame, "You must provide a train file.");
 				
