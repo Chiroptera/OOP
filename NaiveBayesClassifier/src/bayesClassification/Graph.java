@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import dataset.TrainDataSet;
+import dataset.*;
 import nodes.*;
 
 /**
@@ -80,8 +80,6 @@ public class Graph {
 		}
 		
 
-
-		
 		for(int i = 0; i < numberOfVars; i++){
 			for(int ii = i+1 ; ii < numberOfVars; ii++){
 				score = 0;

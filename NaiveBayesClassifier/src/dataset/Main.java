@@ -3,7 +3,7 @@ package dataset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import bayesClassification.NaiveBayesClassification;
+import bayesClassification.*;
 import parseCSV.*;
 import utils.*;
 
